@@ -24,38 +24,6 @@
         android:textAllCaps="false"
         android:textColor="@android:color/white" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/sarabun_regular"
-            android:text="Travel"
-            android:textAlignment="center"
-            android:textSize="30dp"
-            android:textColor="@color/mainTextColor" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/sarabun_bold"
-            android:text="Mate"
-            android:textAlignment="center"
-            android:textSize="30dp"
-            android:textColor="@color/colorPrimary" />
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/jost_regular"
-        android:text="Let our adventure begin. "
-        android:textAlignment="center"
-        android:textSize="16dp"
-        android:textColor="@color/mainTextColor"/>
 
 </LinearLayout>
