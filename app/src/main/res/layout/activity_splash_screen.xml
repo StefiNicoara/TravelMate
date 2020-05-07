@@ -78,6 +78,7 @@
             android:text="@string/don_t_have_an_account" />
 
         <TextView
+            android:id="@+id/singUpButton"
             style="@style/MainText"
             android:layout_width="wrap_content"
             android:text="@string/sign_up"
