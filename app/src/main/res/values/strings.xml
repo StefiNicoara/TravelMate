@@ -10,4 +10,15 @@
     <string name="travel">Travel</string>
     <string name="mate">Mate</string>
     <string name="motto">Let our adventure begin.</string>
+    <string name="email">Email</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="wellcome_back">Welcome back,</string>
+    <string name="mate_lowercase">mate!</string>
+    <string name="sign_in">Sign in</string>
+    <string name="password">Password</string>
+    <string name="how_should_we_call">How should we call</string>
+    <string name="you">you?</string>
+    <string name="register">Register</string>
+    <string name="nickname">Nickname</string>
+    <string name="confirm_password">Confirm password</string>
 </resources>
