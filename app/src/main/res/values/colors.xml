@@ -7,4 +7,6 @@
     <color name="colorAccentDark">#DC524B</color>
     <color name="colorAccentLight">#FF8B85</color>
     <color name="mainTextColor">#585858</color>
+    <color name="mainTextColorDark">#3C3C3C</color>
+    <color name="mainBackground">#FFFEF7</color>
 </resources>
