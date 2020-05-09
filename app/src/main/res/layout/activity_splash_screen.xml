@@ -1,18 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.splashscreen.SplashScreen"
-    android:orientation="vertical">
+    android:background="@color/mainBackground"
+    tools:context=".ui.splashscreen.SplashScreen">
+
+    <LinearLayout
+        android:id="@+id/title_logo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/large_margin_padding"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:alpha="0.0">
+
+        <TextView
+            style="@style/LogoText"
+            android:text="@string/travel" />
+
+        <TextView
+            style="@style/LogoText"
+            android:fontFamily="@font/sarabun_bold"
+            android:text="@string/mate"
+            android:textColor="@color/colorPrimary" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/motto"
+        style="@style/MainText"
+        android:layout_below="@id/title_logo"
+        android:text="@string/motto"
+        android:textAlignment="center"
+        android:alpha="0.0"/>
 
     <ImageView
         android:id="@+id/fox"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srcCompat="@drawable/foxillustrate"
         android:alpha="0.0"
-        android:contentDescription="@null" />
+        android:background="@android:color/transparent"
+        android:contentDescription="@null"
+        app:srcCompat="@drawable/simple_fox_cropped" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/plane"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.0"
+        android:background="@android:color/transparent"
+        android:contentDescription="@null"
+        app:srcCompat="@drawable/simple_plane_cropped" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/logInButton"
+        style="@style/MainButton"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="70dp"
+        android:alpha="0.0"
+        android:text="@string/log_in" />
+
+    <LinearLayout
+        android:id="@+id/no_account_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/large_margin_padding"
+        android:alpha="0.0"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/MainText"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="@dimen/small_space_margin"
+            android:text="@string/don_t_have_an_account" />
+
+        <TextView
+            android:id="@+id/singUpButton"
+            style="@style/MainText"
+            android:layout_width="wrap_content"
+            android:text="@string/sign_up"
+            android:textColor="@color/mainTextColorDark" />
+
+    </LinearLayout>
+</RelativeLayout>

@@ -3,8 +3,11 @@
     <color name="colorPrimary">#FFD001</color>
     <color name="colorPrimaryDark">#F0B701</color>
     <color name="colorPrimaryLight">#FFDF87</color>
+    <color name="colorPrimaryMediumLight">#FCD023</color>
     <color name="colorAccent">#FF5F54</color>
     <color name="colorAccentDark">#DC524B</color>
     <color name="colorAccentLight">#FF8B85</color>
     <color name="mainTextColor">#585858</color>
+    <color name="mainTextColorDark">#3C3C3C</color>
+    <color name="mainBackground">#FFFEF7</color>
 </resources>
