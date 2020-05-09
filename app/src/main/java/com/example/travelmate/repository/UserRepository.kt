@@ -35,4 +35,22 @@ class UserRepository() {
                 Single.just(user)
             }
     }
+
+    fun loginUser(email: String, password: String): Single<Resource<Boolean>> {
+        val login: Single<Resource<Boolean>> = Single.create create@{ emitter ->
+            fbAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    emitter.onSuccess(
+                        Resource.Success(true)
+                    )
+                } else {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.exception?.localizedMessage.toString())))
+                }
+            }
+            return@create
+        }
+        return login.observeOn(Schedulers.io()).flatMap { bool ->
+            Single.just(bool)
+        }
+    }
 }
