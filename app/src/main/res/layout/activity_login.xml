@@ -7,6 +7,10 @@
     <data>
 
         <import type="android.text.InputType" />
+
+        <variable
+            name="loginViewModel"
+            type="com.example.travelmate.ui.account.login.LoginViewModel" />
     </data>
 
     <RelativeLayout
@@ -64,32 +68,34 @@
                 style="@style/MainText"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/large_margin_padding"
+                android:layout_marginStart="@dimen/large_margin_padding"
+                android:layout_marginTop="@dimen/default_margin_padding"
+                android:layout_marginEnd="@dimen/large_margin_padding"
+                android:autofillHints="@string/no_empty_fields"
                 android:background="@drawable/rounded_bg"
                 android:hint="@string/email"
-                android:textColorHint="@color/mainTextColor"
-                android:paddingStart="@dimen/default_margin_padding"
                 android:inputType="text"
-                tools:ignore="RtlSymmetry"
-                android:autofillHints="@string/no_empty_fields"
-                android:layout_marginStart="@dimen/large_margin_padding"
-                android:layout_marginEnd="@dimen/large_margin_padding"
-                android:layout_marginTop="@dimen/default_margin_padding" />
+                android:paddingStart="@dimen/default_margin_padding"
+                android:text="@={loginViewModel.email}"
+                android:textColorHint="@color/mainTextColor"
+                tools:ignore="RtlSymmetry" />
 
 
             <EditText
                 style="@style/MainText"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/large_margin_padding"
+                android:layout_marginStart="@dimen/large_margin_padding"
+                android:layout_marginTop="@dimen/default_margin_padding"
+                android:layout_marginEnd="@dimen/large_margin_padding"
+                android:autofillHints="@string/no_empty_fields"
                 android:background="@drawable/rounded_bg"
                 android:hint="@string/password"
-                android:textColorHint="@color/mainTextColor"
-                android:paddingStart="@dimen/default_margin_padding"
                 android:inputType="textPassword"
-                tools:ignore="RtlSymmetry"
-                android:autofillHints="@string/no_empty_fields"
-                android:layout_marginStart="@dimen/large_margin_padding"
-                android:layout_marginEnd="@dimen/large_margin_padding"
-                android:layout_marginTop="@dimen/default_margin_padding"/>
+                android:paddingStart="@dimen/default_margin_padding"
+                android:text="@={loginViewModel.password}"
+                android:textColorHint="@color/mainTextColor"
+                tools:ignore="RtlSymmetry" />
 
         </LinearLayout>
 
@@ -117,7 +123,9 @@
             android:layout_marginEnd="@dimen/large_margin_padding"
             android:layout_marginBottom="@dimen/large_margin_padding"
             android:background="@drawable/ic_navigate_next"
-            android:contentDescription="@null" />
+            android:contentDescription="@null"
+            android:clickable="true"
+            app:onSingleClick="@{() -> loginViewModel.loginUser()}" />
 
 
     </RelativeLayout>

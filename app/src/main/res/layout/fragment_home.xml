@@ -5,25 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatButton
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/main_button_round"
-        android:fontFamily="@font/jost_regular"
-        android:text="Primary Color Button"
-        android:textAllCaps="false"
-        android:textColor="@color/mainTextColor"/>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/secondary_button_round"
-        android:text="Secondary Color Button"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white" />
-
+        style="@style/LogoText"
+        android:text="Buna siara, ce mai faceti? Bine ca ne vedem cu bine."/>
 
 
 </LinearLayout>
