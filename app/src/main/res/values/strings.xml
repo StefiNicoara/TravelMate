@@ -21,4 +21,6 @@
     <string name="register">Register</string>
     <string name="nickname">Nickname</string>
     <string name="confirm_password">Confirm password</string>
+    <string name="no_matching_passwords">Your password does not match the confirmation password</string>
+    <string name="no_empty_fields">Sorry! Fields can not be empty</string>
 </resources>

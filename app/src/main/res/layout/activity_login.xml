@@ -1,119 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/mainBackground"
-    tools:context=".ui.account.login.LoginActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/clouds"
-        android:layout_width="387dp"
-        android:layout_height="269dp"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/clowds"
-        android:contentDescription="@null" />
+    <data>
 
-    <TextView
-        android:id="@+id/wbId"
-        style="@style/LogoText"
-        android:layout_marginStart="@dimen/large_margin_padding"
-        android:layout_marginTop="100dp"
-        android:fontFamily="@font/sarabun_bold"
-        android:text="@string/wellcome_back"
-        android:textColor="@android:color/black"
-        android:alpha="0.0"/>
+        <import type="android.text.InputType" />
+    </data>
 
-    <TextView
-        android:id="@+id/mateId"
-        style="@style/LogoText"
-        android:layout_below="@+id/wbId"
-        android:layout_marginStart="@dimen/large_margin_padding"
-        android:text="@string/mate_lowercase"
-        android:textColor="@android:color/black"
-        android:alpha="0.0"/>
-
-
-    <TextView
-        android:id="@+id/signInLable"
-        style="@style/MainText"
-        android:layout_below="@id/mateId"
-        android:layout_marginStart="@dimen/large_margin_padding"
-        android:layout_marginTop="81dp"
-        android:text="@string/sign_in"
-        android:textSize="@dimen/large_text_size" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emailLayout"
-        style="@style/InputBoxStyle"
-        android:layout_below="@+id/signInLable"
-        android:layout_marginStart="@dimen/large_margin_padding"
-        android:layout_marginTop="@dimen/default_text_size"
-        android:layout_marginEnd="@dimen/large_margin_padding"
-        android:hint="@string/email"
-        app:boxBackgroundMode="outline"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusTopStart="16dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/emailId"
-            style="@style/MainText"
-            android:inputType="text" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordLayout"
-        style="@style/InputBoxStyle"
-        android:layout_below="@+id/emailLayout"
-        android:layout_marginStart="@dimen/large_margin_padding"
-        android:layout_marginTop="@dimen/default_margin_padding"
-        android:layout_marginEnd="@dimen/large_margin_padding"
-        android:hint="@string/password"
-        app:boxBackgroundMode="outline"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusTopStart="16dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/passwordId"
-            style="@style/MainText"
-            android:inputType="textPassword" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        style="@style/MainText"
-        android:layout_below="@+id/passwordLayout"
-        android:layout_marginStart="@dimen/large_margin_padding"
-        android:layout_marginTop="@dimen/default_margin_padding"
-        android:text="@string/forgot_password" />
-
-    <ImageView
-        android:id="@+id/planeId"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="177dp"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/plane_with_loop"
-        android:contentDescription="@null"
-        android:alpha="0.0"/>
+        android:layout_height="match_parent"
+        android:background="@color/mainBackground"
+        tools:context=".ui.account.login.LoginActivity">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="@dimen/large_margin_padding"
-        android:layout_marginBottom="@dimen/large_margin_padding"
-        android:background="@drawable/ic_navigate_next"
-        android:contentDescription="@null" />
+        <ImageView
+            android:id="@+id/clouds"
+            android:layout_width="387dp"
+            android:layout_height="269dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/clowds"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:id="@+id/wbId"
+            style="@style/LogoText"
+            android:layout_marginStart="@dimen/large_margin_padding"
+            android:layout_marginTop="100dp"
+            android:alpha="0.0"
+            android:fontFamily="@font/sarabun_bold"
+            android:text="@string/wellcome_back"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/mateId"
+            style="@style/LogoText"
+            android:layout_below="@+id/wbId"
+            android:layout_marginStart="@dimen/large_margin_padding"
+            android:alpha="0.0"
+            android:text="@string/mate_lowercase"
+            android:textColor="@android:color/black" />
 
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/signInLable"
+            style="@style/MainText"
+            android:layout_below="@id/mateId"
+            android:layout_marginStart="@dimen/large_margin_padding"
+            android:layout_marginTop="81dp"
+            android:text="@string/sign_in"
+            android:textSize="@dimen/large_text_size" />
+
+        <LinearLayout
+            android:id="@+id/inputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/signInLable"
+            android:orientation="vertical">
+
+
+            <EditText
+                style="@style/MainText"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/large_margin_padding"
+                android:background="@drawable/rounded_bg"
+                android:hint="@string/email"
+                android:textColorHint="@color/mainTextColor"
+                android:paddingStart="@dimen/default_margin_padding"
+                android:inputType="text"
+                tools:ignore="RtlSymmetry"
+                android:autofillHints="@string/no_empty_fields"
+                android:layout_marginStart="@dimen/large_margin_padding"
+                android:layout_marginEnd="@dimen/large_margin_padding"
+                android:layout_marginTop="@dimen/default_margin_padding" />
+
+
+            <EditText
+                style="@style/MainText"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/large_margin_padding"
+                android:background="@drawable/rounded_bg"
+                android:hint="@string/password"
+                android:textColorHint="@color/mainTextColor"
+                android:paddingStart="@dimen/default_margin_padding"
+                android:inputType="textPassword"
+                tools:ignore="RtlSymmetry"
+                android:autofillHints="@string/no_empty_fields"
+                android:layout_marginStart="@dimen/large_margin_padding"
+                android:layout_marginEnd="@dimen/large_margin_padding"
+                android:layout_marginTop="@dimen/default_margin_padding"/>
+
+        </LinearLayout>
+
+        <TextView
+            style="@style/MainText"
+            android:layout_below="@+id/inputLayout"
+            android:layout_marginStart="@dimen/large_margin_padding"
+            android:layout_marginTop="@dimen/default_margin_padding"
+            android:text="@string/forgot_password" />
+
+        <ImageView
+            android:id="@+id/planeId"
+            android:layout_width="342dp"
+            android:layout_height="164dp"
+            android:layout_alignParentBottom="true"
+            android:alpha="1.0"
+            android:background="@drawable/plane_with_loop"
+            android:contentDescription="@null" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="@dimen/large_margin_padding"
+            android:layout_marginBottom="@dimen/large_margin_padding"
+            android:background="@drawable/ic_navigate_next"
+            android:contentDescription="@null" />
+
+
+    </RelativeLayout>
+
+</layout>

@@ -5,6 +5,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -57,5 +58,23 @@ dependencies {
     // Koin
     implementation "org.koin:koin-androidx-viewmodel:2.0.1"
     implementation "org.koin:koin-android:2.0.1"
+
+    // FireBase
+    implementation 'com.google.firebase:firebase-core:17.4.1'
+    implementation 'com.google.firebase:firebase-auth:19.3.1'
+    implementation 'com.google.firebase:firebase-database:19.3.0'
+    implementation 'com.google.firebase:firebase-common-ktx:19.3.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:21.4.3'
+
+    //RxFirebase
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+
+    // RXJava
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.6.2"
+    implementation "android.arch.persistence.room:rxjava2:1.1.1"
+
+    //RxKotlin
+    implementation "io.reactivex.rxjava2:rxkotlin:$rx_kotlin_version"
 
 }
