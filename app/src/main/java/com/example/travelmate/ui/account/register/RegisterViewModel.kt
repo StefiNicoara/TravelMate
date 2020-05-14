@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.travelmate.R
-import com.example.travelmate.model.User
 import com.example.travelmate.repository.UserRepository
 import com.example.travelmate.utils.AppError
 import com.example.travelmate.utils.Resource
@@ -22,8 +21,8 @@ class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
 
     private val subscriptions = CompositeDisposable()
 
-    val userModel: LiveData<Resource<User>> get() = mutableUserModel
-    private var mutableUserModel: MutableLiveData<Resource<User>> = MutableLiveData()
+    val registerResponse: LiveData<Resource<Boolean>> get() = mutableRegisterResponse
+    private var mutableRegisterResponse: MutableLiveData<Resource<Boolean>> = MutableLiveData()
 
 
     private fun checkFieldsNotEmpty(): Boolean {
@@ -44,33 +43,32 @@ class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
     private fun callRepositoryFunction() {
         val observer =
             repository.registerUser(
-                nickname.get().toString(),
                 email.get().toString(),
                 password.get().toString()
             )
                 .subscribeOn(Schedulers.io())
                 .subscribeBy(
                     onSuccess = {
-                        mutableUserModel.postValue(it)
+                        mutableRegisterResponse.postValue(it)
                     },
                     onError = {
-                        mutableUserModel.postValue(Resource.Error(AppError(message = it.message)))
+                        mutableRegisterResponse.postValue(Resource.Error(AppError(message = it.message)))
                     }
                 )
         subscriptions.add(observer)
     }
 
     fun registerUser() {
-        mutableUserModel.value = Resource.Loading()
+        mutableRegisterResponse.value = Resource.Loading()
 
         if (checkFieldsNotEmpty()) {
             if (checkPasswordsMatch()) {
                 callRepositoryFunction()
             } else {
-                mutableUserModel.value = Resource.Error(AppError(R.string.no_matching_passwords))
+                mutableRegisterResponse.value = Resource.Error(AppError(R.string.no_matching_passwords))
             }
         } else {
-            mutableUserModel.value = Resource.Error(AppError(R.string.no_empty_fields))
+            mutableRegisterResponse.value = Resource.Error(AppError(R.string.no_empty_fields))
         }
     }
 

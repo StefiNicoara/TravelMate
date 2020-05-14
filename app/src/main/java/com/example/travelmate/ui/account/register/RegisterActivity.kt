@@ -27,7 +27,7 @@ class RegisterActivity : BaseActivity() {
 
         addWelcomeAnimation(registerBinding.wbId, registerBinding.mateId, registerBinding.planeId)
 
-        viewModel.userModel.observe(this, Observer { user ->
+        viewModel.registerResponse.observe(this, Observer { user ->
             when (user) {
                 is Resource.Loading -> {}
                 is Resource.Success -> {

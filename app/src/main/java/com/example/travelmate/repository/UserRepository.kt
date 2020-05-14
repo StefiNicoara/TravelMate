@@ -7,21 +7,16 @@ import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
-class UserRepository() {
+class UserRepository {
 
     private val fbAuth = FirebaseAuth.getInstance()
 
-    fun registerUser(nickname: String, email: String, password: String): Single<Resource<User>> {
-        val register = Single.create<Resource<User>> create@{ emitter ->
+    fun registerUser(email: String, password: String): Single<Resource<Boolean>> {
+        val register = Single.create<Resource<Boolean>> create@{ emitter ->
             fbAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {
-                    val user = User(
-                        userId = fbAuth.uid.toString(),
-                        nickname = nickname,
-                        email = email
-                    )
                     emitter.onSuccess(
-                        Resource.Success(user)
+                        Resource.Success(true)
                     )
                 } else {
                     emitter.onSuccess(Resource.Error(AppError(message = it.exception?.localizedMessage)))
