@@ -6,15 +6,29 @@ import com.example.travelmate.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import com.google.firebase.firestore.FirebaseFirestore
 
-class UserRepository {
+
+class UserAccountRepository {
 
     private val fbAuth = FirebaseAuth.getInstance()
+    private val db = FirebaseFirestore.getInstance()
+    private val usersRef = db.collection("Users")
 
-    fun registerUser(email: String, password: String): Single<Resource<Boolean>> {
-        val register = Single.create<Resource<Boolean>> create@{ emitter ->
+    fun registerUser(nickname: String, email: String, password: String): Single<Resource<Boolean>> {
+        return Single.create create@{ emitter ->
             fbAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {
+                    val user = User(
+                        userId = it.result?.user!!.uid,
+                        nickname = nickname,
+                        email = email,
+                        journeys = null,
+                        favorites = null,
+                        visited = null,
+                        uploads = null
+                    )
+                    usersRef.document(it.result?.user!!.uid).set(user)
                     emitter.onSuccess(
                         Resource.Success(true)
                     )
@@ -24,11 +38,6 @@ class UserRepository {
             }
             return@create
         }
-        return register
-            .observeOn(Schedulers.io())
-            .flatMap { user ->
-                Single.just(user)
-            }
     }
 
     fun loginUser(email: String, password: String): Single<Resource<Boolean>> {
@@ -46,6 +55,22 @@ class UserRepository {
         }
         return login.observeOn(Schedulers.io()).flatMap { bool ->
             Single.just(bool)
+        }
+    }
+
+    fun getCurrentUser(): Single<User> {
+        val userId = fbAuth.currentUser!!.uid
+
+        return Single.create create@{ emitter ->
+            usersRef.document(userId).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot.exists()) {
+                        val user = documentSnapshot.toObject(User::class.java)
+                        user?.let { emitter.onSuccess(it) }
+                    }
+
+                }
+            return@create
         }
     }
 }

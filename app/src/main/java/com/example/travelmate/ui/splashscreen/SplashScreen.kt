@@ -3,10 +3,13 @@ package com.example.travelmate.ui.splashscreen
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import com.example.travelmate.MainActivity
 import com.example.travelmate.R
 import com.example.travelmate.ui.account.login.LoginActivity
 import com.example.travelmate.ui.account.register.RegisterActivity
 import com.example.travelmate.utils.ANIMATION_DURATION
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 
@@ -14,6 +17,11 @@ class SplashScreen : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            goToHomeScreen()
+        }
+
         setContentView(R.layout.activity_splash_screen)
 
         addFoxAnimation()
@@ -60,5 +68,11 @@ class SplashScreen : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun goToHomeScreen() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
+    }
 
 }

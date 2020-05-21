@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.text.InputType" />
+
+        <variable
+            name="viewModel"
+            type="com.example.travelmate.ui.addAttraction.AddAttractionViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/default_margin_padding"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/mainBackground"
+            app:cardCornerRadius="@dimen/default_margin_padding">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/default_margin_padding"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/addedPhoto"
+                        android:layout_width="110dp"
+                        android:layout_height="92dp"
+                        android:layout_marginEnd="@dimen/small_margin_padding"
+                        android:background="@drawable/addphoto"
+                        android:clickable="true"
+                        android:contentDescription="@null"
+                        android:layout_gravity="center"
+                        app:onSingleClick="@{() -> viewModel.chooseImage()}"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <EditText
+                            style="@style/MainText"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/large_margin_padding"
+                            android:autofillHints="@string/no_empty_fields"
+                            android:background="@drawable/rounded_bg"
+                            android:hint="@string/title"
+                            android:inputType="text"
+                            android:paddingStart="@dimen/small_margin_padding"
+                            android:text="@={viewModel.title}"
+                            android:textColorHint="@color/mainTextColor"
+                            tools:ignore="RtlSymmetry" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                style="@style/MainText"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/large_margin_padding"
+                                android:layout_marginTop="@dimen/default_margin_padding"
+                                android:layout_marginEnd="@dimen/xsmall_margin_padding"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/no_empty_fields"
+                                android:background="@drawable/rounded_bg"
+                                android:hint="@string/city"
+                                android:inputType="text"
+                                android:paddingStart="@dimen/small_margin_padding"
+                                android:text="@={viewModel.city}"
+                                android:textColorHint="@color/mainTextColor"
+                                tools:ignore="RtlSymmetry" />
+
+                            <EditText
+                                style="@style/MainText"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/large_margin_padding"
+                                android:layout_marginStart="@dimen/xsmall_margin_padding"
+                                android:layout_marginTop="@dimen/default_margin_padding"
+                                android:layout_weight="1"
+                                android:autofillHints="@string/no_empty_fields"
+                                android:background="@drawable/rounded_bg"
+                                android:hint="@string/country"
+                                android:inputType="text"
+                                android:paddingStart="@dimen/small_margin_padding"
+                                android:text="@={viewModel.country}"
+                                android:textColorHint="@color/mainTextColor"
+                                tools:ignore="RtlSymmetry" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    style="@style/MainText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/large_margin_padding"
+                    android:text="@string/please_tell_us_what_this_location_is_actually_about" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/small_margin_padding"
+                    android:scrollbarThumbHorizontal="@null"
+                    android:scrollbarThumbVertical="@null"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
+                        <ToggleButton
+                            android:id="@+id/social"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/default_tag_size"
+                            android:background="@drawable/tag_button_background"
+                            android:drawableStart="@drawable/ic_social"
+                            android:drawablePadding="@dimen/small_margin_padding"
+                            android:drawableTint="@drawable/tag_button_text_color"
+                            android:minWidth="@dimen/default_tag_size"
+                            android:paddingStart="@dimen/small_margin_padding"
+                            android:paddingEnd="@dimen/small_margin_padding"
+                            android:text="@string/social"
+                            android:textColor="@drawable/tag_button_text_color"
+                            android:textOff="@string/social"
+                            android:textOn="@string/social" />
+
+                        <ToggleButton
+                            android:id="@+id/cultural"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/default_tag_size"
+                            android:layout_marginStart="@dimen/small_margin_padding"
+                            android:background="@drawable/tag_button_background"
+                            android:drawableStart="@drawable/ic_cultural"
+                            android:drawablePadding="@dimen/small_margin_padding"
+                            android:drawableTint="@drawable/tag_button_text_color"
+                            android:minWidth="@dimen/default_tag_size"
+                            android:paddingStart="@dimen/small_margin_padding"
+                            android:paddingEnd="@dimen/small_margin_padding"
+                            android:text="@string/cultural"
+                            android:textColor="@drawable/tag_button_text_color"
+                            android:textOff="@string/cultural"
+                            android:textOn="@string/cultural"
+                            android:textSize="@dimen/default_text_size" />
+
+                        <ToggleButton
+                            android:id="@+id/recreational"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/default_tag_size"
+                            android:layout_marginStart="@dimen/small_margin_padding"
+                            android:background="@drawable/tag_button_background"
+                            android:drawableStart="@drawable/ic_recreational"
+                            android:drawablePadding="@dimen/small_margin_padding"
+                            android:drawableTint="@drawable/tag_button_text_color"
+                            android:minWidth="@dimen/default_tag_size"
+                            android:paddingStart="@dimen/small_margin_padding"
+                            android:paddingEnd="@dimen/small_margin_padding"
+                            android:text="@string/recreational"
+                            android:textColor="@drawable/tag_button_text_color"
+                            android:textOff="@string/recreational"
+                            android:textOn="@string/recreational"
+                            android:textSize="@dimen/default_text_size" />
+
+                        <ToggleButton
+                            android:id="@+id/fun"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/default_tag_size"
+                            android:layout_marginStart="@dimen/small_margin_padding"
+                            android:background="@drawable/tag_button_background"
+                            android:drawableStart="@drawable/ic_fun"
+                            android:drawablePadding="@dimen/small_margin_padding"
+                            android:drawableTint="@drawable/tag_button_text_color"
+                            android:minWidth="@dimen/default_tag_size"
+                            android:paddingStart="@dimen/small_margin_padding"
+                            android:paddingEnd="@dimen/small_margin_padding"
+                            android:text="@string/fun"
+                            android:textColor="@drawable/tag_button_text_color"
+                            android:textOff="@string/fun"
+                            android:textOn="@string/fun"
+                            android:textSize="@dimen/default_text_size" />
+
+                        <ToggleButton
+                            android:id="@+id/food"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/default_tag_size"
+                            android:layout_marginStart="@dimen/small_margin_padding"
+                            android:background="@drawable/tag_button_background"
+                            android:drawableStart="@drawable/ic_food"
+                            android:drawablePadding="@dimen/small_margin_padding"
+                            android:drawableTint="@drawable/tag_button_text_color"
+                            android:minWidth="@dimen/default_tag_size"
+                            android:paddingStart="@dimen/small_margin_padding"
+                            android:paddingEnd="@dimen/small_margin_padding"
+                            android:text="@string/food"
+                            android:textColor="@drawable/tag_button_text_color"
+                            android:textOff="@string/food"
+                            android:textOn="@string/food"
+                            android:textSize="@dimen/default_text_size" />
+
+                        <ToggleButton
+                            android:id="@+id/cafe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/default_tag_size"
+                            android:layout_marginStart="@dimen/small_margin_padding"
+                            android:background="@drawable/tag_button_background"
+                            android:drawableStart="@drawable/ic_cafe"
+                            android:drawablePadding="@dimen/small_margin_padding"
+                            android:drawableTint="@drawable/tag_button_text_color"
+                            android:minWidth="@dimen/default_tag_size"
+                            android:paddingStart="@dimen/small_margin_padding"
+                            android:paddingEnd="@dimen/small_margin_padding"
+                            android:text="@string/cafe"
+                            android:textColor="@drawable/tag_button_text_color"
+                            android:textOff="@string/cafe"
+                            android:textOn="@string/cafe"
+                            android:textSize="@dimen/default_text_size" />
+
+                        <ToggleButton
+                            android:id="@+id/bar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/default_tag_size"
+                            android:layout_marginStart="@dimen/small_margin_padding"
+                            android:background="@drawable/tag_button_background"
+                            android:drawableStart="@drawable/ic_bar"
+                            android:drawablePadding="@dimen/small_margin_padding"
+                            android:drawableTint="@drawable/tag_button_text_color"
+                            android:minWidth="@dimen/default_tag_size"
+                            android:paddingStart="@dimen/small_margin_padding"
+                            android:paddingEnd="@dimen/small_margin_padding"
+                            android:text="@string/bar"
+                            android:textColor="@drawable/tag_button_text_color"
+                            android:textOff="@string/bar"
+                            android:textOn="@string/bar"
+                            android:textSize="@dimen/default_text_size" />
+
+                        <ToggleButton
+                            android:id="@+id/accommodation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/default_tag_size"
+                            android:layout_marginStart="@dimen/small_margin_padding"
+                            android:background="@drawable/tag_button_background"
+                            android:drawableStart="@drawable/ic_accomodation"
+                            android:drawablePadding="@dimen/small_margin_padding"
+                            android:drawableTint="@drawable/tag_button_text_color"
+                            android:minWidth="@dimen/default_tag_size"
+                            android:paddingStart="@dimen/small_margin_padding"
+                            android:paddingEnd="@dimen/small_margin_padding"
+                            android:text="@string/accommodation"
+                            android:textColor="@drawable/tag_button_text_color"
+                            android:textOff="@string/accommodation"
+                            android:textOn="@string/accommodation"
+                            android:textSize="@dimen/default_text_size" />
+                    </LinearLayout>
+
+                </HorizontalScrollView>
+
+                <EditText
+                    android:id="@+id/reviewText"
+                    style="@style/MainText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/default_margin_padding"
+                    android:layout_weight="1"
+                    android:autofillHints="@null"
+                    android:background="@drawable/rounded_bg"
+                    android:gravity="top|start"
+                    android:hint="@string/description"
+                    android:inputType="textMultiLine"
+                    android:labelFor="@null"
+                    android:maxLength="1200"
+                    android:maxLines="12"
+                    android:padding="@dimen/small_margin_padding"
+                    android:text="@={viewModel.description}"
+                    android:textCursorDrawable="@drawable/cursor"
+                    android:textSize="@dimen/default_text_size" />
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/MainButton"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin_padding"
+            android:text="@string/publish"
+            app:onSingleClick="@{() -> viewModel.publishAttraction()}" />
+
+    </LinearLayout>
+
+</layout>

@@ -5,14 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.travelmate.R
-import com.example.travelmate.repository.UserRepository
+import com.example.travelmate.repository.UserAccountRepository
 import com.example.travelmate.utils.AppError
 import com.example.travelmate.utils.Resource
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 
-class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
+class RegisterViewModel(private val repository: UserAccountRepository) : ViewModel() {
 
     var nickname: ObservableField<String> = ObservableField()
     var email: ObservableField<String> = ObservableField()
@@ -43,6 +43,7 @@ class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
     private fun callRepositoryFunction() {
         val observer =
             repository.registerUser(
+                nickname.get().toString(),
                 email.get().toString(),
                 password.get().toString()
             )

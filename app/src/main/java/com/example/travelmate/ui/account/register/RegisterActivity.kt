@@ -27,14 +27,15 @@ class RegisterActivity : BaseActivity() {
 
         addWelcomeAnimation(registerBinding.wbId, registerBinding.mateId, registerBinding.planeId)
 
-        viewModel.registerResponse.observe(this, Observer { user ->
-            when (user) {
-                is Resource.Loading -> {}
+        viewModel.registerResponse.observe(this, Observer { response ->
+            when (response) {
+                is Resource.Loading -> {
+                }
                 is Resource.Success -> {
                     goToHomeScreen()
                 }
                 is Resource.Error -> {
-                    displayError(user.error)
+                    displayError(response.error)
                 }
             }
         })
