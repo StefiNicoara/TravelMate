@@ -100,14 +100,6 @@ class AddAttractionFragment : Fragment() {
         return mime.getExtensionFromMimeType(cR?.getType(uri)).toString()
     }
 
-    private fun navigateToHome() {
-        val fragmentManager = activity!!.supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.navigation_add_attraction, DashboardFragment())
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
-    }
-
     private fun handleTags() {
         binding.social.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {

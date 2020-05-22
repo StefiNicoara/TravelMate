@@ -10,12 +10,19 @@
         <variable
             name="attraction"
             type="com.example.travelmate.model.Attraction" />
+
+        <variable
+            name="location"
+            type="String" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/default_margin_padding"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="@dimen/small_margin_padding"
         app:cardBackgroundColor="@color/mainBackground"
         app:cardCornerRadius="@dimen/default_margin_padding">
 
@@ -41,14 +48,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sarabun_bold"
-                    android:text="OldSchool Cafe"
+                    android:text="@{attraction.title}"
                     android:textSize="16sp" />
 
                 <TextView
                     style="@style/MainText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Cluj, Romania" />
+                    android:text="@{location}" />
 
 
                 <LinearLayout
@@ -78,7 +85,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
                             android:layout_marginStart="@dimen/small_margin_padding"
-                            android:text="121" />
+                            android:text="@{Integer.toString(attraction.likes)}" />
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -92,29 +99,14 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/tags"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="bottom"
-                            android:layout_marginStart="@dimen/xsmall_margin_padding"
-                            android:background="@drawable/ic_cafe"
-                            android:contentDescription="@null" />
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="bottom"
-                            android:layout_marginStart="@dimen/xsmall_margin_padding"
-                            android:background="@drawable/ic_bar"
-                            android:contentDescription="@null" />
+                        android:orientation="horizontal"
+                        app:addTags="@{attraction.tags}">
 
                     </LinearLayout>
                 </LinearLayout>
-
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

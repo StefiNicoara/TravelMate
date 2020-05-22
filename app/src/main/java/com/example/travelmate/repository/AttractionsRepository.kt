@@ -1,6 +1,5 @@
 package com.example.travelmate.repository
 
-import android.content.ContentResolver
 import android.net.Uri
 import com.example.travelmate.model.Attraction
 import com.example.travelmate.model.AttractionTag
