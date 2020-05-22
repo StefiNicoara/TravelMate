@@ -29,20 +29,41 @@ class AttractionsRepository {
 
         return Single.create create@{ emitter ->
             fileReference.putFile(imageUri)
-                .addOnSuccessListener { taskSnapshot ->
-                    val attraction = Attraction(
-                        title = title,
-                        city = city,
-                        description = description,
-                        tags = tags,
-                        likes = 0,
-                        image = taskSnapshot.uploadSessionUri.toString(),
-                        comments = null
-                    )
-                    attractionsRef.add(attraction)
-                    emitter.onSuccess(
-                        Resource.Success(true)
-                    )
+                .addOnSuccessListener { _ ->
+                    fileReference.downloadUrl.addOnSuccessListener {
+                        val attraction = Attraction(
+                            title = title,
+                            city = city,
+                            description = description,
+                            tags = tags,
+                            likes = 0,
+                            image = it.toString(),
+                            comments = null
+                        )
+                        attractionsRef.add(attraction)
+                        emitter.onSuccess(
+                            Resource.Success(true)
+                        )
+                    }
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
+
+    fun loadAllAttractions(): Single<Resource<List<Attraction>>> {
+        val attractionsList = mutableListOf<Attraction>()
+        return Single.create create@{ emitter ->
+            attractionsRef.get()
+                .addOnSuccessListener { queryDocumentSnapshot ->
+                    for (documentSnapshot in queryDocumentSnapshot) {
+                        val attraction = documentSnapshot.toObject(Attraction::class.java)
+                        attractionsList.add(attraction)
+                    }
+                    emitter.onSuccess(Resource.Success(attractionsList))
                 }
                 .addOnFailureListener {
                     emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))

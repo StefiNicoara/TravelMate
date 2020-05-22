@@ -90,7 +90,11 @@ class AddAttractionFragment : Fragment() {
             viewModel.imageExtension = getFileExtension(data.data!!)
 
             binding.addedPhoto.background = null
-            Picasso.with(context).load(viewModel.imageUri).into(binding.addedPhoto)
+            Picasso.with(context)
+                .load(viewModel.imageUri)
+                .fit()
+                .centerCrop()
+                .into(binding.addedPhoto)
         }
     }
 

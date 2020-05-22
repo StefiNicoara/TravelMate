@@ -11,4 +11,6 @@ data class User (
     var favorites: List<Attraction>?,
     var uploads: List<Attraction>?,
     var visited: List<City>?
-)
+)  {
+    constructor() : this("", "", "", mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf())
+}

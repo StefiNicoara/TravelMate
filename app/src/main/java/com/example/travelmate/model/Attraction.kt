@@ -1,8 +1,5 @@
 package com.example.travelmate.model
 
-import com.google.firebase.firestore.Exclude
-import org.w3c.dom.Comment
-
 data class Attraction(
     var title: String,
     var city: City,
@@ -11,4 +8,6 @@ data class Attraction(
     var likes: Int,
     var image: String,
     var comments: List<Comment>?
-)
+) {
+    constructor() : this("", City(), "", mutableListOf(), 0, "", mutableListOf())
+}

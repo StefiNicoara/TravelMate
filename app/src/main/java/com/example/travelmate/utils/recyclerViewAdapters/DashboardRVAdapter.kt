@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.travelmate.R
 import com.example.travelmate.databinding.LayoutAttractionCellBinding
 import com.example.travelmate.model.Attraction
+import com.squareup.picasso.Picasso
 
 class DashboardRVAdapter(
+    private val context: Context,
     var attractionsList: List<Attraction>
 ) :
     RecyclerView.Adapter<DashboardRVAdapter.AttractionsViewHolder>() {
@@ -38,6 +40,12 @@ class DashboardRVAdapter(
         holder.attractionInfoBinding.attraction = currentAttraction
         holder.attractionInfoBinding.location =
             currentAttraction.city.name.capitalize() + ", " + currentAttraction.city.country.capitalize()
+        Picasso.with(context)
+            .load(currentAttraction.image)
+            .placeholder(R.drawable.whiteimage)
+            .fit()
+            .centerCrop()
+            .into(holder.attractionInfoBinding.locationPhoto)
     }
 
     class AttractionsViewHolder(itemBinding: LayoutAttractionCellBinding) :
@@ -45,11 +53,3 @@ class DashboardRVAdapter(
         var attractionInfoBinding = itemBinding
     }
 }
-//
-//<ImageView
-//android:layout_width="20dp"
-//android:layout_height="20dp"
-//android:layout_gravity="bottom"
-//android:layout_marginStart="@dimen/xsmall_margin_padding"
-//android:background="@drawable/ic_bar"
-//android:contentDescription="@null" />

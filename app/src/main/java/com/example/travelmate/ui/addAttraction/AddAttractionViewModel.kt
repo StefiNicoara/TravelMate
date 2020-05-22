@@ -69,9 +69,12 @@ class AddAttractionViewModel(private val repository: AttractionsRepository) : Vi
 
     private fun callRepositoryFunction() {
         val observer = repository.uploadAttraction(
-            title.get().toString(),
-            City(city.get().toString(), country.get().toString()),
-            description.get().toString(),
+            title.get().toString().removePrefix(" "),
+            City(
+                city.get().toString().removePrefix(" "),
+                country.get().toString().removePrefix(" ")
+            ),
+            description.get().toString().removePrefix(" "),
             tags,
             imageUri,
             imageExtension
