@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.text.InputType" />
+
+        <variable
+            name="attraction"
+            type="com.example.travelmate.model.Attraction" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin_padding"
+        app:cardBackgroundColor="@color/mainBackground"
+        app:cardCornerRadius="@dimen/default_margin_padding">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="110dp"
+                android:layout_height="120dp"
+                android:contentDescription="@null" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/small_margin_padding"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/LogoText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sarabun_bold"
+                    android:text="OldSchool Cafe"
+                    android:textSize="16sp" />
+
+                <TextView
+                    style="@style/MainText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cluj, Romania" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="bottom"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginBottom="2dp"
+                            android:background="@drawable/ic_thumb_up"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            style="@style/MainText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginStart="@dimen/small_margin_padding"
+                            android:text="121" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_marginStart="@dimen/small_margin_padding"
+                            android:layout_marginBottom="2dp"
+                            android:background="@drawable/ic_thumb_down"
+                            android:contentDescription="@null" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="bottom"
+                            android:layout_marginStart="@dimen/xsmall_margin_padding"
+                            android:background="@drawable/ic_cafe"
+                            android:contentDescription="@null" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="bottom"
+                            android:layout_marginStart="@dimen/xsmall_margin_padding"
+                            android:background="@drawable/ic_bar"
+                            android:contentDescription="@null" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</layout>
