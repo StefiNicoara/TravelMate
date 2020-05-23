@@ -1,8 +1,6 @@
 package com.example.travelmate.ui.addAttraction
 
-import android.content.Intent
 import android.net.Uri
-import android.widget.Toast
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

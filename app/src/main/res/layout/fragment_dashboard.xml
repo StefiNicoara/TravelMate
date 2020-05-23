@@ -18,6 +18,164 @@
             android:contextClickable="true"
             android:searchIcon="@drawable/ic_search_black_24dp" />
 
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin_padding"
+            android:scrollbarThumbHorizontal="@null"
+            android:scrollbarThumbVertical="@null"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="2dp">
+
+                <ToggleButton
+                    android:id="@+id/social"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/default_tag_size"
+                    android:background="@drawable/tag_button_background"
+                    android:drawableStart="@drawable/ic_social"
+                    android:drawablePadding="@dimen/small_margin_padding"
+                    android:drawableTint="@drawable/tag_button_text_color"
+                    android:minWidth="@dimen/default_tag_size"
+                    android:paddingStart="@dimen/small_margin_padding"
+                    android:paddingEnd="@dimen/small_margin_padding"
+                    android:text="@string/social"
+                    android:textColor="@drawable/tag_button_text_color"
+                    android:textOff="@string/social"
+                    android:textOn="@string/social" />
+
+                <ToggleButton
+                    android:id="@+id/cultural"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/default_tag_size"
+                    android:layout_marginStart="@dimen/small_margin_padding"
+                    android:background="@drawable/tag_button_background"
+                    android:drawableStart="@drawable/ic_cultural"
+                    android:drawablePadding="@dimen/small_margin_padding"
+                    android:drawableTint="@drawable/tag_button_text_color"
+                    android:minWidth="@dimen/default_tag_size"
+                    android:paddingStart="@dimen/small_margin_padding"
+                    android:paddingEnd="@dimen/small_margin_padding"
+                    android:text="@string/cultural"
+                    android:textColor="@drawable/tag_button_text_color"
+                    android:textOff="@string/cultural"
+                    android:textOn="@string/cultural"
+                    android:textSize="@dimen/default_text_size" />
+
+                <ToggleButton
+                    android:id="@+id/recreational"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/default_tag_size"
+                    android:layout_marginStart="@dimen/small_margin_padding"
+                    android:background="@drawable/tag_button_background"
+                    android:drawableStart="@drawable/ic_recreational"
+                    android:drawablePadding="@dimen/small_margin_padding"
+                    android:drawableTint="@drawable/tag_button_text_color"
+                    android:minWidth="@dimen/default_tag_size"
+                    android:paddingStart="@dimen/small_margin_padding"
+                    android:paddingEnd="@dimen/small_margin_padding"
+                    android:text="@string/recreational"
+                    android:textColor="@drawable/tag_button_text_color"
+                    android:textOff="@string/recreational"
+                    android:textOn="@string/recreational"
+                    android:textSize="@dimen/default_text_size" />
+
+                <ToggleButton
+                    android:id="@+id/fun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/default_tag_size"
+                    android:layout_marginStart="@dimen/small_margin_padding"
+                    android:background="@drawable/tag_button_background"
+                    android:drawableStart="@drawable/ic_fun"
+                    android:drawablePadding="@dimen/small_margin_padding"
+                    android:drawableTint="@drawable/tag_button_text_color"
+                    android:minWidth="@dimen/default_tag_size"
+                    android:paddingStart="@dimen/small_margin_padding"
+                    android:paddingEnd="@dimen/small_margin_padding"
+                    android:text="@string/fun"
+                    android:textColor="@drawable/tag_button_text_color"
+                    android:textOff="@string/fun"
+                    android:textOn="@string/fun"
+                    android:textSize="@dimen/default_text_size" />
+
+                <ToggleButton
+                    android:id="@+id/food"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/default_tag_size"
+                    android:layout_marginStart="@dimen/small_margin_padding"
+                    android:background="@drawable/tag_button_background"
+                    android:drawableStart="@drawable/ic_food"
+                    android:drawablePadding="@dimen/small_margin_padding"
+                    android:drawableTint="@drawable/tag_button_text_color"
+                    android:minWidth="@dimen/default_tag_size"
+                    android:paddingStart="@dimen/small_margin_padding"
+                    android:paddingEnd="@dimen/small_margin_padding"
+                    android:text="@string/food"
+                    android:textColor="@drawable/tag_button_text_color"
+                    android:textOff="@string/food"
+                    android:textOn="@string/food"
+                    android:textSize="@dimen/default_text_size" />
+
+                <ToggleButton
+                    android:id="@+id/cafe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/default_tag_size"
+                    android:layout_marginStart="@dimen/small_margin_padding"
+                    android:background="@drawable/tag_button_background"
+                    android:drawableStart="@drawable/ic_cafe"
+                    android:drawablePadding="@dimen/small_margin_padding"
+                    android:drawableTint="@drawable/tag_button_text_color"
+                    android:minWidth="@dimen/default_tag_size"
+                    android:paddingStart="@dimen/small_margin_padding"
+                    android:paddingEnd="@dimen/small_margin_padding"
+                    android:text="@string/cafe"
+                    android:textColor="@drawable/tag_button_text_color"
+                    android:textOff="@string/cafe"
+                    android:textOn="@string/cafe"
+                    android:textSize="@dimen/default_text_size" />
+
+                <ToggleButton
+                    android:id="@+id/bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/default_tag_size"
+                    android:layout_marginStart="@dimen/small_margin_padding"
+                    android:background="@drawable/tag_button_background"
+                    android:drawableStart="@drawable/ic_bar"
+                    android:drawablePadding="@dimen/small_margin_padding"
+                    android:drawableTint="@drawable/tag_button_text_color"
+                    android:minWidth="@dimen/default_tag_size"
+                    android:paddingStart="@dimen/small_margin_padding"
+                    android:paddingEnd="@dimen/small_margin_padding"
+                    android:text="@string/bar"
+                    android:textColor="@drawable/tag_button_text_color"
+                    android:textOff="@string/bar"
+                    android:textOn="@string/bar"
+                    android:textSize="@dimen/default_text_size" />
+
+                <ToggleButton
+                    android:id="@+id/accommodation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/default_tag_size"
+                    android:layout_marginStart="@dimen/small_margin_padding"
+                    android:background="@drawable/tag_button_background"
+                    android:drawableStart="@drawable/ic_accomodation"
+                    android:drawablePadding="@dimen/small_margin_padding"
+                    android:drawableTint="@drawable/tag_button_text_color"
+                    android:minWidth="@dimen/default_tag_size"
+                    android:paddingStart="@dimen/small_margin_padding"
+                    android:paddingEnd="@dimen/small_margin_padding"
+                    android:text="@string/accommodation"
+                    android:textColor="@drawable/tag_button_text_color"
+                    android:textOff="@string/accommodation"
+                    android:textOn="@string/accommodation"
+                    android:textSize="@dimen/default_text_size" />
+            </LinearLayout>
+
+        </HorizontalScrollView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/attractionsRV"

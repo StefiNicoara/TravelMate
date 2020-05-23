@@ -6,7 +6,10 @@ import com.example.travelmate.model.AttractionTag
 import com.example.travelmate.model.City
 import com.example.travelmate.utils.AppError
 import com.example.travelmate.utils.Resource
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import io.reactivex.Single
 
@@ -53,7 +56,6 @@ class AttractionsRepository {
         }
     }
 
-
     fun loadAllAttractions(): Single<Resource<List<Attraction>>> {
         val attractionsList = mutableListOf<Attraction>()
         return Single.create create@{ emitter ->
@@ -65,6 +67,64 @@ class AttractionsRepository {
                     }
                     emitter.onSuccess(Resource.Success(attractionsList))
                 }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
+    fun filterByTags(tags: List<AttractionTag>): Single<Resource<List<Attraction>>> {
+        val attractionsList = mutableListOf<Attraction>()
+        return Single.create create@{ emitter ->
+            attractionsRef.whereArrayContainsAny("tags", tags)
+                .get()
+                .addOnSuccessListener { queryDocumentSnapshot ->
+                    for (documentSnapshot in queryDocumentSnapshot) {
+                        val attraction = documentSnapshot.toObject(Attraction::class.java)
+                        attractionsList.add(attraction)
+                    }
+                    emitter.onSuccess(Resource.Success(attractionsList))
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
+    //check Algolia
+    fun searchByTerm(searchTerm: String): Single<Resource<List<Attraction>>> {
+        val attractionsList = mutableListOf<Attraction>()
+        return Single.create create@{ emitter ->
+
+            val task1 = attractionsRef
+                .orderBy("title")
+                .startAt(searchTerm)
+                .endAt("$searchTerm\uf8ff")
+                .get()
+            val task2 = attractionsRef
+                .orderBy("city.name")
+                .startAt(searchTerm)
+                .endAt("$searchTerm\uf8ff")
+                .get()
+            val task3 = attractionsRef
+                .orderBy("city.country")
+                .startAt(searchTerm)
+                .endAt("$searchTerm\uf8ff")
+                .get()
+
+            val tasks: Task<List<QuerySnapshot>> =
+                Tasks.whenAllSuccess(task1, task2, task3)
+            tasks.addOnSuccessListener {
+                for (queryDocumentSnapshot in it) {
+                    for (documentSnapshot in queryDocumentSnapshot) {
+                        val attraction = documentSnapshot.toObject(Attraction::class.java)
+                        attractionsList.add(attraction)
+                    }
+                    emitter.onSuccess(Resource.Success(attractionsList))
+                }
+            }
                 .addOnFailureListener {
                     emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
                 }
