@@ -22,7 +22,8 @@ class DashboardFragment : Fragment() {
 
     private val viewModel by inject<DashboardViewModel>()
     private lateinit var binding: FragmentDashboardBinding
-    var tags: MutableList<AttractionTag> = mutableListOf()
+    private var tags: MutableList<AttractionTag> = mutableListOf()
+    var searchTerm: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,17 +74,20 @@ class DashboardFragment : Fragment() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(s: String): Boolean {
-                viewModel.handleSearchTerm(s)
+//                searchTerm = s
+//                viewModel.filter(tags, searchTerm)
                 return true
             }
 
             override fun onQueryTextSubmit(s: String): Boolean {
-                viewModel.handleSearchTerm(s)
+                searchTerm = s
+                viewModel.filter(tags, searchTerm)
                 return true
             }
         })
 
         binding.searchView.setOnCloseListener {
+            searchTerm = ""
             viewModel.loadAttractions()
             true
         }
@@ -96,7 +100,7 @@ class DashboardFragment : Fragment() {
             } else {
                 tags.remove(AttractionTag.SOCIAL)
             }
-            viewModel.handleTagsFilter(tags)
+            viewModel.filter(tags, searchTerm)
         }
 
         binding.cultural.setOnCheckedChangeListener { _, isChecked ->
@@ -105,7 +109,7 @@ class DashboardFragment : Fragment() {
             } else {
                 tags.remove(AttractionTag.CULTURAL)
             }
-            viewModel.handleTagsFilter(tags)
+            viewModel.filter(tags, searchTerm)
         }
 
         binding.recreational.setOnCheckedChangeListener { _, isChecked ->
@@ -114,7 +118,7 @@ class DashboardFragment : Fragment() {
             } else {
                 tags.remove(AttractionTag.RECREATIONAL)
             }
-            viewModel.handleTagsFilter(tags)
+            viewModel.filter(tags, searchTerm)
         }
 
         binding.`fun`.setOnCheckedChangeListener { _, isChecked ->
@@ -123,7 +127,7 @@ class DashboardFragment : Fragment() {
             } else {
                 tags.remove(AttractionTag.FUN)
             }
-            viewModel.handleTagsFilter(tags)
+            viewModel.filter(tags, searchTerm)
         }
         binding.food.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -131,7 +135,7 @@ class DashboardFragment : Fragment() {
             } else {
                 tags.remove(AttractionTag.FOOD)
             }
-            viewModel.handleTagsFilter(tags)
+            viewModel.filter(tags, searchTerm)
         }
         binding.cafe.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -139,7 +143,7 @@ class DashboardFragment : Fragment() {
             } else {
                 tags.remove(AttractionTag.CAFE)
             }
-            viewModel.handleTagsFilter(tags)
+            viewModel.filter(tags, searchTerm)
         }
         binding.bar.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -147,7 +151,7 @@ class DashboardFragment : Fragment() {
             } else {
                 tags.remove(AttractionTag.BAR)
             }
-            viewModel.handleTagsFilter(tags)
+            viewModel.filter(tags, searchTerm)
         }
 
         binding.accommodation.setOnCheckedChangeListener { _, isChecked ->
@@ -156,7 +160,7 @@ class DashboardFragment : Fragment() {
             } else {
                 tags.remove(AttractionTag.ACCOMODATION)
             }
-            viewModel.handleTagsFilter(tags)
+            viewModel.filter(tags, searchTerm)
         }
     }
 }

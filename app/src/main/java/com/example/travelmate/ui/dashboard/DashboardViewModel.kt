@@ -1,6 +1,5 @@
 package com.example.travelmate.ui.dashboard
 
-import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +11,6 @@ import com.example.travelmate.utils.Resource
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import org.w3c.dom.Attr
 
 class DashboardViewModel(private val repository: AttractionsRepository) : ViewModel() {
 
@@ -22,8 +20,8 @@ class DashboardViewModel(private val repository: AttractionsRepository) : ViewMo
     private var mutableLoadAttractions: MutableLiveData<Resource<List<Attraction>>> =
         MutableLiveData()
 
-    fun handleSearchTerm(s: String) {
-        val observer = repository.searchByTerm(s)
+    fun filter(tags: List<AttractionTag>, s: String) {
+        val observer = repository.filter(tags, s)
             .subscribeOn(Schedulers.io())
             .subscribeBy(
                 onSuccess = {
@@ -36,23 +34,23 @@ class DashboardViewModel(private val repository: AttractionsRepository) : ViewMo
         subscriptions.add(observer)
     }
 
-    fun handleTagsFilter(tags: List<AttractionTag>) {
-        if (tags.isNotEmpty()) {
-            val observer = repository.filterByTags(tags)
-                .subscribeOn(Schedulers.io())
-                .subscribeBy(
-                    onSuccess = {
-                        mutableLoadAttractions.postValue(it)
-                    },
-                    onError = {
-                        mutableLoadAttractions.postValue(Resource.Error(AppError(message = it.message)))
-                    }
-                )
-            subscriptions.add(observer)
-        } else {
-            loadAttractions()
-        }
-    }
+//    fun handleTagsFilter(tags: List<AttractionTag>) {
+//        if (tags.isNotEmpty()) {
+//            val observer = repository.filterByTags(tags)
+//                .subscribeOn(Schedulers.io())
+//                .subscribeBy(
+//                    onSuccess = {
+//                        mutableLoadAttractions.postValue(it)
+//                    },
+//                    onError = {
+//                        mutableLoadAttractions.postValue(Resource.Error(AppError(message = it.message)))
+//                    }
+//                )
+//            subscriptions.add(observer)
+//        } else {
+//            loadAttractions()
+//        }
+//    }
 
     fun loadAttractions() {
         val observer = repository.loadAllAttractions()

@@ -74,7 +74,24 @@ class AttractionsRepository {
         }
     }
 
-    fun filterByTags(tags: List<AttractionTag>): Single<Resource<List<Attraction>>> {
+
+    fun filter(tags: List<AttractionTag>, searchTerm: String): Single<Resource<List<Attraction>>> {
+        return if (tags.isNotEmpty() && searchTerm != "") {
+            filterByTagsAndSearch(tags, searchTerm)
+        } else {
+            if (tags.isEmpty() && searchTerm == "") {
+                loadAllAttractions()
+            } else {
+                if (tags.isEmpty()) {
+                    filterBySearch(searchTerm)
+                } else {
+                    filterByTags(tags)
+                }
+            }
+        }
+    }
+
+    private fun filterByTags(tags: List<AttractionTag>): Single<Resource<List<Attraction>>> {
         val attractionsList = mutableListOf<Attraction>()
         return Single.create create@{ emitter ->
             attractionsRef.whereArrayContainsAny("tags", tags)
@@ -93,8 +110,7 @@ class AttractionsRepository {
         }
     }
 
-    //check Algolia
-    fun searchByTerm(searchTerm: String): Single<Resource<List<Attraction>>> {
+    private fun filterBySearch(searchTerm: String): Single<Resource<List<Attraction>>> {
         val attractionsList = mutableListOf<Attraction>()
         return Single.create create@{ emitter ->
 
@@ -113,6 +129,52 @@ class AttractionsRepository {
                 .startAt(searchTerm)
                 .endAt("$searchTerm\uf8ff")
                 .get()
+
+            val tasks: Task<List<QuerySnapshot>> =
+                Tasks.whenAllSuccess(task1, task2, task3)
+            tasks.addOnSuccessListener {
+                for (queryDocumentSnapshot in it) {
+                    for (documentSnapshot in queryDocumentSnapshot) {
+                        val attraction = documentSnapshot.toObject(Attraction::class.java)
+                        attractionsList.add(attraction)
+                    }
+                    emitter.onSuccess(Resource.Success(attractionsList))
+                }
+            }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
+    //check Algolia
+    private fun filterByTagsAndSearch(
+        tags: List<AttractionTag>,
+        searchTerm: String
+    ): Single<Resource<List<Attraction>>> {
+        val attractionsList = mutableListOf<Attraction>()
+        return Single.create create@{ emitter ->
+
+            val task1 = attractionsRef
+                .whereArrayContainsAny("tags", tags)
+                .orderBy("title")
+                .startAt(searchTerm)
+                .endAt("$searchTerm\uf8ff")
+                .get()
+            val task2 = attractionsRef
+                .whereArrayContainsAny("tags", tags)
+                .orderBy("city.name")
+                .startAt(searchTerm)
+                .endAt("$searchTerm\uf8ff")
+                .get()
+            val task3 = attractionsRef
+                .whereArrayContainsAny("tags", tags)
+                .orderBy("city.country")
+                .startAt(searchTerm)
+                .endAt("$searchTerm\uf8ff")
+                .get()
+
 
             val tasks: Task<List<QuerySnapshot>> =
                 Tasks.whenAllSuccess(task1, task2, task3)
