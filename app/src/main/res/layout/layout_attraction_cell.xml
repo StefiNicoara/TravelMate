@@ -26,92 +26,106 @@
         app:cardBackgroundColor="@color/mainBackground"
         app:cardCornerRadius="@dimen/default_margin_padding">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/locationPhoto"
-                android:layout_width="110dp"
-                android:layout_height="120dp"
-                android:contentDescription="@null" />
+            <ToggleButton
+                android:id="@+id/favoritesButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="-5dp"
+                android:layout_marginEnd="@dimen/small_margin_padding"
+                android:checked="@{attraction.isFavoriteByCurrentUser}"
+                android:background="@drawable/bookmarks_background"
+                android:padding="0dp"
+                android:textOff=""
+                android:textOn="" />
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/small_margin_padding"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <TextView
-                    style="@style/LogoText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:textAlignment="textStart"
-                    android:fontFamily="@font/sarabun_bold"
-                    android:text="@{attraction.title}"
-                    android:textSize="16sp" />
-
-                <TextView
-                    style="@style/MainText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@{location}" />
-
+                <ImageView
+                    android:id="@+id/locationPhoto"
+                    android:layout_width="110dp"
+                    android:layout_height="120dp"
+                    android:contentDescription="@null" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_gravity="bottom"
-                    android:baselineAligned="false"
-                    android:orientation="horizontal">
+                    android:layout_margin="@dimen/small_margin_padding"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/LogoText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/sarabun_bold"
+                        android:text="@{attraction.title}"
+                        android:textAlignment="textStart"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        style="@style/MainText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{location}" />
+
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="bottom"
-                        android:layout_weight="1">
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
                             android:layout_gravity="bottom"
-                            android:layout_marginBottom="2dp"
-                            android:background="@drawable/ic_thumb_up"
-                            android:contentDescription="@null" />
+                            android:layout_weight="1">
 
-                        <TextView
-                            style="@style/MainText"
+                            <ToggleButton
+                                android:id="@+id/likeButton"
+                                android:layout_width="18dp"
+                                android:checked="@{attraction.isLikedByCurrentUser}"
+                                android:layout_height="18dp"
+                                android:layout_gravity="bottom"
+                                android:layout_marginBottom="-1dp"
+                                android:background="@drawable/ic_heart"
+                                android:backgroundTint="@drawable/like_button_background_color"
+                                android:textOff=""
+                                android:textOn="" />
+
+                            <TextView
+                                android:id="@+id/likesValue"
+                                style="@style/MainText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:layout_marginStart="@dimen/small_margin_padding"
+                                android:text="@{Integer.toString(attraction.likes)}" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/tags"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:layout_marginStart="@dimen/small_margin_padding"
-                            android:text="@{Integer.toString(attraction.likes)}" />
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            app:addTags="@{attraction.tags}">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:layout_marginStart="@dimen/small_margin_padding"
-                            android:layout_marginBottom="2dp"
-                            android:background="@drawable/ic_thumb_down"
-                            android:contentDescription="@null" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/tags"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        app:addTags="@{attraction.tags}">
-
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
 </layout>

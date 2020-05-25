@@ -8,16 +8,35 @@ import com.example.travelmate.utils.AppError
 import com.example.travelmate.utils.Resource
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import io.reactivex.Single
+import android.widget.Toast
+import com.example.travelmate.MainActivity
+import com.google.android.gms.tasks.OnSuccessListener
+import android.provider.SyncStateContract.Helpers.update
+import android.util.Log
+import com.example.travelmate.model.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.*
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
+
 
 class AttractionsRepository {
 
+    private val fbAuth = FirebaseAuth.getInstance()
     private val storageReference = FirebaseStorage.getInstance().getReference("Attractions")
     private val db = FirebaseFirestore.getInstance()
     private val attractionsRef = db.collection("Attractions")
+    private val usersRef = db.collection("Users")
+    private val currentUserRef = fbAuth.currentUser?.uid?.let { usersRef.document(it) }
+
+    private lateinit var currentUser: User
+
+    init {
+        getCurrentUser()
+    }
 
     fun uploadAttraction(
         title: String,
@@ -35,13 +54,16 @@ class AttractionsRepository {
                 .addOnSuccessListener { _ ->
                     fileReference.downloadUrl.addOnSuccessListener {
                         val attraction = Attraction(
+                            id = "",
                             title = title,
                             city = city,
                             description = description,
                             tags = tags,
                             likes = 0,
                             image = it.toString(),
-                            comments = null
+                            comments = null,
+                            isLikedByCurrentUser = false,
+                            isFavoriteByCurrentUser = false
                         )
                         attractionsRef.add(attraction)
                         emitter.onSuccess(
@@ -56,6 +78,22 @@ class AttractionsRepository {
         }
     }
 
+    private fun getCurrentUser() {
+        val userId = fbAuth.currentUser!!.uid
+
+        usersRef.document(userId).get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val user = documentSnapshot.toObject(User::class.java)
+                    if (user != null) {
+                        currentUser = user
+                    }
+                }
+
+            }
+    }
+
+
     fun loadAllAttractions(): Single<Resource<List<Attraction>>> {
         val attractionsList = mutableListOf<Attraction>()
         return Single.create create@{ emitter ->
@@ -63,6 +101,19 @@ class AttractionsRepository {
                 .addOnSuccessListener { queryDocumentSnapshot ->
                     for (documentSnapshot in queryDocumentSnapshot) {
                         val attraction = documentSnapshot.toObject(Attraction::class.java)
+
+                        if (currentUser.likes != null) {
+                            if (currentUser.likes?.contains(documentSnapshot.id) == true) {
+                                attraction.isLikedByCurrentUser = true
+                            }
+                        }
+                        if (currentUser.favorites != null) {
+                            if (currentUser.favorites?.contains(attraction) == true) {
+                                attraction.isFavoriteByCurrentUser = true
+                            }
+                        }
+
+                        attraction.id = documentSnapshot.id
                         attractionsList.add(attraction)
                     }
                     emitter.onSuccess(Resource.Success(attractionsList))
@@ -99,6 +150,12 @@ class AttractionsRepository {
                 .addOnSuccessListener { queryDocumentSnapshot ->
                     for (documentSnapshot in queryDocumentSnapshot) {
                         val attraction = documentSnapshot.toObject(Attraction::class.java)
+                        attraction.id = documentSnapshot.id
+                        if (currentUser.likes != null) {
+                            if (currentUser.likes?.contains(documentSnapshot.id) == true) {
+                                attraction.isLikedByCurrentUser = true
+                            }
+                        }
                         attractionsList.add(attraction)
                     }
                     emitter.onSuccess(Resource.Success(attractionsList))
@@ -136,6 +193,12 @@ class AttractionsRepository {
                 for (queryDocumentSnapshot in it) {
                     for (documentSnapshot in queryDocumentSnapshot) {
                         val attraction = documentSnapshot.toObject(Attraction::class.java)
+                        attraction.id = documentSnapshot.id
+                        if (currentUser.likes != null) {
+                            if (currentUser.likes?.contains(documentSnapshot.id) == true) {
+                                attraction.isLikedByCurrentUser = true
+                            }
+                        }
                         attractionsList.add(attraction)
                     }
                     emitter.onSuccess(Resource.Success(attractionsList))
@@ -182,6 +245,12 @@ class AttractionsRepository {
                 for (queryDocumentSnapshot in it) {
                     for (documentSnapshot in queryDocumentSnapshot) {
                         val attraction = documentSnapshot.toObject(Attraction::class.java)
+                        attraction.id = documentSnapshot.id
+                        if (currentUser.likes != null) {
+                            if (currentUser.likes?.contains(documentSnapshot.id) == true) {
+                                attraction.isLikedByCurrentUser = true
+                            }
+                        }
                         attractionsList.add(attraction)
                     }
                     emitter.onSuccess(Resource.Success(attractionsList))
@@ -193,4 +262,49 @@ class AttractionsRepository {
             return@create
         }
     }
+
+    fun likeAttractionTransaction(attractionId: String): Single<Long> {
+        return Single.create create@{ emitter ->
+            currentUserRef?.update("likes", FieldValue.arrayUnion(attractionId))
+            db.runTransaction { transaction ->
+                val attractionRef = attractionsRef.document(attractionId)
+                val attractionSnapshot = transaction.get(attractionRef)
+                val newLikesValue = attractionSnapshot.getLong("likes")?.plus(1)
+                transaction.update(attractionRef, "likes", newLikesValue)
+                newLikesValue
+            }.addOnSuccessListener { result ->
+                emitter.onSuccess(result)
+            }
+            return@create
+        }
+    }
+
+    fun undoLikeAttractionTransaction(attractionId: String): Single<Long> {
+        return Single.create create@{ emitter ->
+            currentUserRef?.update("likes", FieldValue.arrayRemove(attractionId))
+            db.runTransaction { transaction ->
+                val attractionRef = attractionsRef.document(attractionId)
+                val attractionSnapshot = transaction.get(attractionRef)
+                val newLikesValue = attractionSnapshot.getLong("likes")?.minus(1)
+                transaction.update(attractionRef, "likes", newLikesValue)
+                newLikesValue
+            }.addOnSuccessListener { result ->
+                emitter.onSuccess(result)
+            }
+            return@create
+        }
+    }
+
+    fun addAttractionToFavorites(attraction: Attraction) {
+
+        currentUserRef?.update("favorites", FieldValue.arrayUnion(attraction))
+
+    }
+
+    fun removeAttractionFromFavorites(attraction: Attraction) {
+
+        currentUserRef?.update("favorites", FieldValue.arrayRemove(attraction))
+
+    }
+
 }

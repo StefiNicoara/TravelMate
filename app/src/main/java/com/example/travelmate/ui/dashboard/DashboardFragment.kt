@@ -64,18 +64,19 @@ class DashboardFragment : Fragment() {
     }
 
     private fun setUpDashboardRecyclerView(attractionsList: List<Attraction>) {
-        val adapter = context?.let { DashboardRVAdapter(it, attractionsList) }
+        val adapter = context?.let { DashboardRVAdapter(it, attractionsList, viewModel) }
         binding.attractionsRV.layoutManager = LinearLayoutManager(context)
         binding.attractionsRV.adapter = adapter
 
     }
 
+
     private fun handleSearch() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(s: String): Boolean {
-//                searchTerm = s
-//                viewModel.filter(tags, searchTerm)
+                searchTerm = s
+                viewModel.filter(tags, searchTerm)
                 return true
             }
 
@@ -92,6 +93,7 @@ class DashboardFragment : Fragment() {
             true
         }
     }
+
 
     private fun handleTags() {
         binding.social.setOnCheckedChangeListener { _, isChecked ->

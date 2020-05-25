@@ -16,6 +16,10 @@ class DashboardViewModel(private val repository: AttractionsRepository) : ViewMo
 
     private val subscriptions = CompositeDisposable()
 
+    val newLikesValue: LiveData<Long> get() = mutableLikeValue
+    private var mutableLikeValue: MutableLiveData<Long> =
+        MutableLiveData()
+
     val loadAttractions: LiveData<Resource<List<Attraction>>> get() = mutableLoadAttractions
     private var mutableLoadAttractions: MutableLiveData<Resource<List<Attraction>>> =
         MutableLiveData()
@@ -34,23 +38,35 @@ class DashboardViewModel(private val repository: AttractionsRepository) : ViewMo
         subscriptions.add(observer)
     }
 
-//    fun handleTagsFilter(tags: List<AttractionTag>) {
-//        if (tags.isNotEmpty()) {
-//            val observer = repository.filterByTags(tags)
-//                .subscribeOn(Schedulers.io())
-//                .subscribeBy(
-//                    onSuccess = {
-//                        mutableLoadAttractions.postValue(it)
-//                    },
-//                    onError = {
-//                        mutableLoadAttractions.postValue(Resource.Error(AppError(message = it.message)))
-//                    }
-//                )
-//            subscriptions.add(observer)
-//        } else {
-//            loadAttractions()
-//        }
-//    }
+    fun addLike(attractionId: String) {
+        val observer = repository.likeAttractionTransaction(attractionId)
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onSuccess = {
+                    mutableLikeValue.postValue(it)
+                }
+            )
+        subscriptions.add(observer)
+    }
+
+    fun undoLike(attractionId: String) {
+        val observer = repository.undoLikeAttractionTransaction(attractionId)
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onSuccess = {
+                    mutableLikeValue.postValue(it)
+                }
+            )
+        subscriptions.add(observer)
+    }
+
+    fun addToFavorites(attraction: Attraction) {
+        repository.addAttractionToFavorites(attraction)
+    }
+
+    fun removeFromFavorites(attraction: Attraction) {
+       repository.removeAttractionFromFavorites(attraction)
+    }
 
     fun loadAttractions() {
         val observer = repository.loadAllAttractions()

@@ -15,6 +15,8 @@ class UserAccountRepository {
     private val db = FirebaseFirestore.getInstance()
     private val usersRef = db.collection("Users")
 
+    private lateinit var userrr: User
+
     fun registerUser(nickname: String, email: String, password: String): Single<Resource<Boolean>> {
         return Single.create create@{ emitter ->
             fbAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
@@ -24,6 +26,7 @@ class UserAccountRepository {
                         nickname = nickname,
                         email = email,
                         journeys = null,
+                        likes = null,
                         favorites = null,
                         visited = null,
                         uploads = null
