@@ -9,13 +9,14 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.travelmate.R
 import com.example.travelmate.databinding.FragmentDashboardBinding
 import com.example.travelmate.model.Attraction
 import com.example.travelmate.model.AttractionTag
+import com.example.travelmate.ui.attractionDetails.AttractionDetailFragmentArgs
 import com.example.travelmate.utils.Resource
-import com.example.travelmate.utils.recyclerViewAdapters.DashboardRVAdapter
 import org.koin.android.ext.android.inject
 
 class DashboardFragment : Fragment() {
@@ -43,6 +44,17 @@ class DashboardFragment : Fragment() {
         handleTags()
         handleSearch()
         observeAttractions()
+        observeNavigation()
+    }
+
+    private fun observeNavigation() {
+        viewModel.detailsScreenNav.observe(this, Observer { attractionId ->
+            if (attractionId != null) {
+                val navController = findNavController()
+                val actions = DashboardFragmentDirections.fromDashboardToDetails(attractionId)
+                navController.navigate(actions)
+            }
+        })
     }
 
     private fun observeAttractions() {
@@ -64,10 +76,15 @@ class DashboardFragment : Fragment() {
     }
 
     private fun setUpDashboardRecyclerView(attractionsList: List<Attraction>) {
-        val adapter = context?.let { DashboardRVAdapter(it, attractionsList, viewModel) }
+        val adapter = context?.let {
+            DashboardRVAdapter(
+                it,
+                attractionsList,
+                viewModel
+            )
+        }
         binding.attractionsRV.layoutManager = LinearLayoutManager(context)
         binding.attractionsRV.adapter = adapter
-
     }
 
 

@@ -298,6 +298,8 @@
 
         <androidx.appcompat.widget.AppCompatButton
             style="@style/MainButton"
+            android:layout_marginStart="@dimen/default_margin_padding"
+            android:layout_marginEnd="@dimen/default_margin_padding"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/default_margin_padding"
             android:text="@string/publish"

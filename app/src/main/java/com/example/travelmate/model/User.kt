@@ -8,7 +8,7 @@ data class User(
     var nickname: String,
     var email: String,
     var journeys: List<Journey>?,
-    var favorites: List<Attraction>?,
+    var favorites: List<String>?,
     var likes: List<String>?,
     var uploads: List<Attraction>?,
     var visited: List<City>?

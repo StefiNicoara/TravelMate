@@ -24,7 +24,7 @@ val tagsIcon: Map<AttractionTag, Int> = mapOf(
 )
 
 @BindingAdapter("addTags")
-fun addTags(layout: LinearLayout, tagsList: List<AttractionTag>) {
+fun addTags(layout: LinearLayout, tagsList: List<AttractionTag>?) {
     layout.removeAllViews()
 
     // Converts dp into its equivalent px
@@ -43,7 +43,7 @@ fun addTags(layout: LinearLayout, tagsList: List<AttractionTag>) {
     layoutParams.gravity = Gravity.BOTTOM
 
 
-    tagsList.forEach { tag ->
+    tagsList?.forEach { tag ->
         val img = ImageView(layout.context)
         val drawableId = tagsIcon[tag]
         img.layoutParams = layoutParams

@@ -32,7 +32,7 @@ class AttractionsRepository {
     private val usersRef = db.collection("Users")
     private val currentUserRef = fbAuth.currentUser?.uid?.let { usersRef.document(it) }
 
-    private lateinit var currentUser: User
+    private var currentUser: User = User()
 
     init {
         getCurrentUser()
@@ -89,10 +89,29 @@ class AttractionsRepository {
                         currentUser = user
                     }
                 }
-
             }
     }
 
+    fun getAttractionById(attractionId: String): Single<Resource<Attraction>> {
+        return Single.create create@{ emitter ->
+            attractionsRef.document(attractionId).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot.exists()) {
+                        val attraction = documentSnapshot.toObject(Attraction::class.java)
+                        if (currentUser.favorites != null) {
+                            if (currentUser.favorites?.contains(attractionId) == true) {
+                                attraction?.isFavoriteByCurrentUser = true
+                            }
+                        }
+                        attraction?.let { emitter.onSuccess(Resource.Success(it)) }
+                    }
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
 
     fun loadAllAttractions(): Single<Resource<List<Attraction>>> {
         val attractionsList = mutableListOf<Attraction>()
@@ -100,18 +119,9 @@ class AttractionsRepository {
             attractionsRef.get()
                 .addOnSuccessListener { queryDocumentSnapshot ->
                     for (documentSnapshot in queryDocumentSnapshot) {
-                        val attraction = documentSnapshot.toObject(Attraction::class.java)
+                        var attraction = documentSnapshot.toObject(Attraction::class.java)
 
-                        if (currentUser.likes != null) {
-                            if (currentUser.likes?.contains(documentSnapshot.id) == true) {
-                                attraction.isLikedByCurrentUser = true
-                            }
-                        }
-                        if (currentUser.favorites != null) {
-                            if (currentUser.favorites?.contains(attraction) == true) {
-                                attraction.isFavoriteByCurrentUser = true
-                            }
-                        }
+                        attraction = setUserPreferences(attraction, documentSnapshot.id)
 
                         attraction.id = documentSnapshot.id
                         attractionsList.add(attraction)
@@ -149,13 +159,9 @@ class AttractionsRepository {
                 .get()
                 .addOnSuccessListener { queryDocumentSnapshot ->
                     for (documentSnapshot in queryDocumentSnapshot) {
-                        val attraction = documentSnapshot.toObject(Attraction::class.java)
+                        var attraction = documentSnapshot.toObject(Attraction::class.java)
+                        attraction = setUserPreferences(attraction, documentSnapshot.id)
                         attraction.id = documentSnapshot.id
-                        if (currentUser.likes != null) {
-                            if (currentUser.likes?.contains(documentSnapshot.id) == true) {
-                                attraction.isLikedByCurrentUser = true
-                            }
-                        }
                         attractionsList.add(attraction)
                     }
                     emitter.onSuccess(Resource.Success(attractionsList))
@@ -192,13 +198,9 @@ class AttractionsRepository {
             tasks.addOnSuccessListener {
                 for (queryDocumentSnapshot in it) {
                     for (documentSnapshot in queryDocumentSnapshot) {
-                        val attraction = documentSnapshot.toObject(Attraction::class.java)
+                        var attraction = documentSnapshot.toObject(Attraction::class.java)
+                        attraction = setUserPreferences(attraction, documentSnapshot.id)
                         attraction.id = documentSnapshot.id
-                        if (currentUser.likes != null) {
-                            if (currentUser.likes?.contains(documentSnapshot.id) == true) {
-                                attraction.isLikedByCurrentUser = true
-                            }
-                        }
                         attractionsList.add(attraction)
                     }
                     emitter.onSuccess(Resource.Success(attractionsList))
@@ -244,13 +246,9 @@ class AttractionsRepository {
             tasks.addOnSuccessListener {
                 for (queryDocumentSnapshot in it) {
                     for (documentSnapshot in queryDocumentSnapshot) {
-                        val attraction = documentSnapshot.toObject(Attraction::class.java)
+                        var attraction = documentSnapshot.toObject(Attraction::class.java)
+                        attraction = setUserPreferences(attraction, documentSnapshot.id)
                         attraction.id = documentSnapshot.id
-                        if (currentUser.likes != null) {
-                            if (currentUser.likes?.contains(documentSnapshot.id) == true) {
-                                attraction.isLikedByCurrentUser = true
-                            }
-                        }
                         attractionsList.add(attraction)
                     }
                     emitter.onSuccess(Resource.Success(attractionsList))
@@ -263,48 +261,49 @@ class AttractionsRepository {
         }
     }
 
-    fun likeAttractionTransaction(attractionId: String): Single<Long> {
-        return Single.create create@{ emitter ->
-            currentUserRef?.update("likes", FieldValue.arrayUnion(attractionId))
-            db.runTransaction { transaction ->
-                val attractionRef = attractionsRef.document(attractionId)
-                val attractionSnapshot = transaction.get(attractionRef)
-                val newLikesValue = attractionSnapshot.getLong("likes")?.plus(1)
-                transaction.update(attractionRef, "likes", newLikesValue)
-                newLikesValue
-            }.addOnSuccessListener { result ->
-                emitter.onSuccess(result)
+    private fun setUserPreferences(attraction: Attraction, id: String): Attraction {
+        if (currentUser.likes != null) {
+            if (currentUser.likes?.contains(id) == true) {
+                attraction.isLikedByCurrentUser = true
             }
-            return@create
+        }
+
+        if (currentUser.favorites != null) {
+            if (currentUser.favorites?.contains(id) == true) {
+                attraction.isFavoriteByCurrentUser = true
+            }
+        }
+        return attraction
+    }
+
+    fun likeAttractionTransaction(attractionId: String) {
+        currentUserRef?.update("likes", FieldValue.arrayUnion(attractionId))
+        db.runTransaction { transaction ->
+            val attractionRef = attractionsRef.document(attractionId)
+            val attractionSnapshot = transaction.get(attractionRef)
+            val newLikesValue = attractionSnapshot.getLong("likes")?.plus(1)
+            transaction.update(attractionRef, "likes", newLikesValue)
+            newLikesValue
         }
     }
 
-    fun undoLikeAttractionTransaction(attractionId: String): Single<Long> {
-        return Single.create create@{ emitter ->
-            currentUserRef?.update("likes", FieldValue.arrayRemove(attractionId))
-            db.runTransaction { transaction ->
-                val attractionRef = attractionsRef.document(attractionId)
-                val attractionSnapshot = transaction.get(attractionRef)
-                val newLikesValue = attractionSnapshot.getLong("likes")?.minus(1)
-                transaction.update(attractionRef, "likes", newLikesValue)
-                newLikesValue
-            }.addOnSuccessListener { result ->
-                emitter.onSuccess(result)
-            }
-            return@create
+    fun undoLikeAttractionTransaction(attractionId: String) {
+        currentUserRef?.update("likes", FieldValue.arrayRemove(attractionId))
+        db.runTransaction { transaction ->
+            val attractionRef = attractionsRef.document(attractionId)
+            val attractionSnapshot = transaction.get(attractionRef)
+            val newLikesValue = attractionSnapshot.getLong("likes")?.minus(1)
+            transaction.update(attractionRef, "likes", newLikesValue)
+            newLikesValue
         }
     }
 
-    fun addAttractionToFavorites(attraction: Attraction) {
-
-        currentUserRef?.update("favorites", FieldValue.arrayUnion(attraction))
-
+    fun addAttractionToFavorites(attractionId: String) {
+        currentUserRef?.update("favorites", FieldValue.arrayUnion(attractionId))
     }
 
-    fun removeAttractionFromFavorites(attraction: Attraction) {
-
-        currentUserRef?.update("favorites", FieldValue.arrayRemove(attraction))
-
+    fun removeAttractionFromFavorites(attractionId: String) {
+        currentUserRef?.update("favorites", FieldValue.arrayRemove(attractionId))
     }
 
 }

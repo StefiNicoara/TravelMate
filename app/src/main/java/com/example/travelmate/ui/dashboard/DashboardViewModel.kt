@@ -16,9 +16,8 @@ class DashboardViewModel(private val repository: AttractionsRepository) : ViewMo
 
     private val subscriptions = CompositeDisposable()
 
-    val newLikesValue: LiveData<Long> get() = mutableLikeValue
-    private var mutableLikeValue: MutableLiveData<Long> =
-        MutableLiveData()
+    val detailsScreenNav: LiveData<String> get() = mutableDetailsScreenNav
+    private var mutableDetailsScreenNav: MutableLiveData<String> = MutableLiveData()
 
     val loadAttractions: LiveData<Resource<List<Attraction>>> get() = mutableLoadAttractions
     private var mutableLoadAttractions: MutableLiveData<Resource<List<Attraction>>> =
@@ -39,33 +38,19 @@ class DashboardViewModel(private val repository: AttractionsRepository) : ViewMo
     }
 
     fun addLike(attractionId: String) {
-        val observer = repository.likeAttractionTransaction(attractionId)
-            .subscribeOn(Schedulers.io())
-            .subscribeBy(
-                onSuccess = {
-                    mutableLikeValue.postValue(it)
-                }
-            )
-        subscriptions.add(observer)
+        repository.likeAttractionTransaction(attractionId)
     }
 
     fun undoLike(attractionId: String) {
-        val observer = repository.undoLikeAttractionTransaction(attractionId)
-            .subscribeOn(Schedulers.io())
-            .subscribeBy(
-                onSuccess = {
-                    mutableLikeValue.postValue(it)
-                }
-            )
-        subscriptions.add(observer)
+        repository.undoLikeAttractionTransaction(attractionId)
     }
 
-    fun addToFavorites(attraction: Attraction) {
-        repository.addAttractionToFavorites(attraction)
+    fun addToFavorites(attractionId: String) {
+        repository.addAttractionToFavorites(attractionId)
     }
 
-    fun removeFromFavorites(attraction: Attraction) {
-       repository.removeAttractionFromFavorites(attraction)
+    fun removeFromFavorites(attractionId: String) {
+        repository.removeAttractionFromFavorites(attractionId)
     }
 
     fun loadAttractions() {
@@ -80,5 +65,9 @@ class DashboardViewModel(private val repository: AttractionsRepository) : ViewMo
                 }
             )
         subscriptions.add(observer)
+    }
+
+    fun navigateToDetailsScreen(attractionId: String) {
+        mutableDetailsScreenNav.postValue(attractionId)
     }
 }

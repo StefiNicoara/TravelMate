@@ -56,6 +56,8 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/logInButton"
         style="@style/MainButton"
+        android:layout_marginStart="@dimen/default_margin_padding"
+        android:layout_marginEnd="@dimen/default_margin_padding"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="70dp"
         android:alpha="0.0"

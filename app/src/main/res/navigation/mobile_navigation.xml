@@ -22,4 +22,23 @@
         android:name="com.example.travelmate.ui.profile.ProfileFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_profile" />
+
+
+    <fragment
+        android:id="@+id/navigation_attraction_details"
+        android:name="com.example.travelmate.ui.attractionDetails.AttractionDetailFragment"
+        android:label="@string/details"
+        tools:layout="@layout/fragment_attraction_detail">
+        <argument
+            android:name="attractionId"
+            app:argType="string" />
+    </fragment>
+
+    <action
+        android:id="@+id/from_dashboard_to_details"
+        app:destination="@+id/navigation_attraction_details">
+        <argument
+            android:name="attractionId"
+            app:argType="string" />
+    </action>
 </navigation>

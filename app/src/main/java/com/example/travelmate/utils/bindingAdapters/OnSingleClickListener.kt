@@ -1,4 +1,4 @@
-package com.example.travelmate.utils
+package com.example.travelmate.utils.bindingAdapters
 
 import android.view.View
 import androidx.databinding.BindingAdapter

@@ -1,20 +1,15 @@
-package com.example.travelmate.utils.recyclerViewAdapters
+package com.example.travelmate.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelmate.R
 import com.example.travelmate.databinding.LayoutAttractionCellBinding
 import com.example.travelmate.model.Attraction
-import com.example.travelmate.ui.dashboard.DashboardFragment
-import com.example.travelmate.ui.dashboard.DashboardViewModel
 import com.squareup.picasso.Picasso
 
 class DashboardRVAdapter(
@@ -24,7 +19,8 @@ class DashboardRVAdapter(
 ) :
     RecyclerView.Adapter<DashboardRVAdapter.AttractionsViewHolder>() {
 
-    private var triggered = false
+    private var isCheckedFavorites = false
+    private var isCheckedLikes = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttractionsViewHolder {
         val binding = DataBindingUtil.inflate<LayoutAttractionCellBinding>(
@@ -43,28 +39,32 @@ class DashboardRVAdapter(
     private fun handleFavorites(holder: AttractionsViewHolder, position: Int) {
 
         holder.attractionInfoBinding.favoritesButton.setOnClickListener {
-            triggered = true
+            if (isCheckedFavorites) {
+                viewModel.addToFavorites(attractionsList[position].id)
+            } else {
+                viewModel.removeFromFavorites(attractionsList[position].id)
+            }
         }
 
         holder.attractionInfoBinding.favoritesButton.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked && triggered) {
-                viewModel.addToFavorites(attractionsList[position])
-            } else {
-                viewModel.removeFromFavorites(attractionsList[position])
-            }
+            isCheckedFavorites = isChecked
         }
     }
 
 
     private fun handleLikes(holder: AttractionsViewHolder, position: Int) {
-        holder.attractionInfoBinding.likeButton.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
+        holder.attractionInfoBinding.likeButton.setOnClickListener {
+            if (isCheckedLikes) {
                 viewModel.addLike(attractionsList[position].id)
                 displayLikeValue(holder, 1)
             } else {
                 viewModel.undoLike(attractionsList[position].id)
                 displayLikeValue(holder, -1)
             }
+        }
+
+        holder.attractionInfoBinding.likeButton.setOnCheckedChangeListener { _, isChecked ->
+            isCheckedLikes = isChecked
         }
     }
 
@@ -81,21 +81,37 @@ class DashboardRVAdapter(
         }
     }
 
+    private fun handleNavigation(holder: AttractionsViewHolder, position: Int) {
+        holder.attractionInfoBinding.cardViewId.setOnClickListener {
+            viewModel.navigateToDetailsScreen(attractionsList[position].id)
+        }
+    }
 
-    @SuppressLint("DefaultLocale")
-    override fun onBindViewHolder(holder: AttractionsViewHolder, position: Int) {
-        val currentAttraction = attractionsList[position]
-        holder.attractionInfoBinding.attraction = currentAttraction
-        holder.attractionInfoBinding.location =
-            currentAttraction.city.name.capitalize() + ", " + currentAttraction.city.country.capitalize()
-        handleLikes(holder, position)
-        handleFavorites(holder, position)
+    private fun loadPhoto(holder: AttractionsViewHolder, position: Int) {
         Picasso.with(context)
-            .load(currentAttraction.image)
+            .load(attractionsList[position].image)
             .placeholder(R.drawable.whiteimage)
             .fit()
             .centerCrop()
             .into(holder.attractionInfoBinding.locationPhoto)
+    }
+
+    private fun loadLocation(holder: AttractionsViewHolder, position: Int) {
+        holder.attractionInfoBinding.location =
+            attractionsList[position].city.name.capitalize() +
+                    ", " +
+                    attractionsList[position].city.country.capitalize()
+    }
+
+
+    @SuppressLint("DefaultLocale")
+    override fun onBindViewHolder(holder: AttractionsViewHolder, position: Int) {
+        holder.attractionInfoBinding.attraction = attractionsList[position]
+        loadLocation(holder, position)
+        loadPhoto(holder, position)
+        handleLikes(holder, position)
+        handleFavorites(holder, position)
+        handleNavigation(holder, position)
     }
 
     class AttractionsViewHolder(itemBinding: LayoutAttractionCellBinding) :
