@@ -78,4 +78,14 @@
         <item name="android:paddingBottom">8dp</item>
     </style>
 
+    <style name="CustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:fontFamily">@font/jost_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/mainTextColor</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+
+
 </resources>

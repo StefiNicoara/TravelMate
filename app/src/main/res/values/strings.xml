@@ -42,4 +42,11 @@
     <string name="select_one_tag">Please select atleast one tag</string>
     <string name="details">Details</string>
     <string name="add_to_journey">Add to journey</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="tab_text_1">Journeys</string>
+    <string name="tab_text_2">Favorites</string>
+    <string name="tab_text_3">Uploads</string>
+    <string name="tab_text_4">Visited</string>
+    <string name="feeling_adventurous_yet">Feeling adventurous yet?</string>
+    <string name="hi">Hi</string>
 </resources>

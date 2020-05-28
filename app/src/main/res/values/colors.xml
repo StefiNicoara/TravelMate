@@ -8,6 +8,7 @@
     <color name="colorAccentDark">#DC524B</color>
     <color name="colorAccentLight">#FF8B85</color>
     <color name="bottom_nav">#DADADA</color>
+    <color name="bottom_nav_light">#ECECEC</color>
     <color name="bottom_nav_dark">#B3B3B3</color>
     <color name="mainTextColor">#585858</color>
     <color name="mainTextColorDark">#3C3C3C</color>
