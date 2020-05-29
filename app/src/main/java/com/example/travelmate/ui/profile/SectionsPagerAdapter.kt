@@ -5,25 +5,34 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.example.travelmate.R
+import com.example.travelmate.ui.profile.favorites.FavoritesFragment
+import com.example.travelmate.ui.profile.journeys.JourneysFragment
+import com.example.travelmate.ui.profile.uploads.UploadsFragment
 
 private val TAB_TITLES = arrayOf(
     R.string.tab_text_1,
     R.string.tab_text_2,
-    R.string.tab_text_3,
-    R.string.tab_text_4
+    R.string.tab_text_3
 )
 
-/**
- * A [FragmentPagerAdapter] that returns a fragment corresponding to
- * one of the sections/tabs/pages.
- */
 class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
-    FragmentPagerAdapter(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1)
+        var fragment = Fragment()
+
+        when (position) {
+            0 -> {
+                fragment = JourneysFragment()
+            }
+            1 -> {
+                fragment = FavoritesFragment()
+            }
+            2 -> {
+                fragment = UploadsFragment()
+            }
+        }
+        return fragment
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
@@ -31,7 +40,6 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
     }
 
     override fun getCount(): Int {
-        // Show 2 total pages.
-        return 4
+        return 3
     }
 }

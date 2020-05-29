@@ -78,20 +78,6 @@ class AttractionsRepository {
         }
     }
 
-    private fun getCurrentUser() {
-        val userId = fbAuth.currentUser!!.uid
-
-        usersRef.document(userId).get()
-            .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
-                    val user = documentSnapshot.toObject(User::class.java)
-                    if (user != null) {
-                        currentUser = user
-                    }
-                }
-            }
-    }
-
     fun getAttractionById(attractionId: String): Single<Resource<Attraction>> {
         return Single.create create@{ emitter ->
             attractionsRef.document(attractionId).get()
@@ -135,8 +121,44 @@ class AttractionsRepository {
         }
     }
 
+    fun loadFavoriteAttractions(): Single<Resource<List<Attraction>>> {
 
-    fun filter(tags: List<AttractionTag>, searchTerm: String): Single<Resource<List<Attraction>>> {
+
+
+//        getCurrentUser()
+//        val attractionsList = mutableListOf<Attraction>()
+//        return Single.create create@{ emitter ->
+//
+//            currentUser.favorites?.forEach { attractionId ->
+//                attractionsRef.document(attractionId).get()
+//                    .addOnSuccessListener { documentSnapshot ->
+//                        if (documentSnapshot.exists()) {
+//                            val attraction = documentSnapshot.toObject(Attraction::class.java)
+//                            attraction?.id = documentSnapshot.id
+//                            if (currentUser.likes != null) {
+//                                if (currentUser.likes?.contains(attractionId) == true) {
+//                                    attraction?.isLikedByCurrentUser = true
+//                                }
+//                            }
+//                            attraction?.isFavoriteByCurrentUser = true
+//                            attraction?.let {
+//                                attractionsList.add(it)
+//                            }
+//                        }
+//                        emitter.onSuccess(Resource.Success(attractionsList))
+//                    }
+//                    .addOnFailureListener {
+//                        emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+//                    }
+//            }
+//            return@create
+//        }
+    }
+
+    fun filter(
+        tags: List<AttractionTag>,
+        searchTerm: String
+    ): Single<Resource<List<Attraction>>> {
         return if (tags.isNotEmpty() && searchTerm != "") {
             filterByTagsAndSearch(tags, searchTerm)
         } else {
@@ -151,6 +173,7 @@ class AttractionsRepository {
             }
         }
     }
+
 
     private fun filterByTags(tags: List<AttractionTag>): Single<Resource<List<Attraction>>> {
         val attractionsList = mutableListOf<Attraction>()
@@ -261,21 +284,6 @@ class AttractionsRepository {
         }
     }
 
-    private fun setUserPreferences(attraction: Attraction, id: String): Attraction {
-        if (currentUser.likes != null) {
-            if (currentUser.likes?.contains(id) == true) {
-                attraction.isLikedByCurrentUser = true
-            }
-        }
-
-        if (currentUser.favorites != null) {
-            if (currentUser.favorites?.contains(id) == true) {
-                attraction.isFavoriteByCurrentUser = true
-            }
-        }
-        return attraction
-    }
-
     fun likeAttractionTransaction(attractionId: String) {
         currentUserRef?.update("likes", FieldValue.arrayUnion(attractionId))
         db.runTransaction { transaction ->
@@ -305,5 +313,35 @@ class AttractionsRepository {
     fun removeAttractionFromFavorites(attractionId: String) {
         currentUserRef?.update("favorites", FieldValue.arrayRemove(attractionId))
     }
+
+    private fun setUserPreferences(attraction: Attraction, id: String): Attraction {
+        if (currentUser.likes != null) {
+            if (currentUser.likes?.contains(id) == true) {
+                attraction.isLikedByCurrentUser = true
+            }
+        }
+
+        if (currentUser.favorites != null) {
+            if (currentUser.favorites?.contains(id) == true) {
+                attraction.isFavoriteByCurrentUser = true
+            }
+        }
+        return attraction
+    }
+
+    private fun getCurrentUser() {
+        val userId = fbAuth.currentUser!!.uid
+
+        usersRef.document(userId).get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val user = documentSnapshot.toObject(User::class.java)
+                    if (user != null) {
+                        currentUser = user
+                    }
+                }
+            }
+    }
+
 
 }

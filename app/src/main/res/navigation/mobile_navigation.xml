@@ -6,12 +6,6 @@
     app:startDestination="@+id/navigation_dashboard">
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.travelmate.ui.dashboard.DashboardFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_dashboard" />
-
-    <fragment
         android:id="@+id/navigation_add_attraction"
         android:name="com.example.travelmate.ui.addAttraction.AddAttractionFragment"
         android:label="@string/title_dashboard"
@@ -25,6 +19,22 @@
 
 
     <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.example.travelmate.ui.dashboard.DashboardFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/from_dashboard_to_details"
+            app:destination="@+id/navigation_attraction_details"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim">
+            <argument
+                android:name="attractionId"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
         android:id="@+id/navigation_attraction_details"
         android:name="com.example.travelmate.ui.attractionDetails.AttractionDetailFragment"
         android:label="@string/details"
@@ -32,13 +42,10 @@
         <argument
             android:name="attractionId"
             app:argType="string" />
+        <action
+            android:id="@+id/from_details_to_dashboard"
+            app:destination="@+id/navigation_dashboard">
+        </action>
     </fragment>
 
-    <action
-        android:id="@+id/from_dashboard_to_details"
-        app:destination="@+id/navigation_attraction_details">
-        <argument
-            android:name="attractionId"
-            app:argType="string" />
-    </action>
 </navigation>
