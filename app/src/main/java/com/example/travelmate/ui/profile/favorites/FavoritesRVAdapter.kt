@@ -39,10 +39,8 @@ class FavoritesRVAdapter(
     private fun handleFavorites(holder: AttractionsViewHolder, position: Int) {
 
         holder.attractionInfoBinding.favoritesButton.setOnClickListener {
-            if (isCheckedFavorites) {
-                viewModel.addToFavorites(attractionsList[position].id)
-            } else {
-                viewModel.removeFromFavorites(attractionsList[position].id)
+            if (!isCheckedFavorites) {
+                viewModel.removeFromFavorites(attractionsList[position])
             }
         }
 

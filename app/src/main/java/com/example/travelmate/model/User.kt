@@ -9,16 +9,12 @@ data class User(
     var email: String,
     var journeys: List<Journey>?,
     var favorites: List<String>?,
-    var likes: List<String>?,
-    var uploads: List<Attraction>?,
-    var visited: List<City>?
+    var likes: List<String>?
 ) {
     constructor() : this(
         "",
         "",
         "",
-        mutableListOf(),
-        mutableListOf(),
         mutableListOf(),
         mutableListOf(),
         mutableListOf()

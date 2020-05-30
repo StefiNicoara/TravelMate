@@ -14,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 
 import com.example.travelmate.R
 import com.example.travelmate.databinding.FragmentAttractionDetailBinding
+import com.example.travelmate.model.Attraction
 import com.example.travelmate.utils.Resource
 import com.squareup.picasso.Picasso
 import org.koin.android.ext.android.inject
@@ -44,7 +45,6 @@ class AttractionDetailFragment : Fragment() {
         })
         viewModel.getCurrentAttraction(arguments?.get("attractionId") as String)
         observeAttractions()
-        handleFavorites(arguments?.get("attractionId") as String)
     }
 
     private fun observeAttractions() {
@@ -57,6 +57,7 @@ class AttractionDetailFragment : Fragment() {
                     binding.attraction = result.data
                     loadLocation(result.data?.city?.name, result.data?.city?.country)
                     result.data?.image?.let { setPhoto(it) }
+                    result.data?.let { handleFavorites(it) }
                 }
                 is Resource.Error -> {
                     Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
@@ -77,13 +78,13 @@ class AttractionDetailFragment : Fragment() {
             .into(binding.image)
     }
 
-    private fun handleFavorites(attractionId: String) {
+    private fun handleFavorites(attraction: Attraction) {
 
         binding.favoritesButton.setOnClickListener {
             if (isCheckedFavorites) {
-                viewModel.addToFavorites(attractionId)
+                viewModel.addToFavorites(attraction)
             } else {
-                viewModel.removeFromFavorites(attractionId)
+                viewModel.removeFromFavorites(attraction)
             }
         }
 

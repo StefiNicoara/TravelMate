@@ -8,12 +8,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 import com.example.travelmate.R
-import com.example.travelmate.databinding.FragmentFavoritesBinding
+import com.example.travelmate.databinding.FragmentUserAttractionsBinding
 import com.example.travelmate.model.Attraction
+import com.example.travelmate.ui.profile.ProfileFragmentDirections
 import com.example.travelmate.utils.Resource
 import org.koin.android.ext.android.inject
 
@@ -21,14 +22,14 @@ import org.koin.android.ext.android.inject
 class FavoritesFragment : Fragment() {
 
     private val viewModel by inject<FavoritesViewModel>()
-    private lateinit var binding: FragmentFavoritesBinding
+    private lateinit var binding: FragmentUserAttractionsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_favorites, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_user_attractions, container, false)
         return binding.root
     }
 
@@ -41,6 +42,7 @@ class FavoritesFragment : Fragment() {
         }
         viewModel.loadFavoriteAttractions()
         observeFavoriteAttractions()
+        observeNavigation()
     }
 
 
@@ -58,6 +60,16 @@ class FavoritesFragment : Fragment() {
                 is Resource.Error -> {
                     Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
                 }
+            }
+        })
+    }
+
+    private fun observeNavigation() {
+        viewModel.detailsScreenNav.observe(this, Observer { attractionId ->
+            if (attractionId != null) {
+                val navController = findNavController()
+                val actions = ProfileFragmentDirections.fromProfileToDetails(attractionId)
+                navController.navigate(actions)
             }
         })
     }

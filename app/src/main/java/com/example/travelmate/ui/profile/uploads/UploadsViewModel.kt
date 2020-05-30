@@ -1,4 +1,4 @@
-package com.example.travelmate.ui.profile.favorites
+package com.example.travelmate.ui.profile.uploads
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,11 +11,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 
-class FavoritesViewModel(private val repository: AttractionsRepository) : ViewModel() {
-
+class UploadsViewModel(private val repository: AttractionsRepository) : ViewModel() {
     private val subscriptions = CompositeDisposable()
 
-    val loadFavoriteAttractions: LiveData<Resource<List<Attraction>>> get() = mutableLoadAttractions
+    val loadUploadedAttractions: LiveData<Resource<List<Attraction>>> get() = mutableLoadAttractions
     private var mutableLoadAttractions: MutableLiveData<Resource<List<Attraction>>> =
         MutableLiveData()
 
@@ -23,7 +22,7 @@ class FavoritesViewModel(private val repository: AttractionsRepository) : ViewMo
     private var mutableDetailsScreenNav: MutableLiveData<String> = MutableLiveData()
 
     fun loadFavoriteAttractions() {
-        val observer = repository.loadFavoriteAttractions()
+        val observer = repository.loadUploadedAttractions()
             .subscribeOn(Schedulers.io())
             .subscribeBy(
                 onSuccess = {
@@ -42,6 +41,10 @@ class FavoritesViewModel(private val repository: AttractionsRepository) : ViewMo
 
     fun undoLike(attractionId: String) {
         repository.undoLikeAttractionTransaction(attractionId)
+    }
+
+    fun addToFavorites(attraction: Attraction) {
+        repository.addAttractionToFavorites(attraction)
     }
 
     fun removeFromFavorites(attraction: Attraction) {

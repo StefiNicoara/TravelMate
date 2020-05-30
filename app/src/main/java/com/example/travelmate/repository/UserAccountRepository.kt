@@ -15,7 +15,6 @@ class UserAccountRepository {
     private val db = FirebaseFirestore.getInstance()
     private val usersRef = db.collection("Users")
 
-    private lateinit var userrr: User
 
     fun registerUser(nickname: String, email: String, password: String): Single<Resource<Boolean>> {
         return Single.create create@{ emitter ->
@@ -27,9 +26,7 @@ class UserAccountRepository {
                         email = email,
                         journeys = null,
                         likes = null,
-                        favorites = null,
-                        visited = null,
-                        uploads = null
+                        favorites = null
                     )
                     usersRef.document(it.result?.user!!.uid).set(user)
                     emitter.onSuccess(

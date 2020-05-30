@@ -15,7 +15,17 @@
         android:id="@+id/navigation_profile"
         android:name="com.example.travelmate.ui.profile.ProfileFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/from_profile_to_details"
+            app:destination="@+id/navigation_attraction_details"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim">
+            <argument
+                android:name="attractionId"
+                app:argType="string" />
+        </action>
+    </fragment>
 
 
     <fragment
@@ -44,8 +54,7 @@
             app:argType="string" />
         <action
             android:id="@+id/from_details_to_dashboard"
-            app:destination="@+id/navigation_dashboard">
-        </action>
+            app:destination="@+id/navigation_dashboard"></action>
     </fragment>
 
 </navigation>

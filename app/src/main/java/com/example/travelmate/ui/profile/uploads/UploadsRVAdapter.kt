@@ -1,4 +1,4 @@
-package com.example.travelmate.ui.dashboard
+package com.example.travelmate.ui.profile.uploads
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,14 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.travelmate.R
 import com.example.travelmate.databinding.LayoutAttractionCellBinding
 import com.example.travelmate.model.Attraction
+import com.example.travelmate.ui.profile.favorites.FavoritesViewModel
 import com.squareup.picasso.Picasso
 
-class DashboardRVAdapter(
+class UploadsRVAdapter(
     private val context: Context,
     var attractionsList: List<Attraction>,
-    var viewModel: DashboardViewModel
+    var viewModel: UploadsViewModel
 ) :
-    RecyclerView.Adapter<DashboardRVAdapter.AttractionsViewHolder>() {
+    RecyclerView.Adapter<UploadsRVAdapter.AttractionsViewHolder>() {
 
     private var isCheckedFavorites = false
     private var isCheckedLikes = false

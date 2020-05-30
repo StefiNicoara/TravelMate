@@ -45,12 +45,12 @@ class DashboardViewModel(private val repository: AttractionsRepository) : ViewMo
         repository.undoLikeAttractionTransaction(attractionId)
     }
 
-    fun addToFavorites(attractionId: String) {
-        repository.addAttractionToFavorites(attractionId)
+    fun addToFavorites(attraction: Attraction) {
+        repository.addAttractionToFavorites(attraction)
     }
 
-    fun removeFromFavorites(attractionId: String) {
-        repository.removeAttractionFromFavorites(attractionId)
+    fun removeFromFavorites(attraction: Attraction) {
+        repository.removeAttractionFromFavorites(attraction)
     }
 
     fun loadAttractions() {

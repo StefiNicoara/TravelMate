@@ -8,6 +8,7 @@
         tools:context=".ui.profile.favorites.FavoritesFragment">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:layout_margin="@dimen/default_margin_padding"
             android:id="@+id/swipeLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
