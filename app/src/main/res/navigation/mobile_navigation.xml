@@ -54,7 +54,13 @@
             app:argType="string" />
         <action
             android:id="@+id/from_details_to_dashboard"
-            app:destination="@+id/navigation_dashboard"></action>
+            app:destination="@+id/navigation_dashboard" />
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_add_journey"
+        android:name="com.example.travelmate.ui.profile.journeys.AddJourneyFragment"
+        android:label="@string/add_journey"
+        tools:layout="@layout/fragment_add_journey" />
 
 </navigation>

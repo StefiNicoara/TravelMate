@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/clowds"
+                android:contentDescription="@null" />
+
+            <TextView
+                style="@style/LogoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/large_margin_padding"
+                android:layout_marginEnd="@dimen/large_margin_padding"
+                android:fontFamily="@font/sarabun_bold"
+                android:text="@string/we_hope_you_re_excited_about_your_new_journey"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/black"
+                android:textSize="24sp" />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/large_margin_padding"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/large_margin_padding"
+                android:layout_marginEnd="@dimen/large_margin_padding"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/journeyName"
+                    style="@style/MainText"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/large_margin_padding"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="@dimen/default_margin_padding"
+                    android:layout_weight="1"
+                    android:autofillHints="@string/no_empty_fields"
+                    android:background="@drawable/rounded_bg"
+                    android:hint="@string/give_it_a_name"
+                    android:inputType="text"
+                    android:paddingStart="@dimen/default_margin_padding"
+                    android:paddingEnd="@dimen/default_margin_padding"
+                    android:textColorHint="@color/mainTextColor" />
+
+
+                <ImageView
+                    android:id="@+id/addPhoto"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/ic_add_a_photo"
+                    android:contentDescription="@null" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/large_margin_padding">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/startDate"
+                    style="@style/MainButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/large_margin_padding"
+                    android:layout_marginEnd="@dimen/small_margin_padding"
+                    android:layout_weight="1"
+                    android:text="@string/start_date" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/endDate"
+                    style="@style/MainButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/small_margin_padding"
+                    android:layout_marginEnd="@dimen/large_margin_padding"
+                    android:layout_weight="1"
+                    android:text="@string/end_date" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:background="@drawable/add_journey"
+                android:contentDescription="@null" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/default_margin_padding"
+                android:background="@drawable/ic_navigate_next"
+                android:clickable="true"
+                android:contentDescription="@null" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</layout>

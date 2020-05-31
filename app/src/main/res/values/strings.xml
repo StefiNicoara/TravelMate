@@ -52,4 +52,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="give_it_a_name">Give it a name</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
+    <string name="we_hope_you_re_excited_about_your_new_journey">We hope you\'re excited about your new journey!</string>
+    <string name="add_journey">AddJourney</string>
+    <string name="we_sure_are">We sure are!</string>
 </resources>
