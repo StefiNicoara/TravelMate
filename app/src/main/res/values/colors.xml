@@ -13,4 +13,5 @@
     <color name="mainTextColor">#585858</color>
     <color name="mainTextColorDark">#3C3C3C</color>
     <color name="mainBackground">#FFFEF7</color>
+    <color name="btn">#FFD001</color>
 </resources>
