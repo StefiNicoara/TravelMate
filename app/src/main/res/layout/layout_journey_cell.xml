@@ -46,29 +46,35 @@
                 android:background="@android:color/white" />
 
             <ImageView
+                android:id="@+id/gradient"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/blackgradient" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/journeyTitle"
                 style="@style/LogoText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/date"
                 android:layout_marginStart="@dimen/default_margin_padding"
                 android:ellipsize="end"
                 android:fontFamily="@font/sarabun_bold"
                 android:text="@{journey.name}"
                 android:textAlignment="textStart"
                 android:textColor="@android:color/white"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:id="@+id/date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/shareJourney"
                 android:layout_marginStart="@dimen/default_margin_padding"
                 android:layout_marginBottom="@dimen/small_margin_padding">
 
@@ -96,40 +102,42 @@
                     android:textColor="@android:color/white" />
             </LinearLayout>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="@dimen/default_margin_padding"
-                android:layout_marginBottom="@dimen/small_margin_padding"
-                android:background="@drawable/ic_check_circle_black_24dp"
-                android:contentDescription="@string/start_journey"
-                app:visibilityView="@{journey.completed}" />
 
-            <ImageView
-                android:id="@+id/shareJourney"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="@dimen/default_margin_padding"
-                android:layout_marginBottom="@dimen/small_margin_padding"
-                android:background="@drawable/ic_share"
-                android:contentDescription="@string/mark_as_complete" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/markStart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/shareJourney"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="@dimen/large_margin_padding"
-                android:layout_marginBottom="@dimen/small_margin_padding"
-                android:background="@drawable/ic_start"
-                android:contentDescription="@string/mark_as_complete"
-                app:visibilityView="@{isUpcoming}" />
-        </RelativeLayout>
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/default_margin_padding"
+                    android:layout_marginBottom="@dimen/small_margin_padding"
+                    android:background="@drawable/ic_check_circle_black_24dp"
+                    android:contentDescription="@string/start_journey"
+                    app:visibilityView="@{journey.completed}" />
 
+                <ImageView
+                    android:id="@+id/shareJourney"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="@dimen/default_margin_padding"
+                    android:layout_marginBottom="@dimen/small_margin_padding"
+                    android:background="@drawable/ic_share"
+                    android:contentDescription="@string/mark_as_complete" />
+
+                <ImageView
+                    android:id="@+id/markStart"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignStart="@+id/shareJourney"
+                    android:layout_marginStart="@dimen/large_margin_padding"
+                    android:layout_marginBottom="@dimen/small_margin_padding"
+                    android:background="@drawable/ic_start"
+                    android:contentDescription="@string/mark_as_complete"
+                    app:visibilityView="@{isUpcoming}" />
+            </RelativeLayout>
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
 </layout>

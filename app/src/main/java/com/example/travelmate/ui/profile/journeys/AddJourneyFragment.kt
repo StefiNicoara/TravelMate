@@ -19,6 +19,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.travelmate.utils.DATE_PICKER
+import com.example.travelmate.utils.DatePickerFragment
 import com.example.travelmate.utils.PICK_IMAGE_REQUEST
 import com.example.travelmate.utils.Resource
 import com.squareup.picasso.Picasso

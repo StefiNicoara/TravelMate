@@ -64,4 +64,7 @@
     <string name="start_journey">Start journey</string>
     <string name="mark_as_complete">Mark as complete</string>
     <string name="dash">-</string>
+    <string name="pick_a_date">Pick a date</string>
+    <string name="pick_a_time">Pick a time</string>
+    <string name="select_the_journey_below">Select the journey below</string>
 </resources>

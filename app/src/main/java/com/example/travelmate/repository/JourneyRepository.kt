@@ -7,6 +7,7 @@ import com.example.travelmate.model.JourneyPlan
 import com.example.travelmate.utils.AppError
 import com.example.travelmate.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import io.reactivex.Single
@@ -146,10 +147,48 @@ class JourneyRepository {
         }
     }
 
+    fun getAvailableJourneys(): Single<Resource<List<Journey>>> {
+        val journeyList = mutableListOf<Journey>()
+
+        return Single.create create@{ emitter ->
+            journeysRef.whereArrayContains("users", fbAuth.currentUser!!.uid)
+                .whereGreaterThanOrEqualTo("startDate", Date())
+                .get()
+                .addOnSuccessListener { queryDocumentSnapshot ->
+                    for (documentSnapshot in queryDocumentSnapshot) {
+                        val journey = documentSnapshot.toObject(Journey::class.java)
+                        journeyList.add(journey)
+                    }
+                    emitter.onSuccess(Resource.Success(journeyList))
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
     fun startJourney(journeyId: String): Single<Resource<Boolean>> {
         return Single.create create@{ emitter ->
             journeysRef.document(journeyId)
                 .update("started", true)
+                .addOnSuccessListener {
+                    emitter.onSuccess(Resource.Success(true))
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
+    fun addAttractionToJourneyPlan(
+        journeyId: String,
+        journeyPlan: JourneyPlan
+    ): Single<Resource<Boolean>> {
+        return Single.create create@{ emitter ->
+            journeysRef.document(journeyId)
+                .update("journeyPlans", FieldValue.arrayUnion(journeyPlan))
                 .addOnSuccessListener {
                     emitter.onSuccess(Resource.Success(true))
                 }

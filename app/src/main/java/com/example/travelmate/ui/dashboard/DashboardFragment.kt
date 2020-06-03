@@ -15,7 +15,6 @@ import com.example.travelmate.R
 import com.example.travelmate.databinding.FragmentDashboardBinding
 import com.example.travelmate.model.Attraction
 import com.example.travelmate.model.AttractionTag
-import com.example.travelmate.ui.attractionDetails.AttractionDetailFragmentArgs
 import com.example.travelmate.utils.Resource
 import org.koin.android.ext.android.inject
 

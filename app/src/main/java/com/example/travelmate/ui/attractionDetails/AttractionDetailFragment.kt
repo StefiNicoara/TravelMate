@@ -15,6 +15,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.travelmate.R
 import com.example.travelmate.databinding.FragmentAttractionDetailBinding
 import com.example.travelmate.model.Attraction
+import com.example.travelmate.ui.dashboard.DashboardFragmentDirections
 import com.example.travelmate.utils.Resource
 import com.squareup.picasso.Picasso
 import org.koin.android.ext.android.inject
@@ -45,6 +46,7 @@ class AttractionDetailFragment : Fragment() {
         })
         viewModel.getCurrentAttraction(arguments?.get("attractionId") as String)
         observeAttractions()
+        handleAddClick()
     }
 
     private fun observeAttractions() {
@@ -91,5 +93,15 @@ class AttractionDetailFragment : Fragment() {
         binding.favoritesButton.setOnCheckedChangeListener { _, isChecked ->
             isCheckedFavorites = isChecked
         }
+    }
+
+    private fun handleAddClick() {
+        binding.addToJourney.setOnClickListener {
+            val navController = findNavController()
+            val actions =
+                AttractionDetailFragmentDirections.fromDetailsToCreatePlan(arguments?.get("attractionId") as String)
+            navController.navigate(actions)
+        }
+
     }
 }

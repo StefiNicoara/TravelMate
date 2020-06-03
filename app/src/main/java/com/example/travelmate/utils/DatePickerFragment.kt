@@ -1,4 +1,4 @@
-package com.example.travelmate.ui.profile.journeys
+package com.example.travelmate.utils
 
 import android.app.DatePickerDialog
 import android.app.Dialog
