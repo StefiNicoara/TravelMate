@@ -113,7 +113,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="@dimen/default_margin_padding"
                     android:layout_marginBottom="@dimen/small_margin_padding"
-                    android:background="@drawable/ic_check_circle_black_24dp"
+                    android:background="@drawable/ic_check_circle"
                     android:contentDescription="@string/start_journey"
                     app:visibilityView="@{journey.completed}" />
 

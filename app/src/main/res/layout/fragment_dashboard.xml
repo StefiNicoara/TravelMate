@@ -16,7 +16,7 @@
             android:background="@drawable/rounded_bg"
             android:closeIcon="@drawable/ic_close_black_24dp"
             android:contextClickable="true"
-            android:searchIcon="@drawable/ic_search_black_24dp" />
+            android:searchIcon="@drawable/ic_search" />
 
         <HorizontalScrollView
             android:layout_width="match_parent"
