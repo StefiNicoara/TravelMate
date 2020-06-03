@@ -58,4 +58,10 @@
     <string name="we_hope_you_re_excited_about_your_new_journey">We hope you\'re excited about your new journey!</string>
     <string name="add_journey">AddJourney</string>
     <string name="we_sure_are">We sure are!</string>
+    <string name="current">Current</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="past">Past</string>
+    <string name="start_journey">Start journey</string>
+    <string name="mark_as_complete">Mark as complete</string>
+    <string name="dash">-</string>
 </resources>

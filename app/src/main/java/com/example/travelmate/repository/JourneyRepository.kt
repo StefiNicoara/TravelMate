@@ -32,7 +32,6 @@ class JourneyRepository {
             storageReference.child(System.currentTimeMillis().toString() + "." + extension)
 
         return Single.create create@{ emitter ->
-
             fileReference.putFile(imageUri)
                 .addOnSuccessListener { _ ->
                     fileReference.downloadUrl.addOnSuccessListener {
@@ -58,7 +57,105 @@ class JourneyRepository {
                 .addOnFailureListener {
                     emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
                 }
+            return@create
+        }
+    }
 
+    fun getCurrentJourneys(): Single<Resource<List<Journey>>> {
+
+        val journeyList = mutableListOf<Journey>()
+
+        return Single.create create@{ emitter ->
+            journeysRef.whereArrayContains("users", fbAuth.currentUser!!.uid)
+                .whereEqualTo("started", true)
+                .get()
+                .addOnSuccessListener { queryDocumentSnapshot ->
+                    for (documentSnapshot in queryDocumentSnapshot) {
+                        val journey = documentSnapshot.toObject(Journey::class.java)
+                        journeyList.add(journey)
+                    }
+                    emitter.onSuccess(Resource.Success(journeyList))
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
+    fun getUpcomingJourneys(): Single<Resource<List<Journey>>> {
+        val journeyList = mutableListOf<Journey>()
+
+        return Single.create create@{ emitter ->
+            journeysRef.whereArrayContains("users", fbAuth.currentUser!!.uid)
+                .whereGreaterThanOrEqualTo("startDate", Date())
+                .whereEqualTo("started", false)
+                .get()
+                .addOnSuccessListener { queryDocumentSnapshot ->
+                    for (documentSnapshot in queryDocumentSnapshot) {
+                        val journey = documentSnapshot.toObject(Journey::class.java)
+                        journeyList.add(journey)
+                    }
+                    emitter.onSuccess(Resource.Success(journeyList))
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
+    fun getPastJourneys(): Single<Resource<List<Journey>>> {
+        val journeyList = mutableListOf<Journey>()
+
+        return Single.create create@{ emitter ->
+            journeysRef.whereArrayContains("users", fbAuth.currentUser!!.uid)
+                .whereLessThan("startDate", Date())
+                .get()
+                .addOnSuccessListener { queryDocumentSnapshot ->
+                    for (documentSnapshot in queryDocumentSnapshot) {
+                        val journey = documentSnapshot.toObject(Journey::class.java)
+                        journeyList.add(journey)
+                    }
+                    emitter.onSuccess(Resource.Success(journeyList))
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
+    fun getPendingJourneys(): Single<Resource<List<Journey>>> {
+        val journeyList = mutableListOf<Journey>()
+
+        return Single.create create@{ emitter ->
+            journeysRef.whereArrayContains("pending", fbAuth.currentUser!!.uid)
+                .get()
+                .addOnSuccessListener { queryDocumentSnapshot ->
+                    for (documentSnapshot in queryDocumentSnapshot) {
+                        val journey = documentSnapshot.toObject(Journey::class.java)
+                        journeyList.add(journey)
+                    }
+                    emitter.onSuccess(Resource.Success(journeyList))
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
+    fun startJourney(journeyId: String): Single<Resource<Boolean>> {
+        return Single.create create@{ emitter ->
+            journeysRef.document(journeyId)
+                .update("started", true)
+                .addOnSuccessListener {
+                    emitter.onSuccess(Resource.Success(true))
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
             return@create
         }
     }

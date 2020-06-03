@@ -44,7 +44,6 @@ class AddJourneyViewModel(private val repository: JourneyRepository) : ViewModel
 
     fun createJourney() {
         mutableCreateClick.value = Resource.Loading()
-        Log.d("Ceva", "sent")
         if (checkFieldsNotEmpty()) {
             callRepositoryFunction()
         } else {

@@ -8,10 +8,11 @@ data class Journey(
     var startDate: Date,
     var endDate: Date,
     var image: String?,
-    var journeyPlans: Map<String, JourneyPlan>?,
+    var journeyPlans: List<JourneyPlan>?,
     var users: List<String>,
     var pending: List<String>?,
-    var completed: Boolean = false
+    var completed: Boolean = false,
+    var started: Boolean = false
 ) {
     constructor() : this(
         "",
@@ -19,9 +20,10 @@ data class Journey(
         Date(),
         Date(),
         null,
-        mutableMapOf(),
         mutableListOf(),
         mutableListOf(),
+        mutableListOf(),
+        false,
         false
     )
 }

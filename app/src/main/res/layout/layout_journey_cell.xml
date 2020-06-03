@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.text.InputType" />
+
+        <variable
+            name="journey"
+            type="com.example.travelmate.model.Journey" />
+
+        <variable
+            name="startDate"
+            type="String" />
+
+        <variable
+            name="endDate"
+            type="String" />
+
+        <variable
+            name="isUpcoming"
+            type="Boolean" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewId"
+        android:layout_width="250dp"
+        android:layout_height="170dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="@dimen/small_margin_padding"
+        android:layout_marginBottom="@dimen/small_margin_padding"
+        android:clickable="true"
+        app:cardBackgroundColor="@color/mainBackground"
+        app:cardCornerRadius="@dimen/default_margin_padding">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/journeyImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/blackgradient" />
+
+            <TextView
+                android:id="@+id/journeyTitle"
+                style="@style/LogoText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/date"
+                android:layout_marginStart="@dimen/default_margin_padding"
+                android:ellipsize="end"
+                android:fontFamily="@font/sarabun_bold"
+                android:text="@{journey.name}"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/white"
+                android:textSize="24sp" />
+
+            <LinearLayout
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/shareJourney"
+                android:layout_marginStart="@dimen/default_margin_padding"
+                android:layout_marginBottom="@dimen/small_margin_padding">
+
+                <TextView
+                    style="@style/MainText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{startDate}"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    style="@style/MainText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/small_margin_padding"
+                    android:layout_marginEnd="@dimen/small_margin_padding"
+                    android:text="@string/dash"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    style="@style/MainText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{endDate}"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="@dimen/default_margin_padding"
+                android:layout_marginBottom="@dimen/small_margin_padding"
+                android:background="@drawable/ic_check_circle_black_24dp"
+                android:contentDescription="@string/start_journey"
+                app:visibilityView="@{journey.completed}" />
+
+            <ImageView
+                android:id="@+id/shareJourney"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/default_margin_padding"
+                android:layout_marginBottom="@dimen/small_margin_padding"
+                android:background="@drawable/ic_share"
+                android:contentDescription="@string/mark_as_complete" />
+
+            <ImageView
+                android:id="@+id/markStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/shareJourney"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/large_margin_padding"
+                android:layout_marginBottom="@dimen/small_margin_padding"
+                android:background="@drawable/ic_start"
+                android:contentDescription="@string/mark_as_complete"
+                app:visibilityView="@{isUpcoming}" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

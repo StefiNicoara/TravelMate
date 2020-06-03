@@ -142,7 +142,7 @@ class AttractionsRepository {
         }
     }
 
-    fun loadUploadedAttractions() : Single<Resource<List<Attraction>>> {
+    fun loadUploadedAttractions(): Single<Resource<List<Attraction>>> {
         val userId = fbAuth.currentUser!!.uid
         val attractionsList = mutableListOf<Attraction>()
         return Single.create create@{ emitter ->

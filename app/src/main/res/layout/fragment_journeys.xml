@@ -1,21 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout xmlns:tools="http://schemas.android.com/tools"
+    <data>
+
+        <variable
+            name="visibilityPending"
+            type="Boolean" />
+
+        <variable
+            name="visibilityCurrent"
+            type="Boolean" />
+
+        <variable
+            name="visibilityUpcoming"
+            type="Boolean" />
+
+        <variable
+            name="visibilityPast"
+            type="Boolean" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.profile.journeys.JourneysFragment">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="end"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/default_margin_padding"
             android:layout_marginEnd="@dimen/default_margin_padding"
-            android:layout_marginTop="300dp"
-            android:background="@drawable/ic_add_journey"
-            android:clickable="true"
-            android:contentDescription="@null" />
-    </FrameLayout>
+            android:orientation="vertical"
+            tools:context=".ui.profile.journeys.JourneysFragment">
+
+            <ImageView
+                android:id="@+id/button"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="end"
+                android:background="@drawable/ic_add_journey"
+                android:clickable="true"
+                android:contentDescription="@null" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:visibilityView="@{visibilityPending}">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/pendingJourneys"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/currentJourneyLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:visibilityView="@{visibilityCurrent}">
+
+                <TextView
+                    style="@style/MainText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/small_margin_padding"
+                    android:text="@string/current" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/currentJourneyRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/upcomingJourneyLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:visibilityView="@{visibilityUpcoming}">
+
+                <TextView
+                    style="@style/MainText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/small_margin_padding"
+                    android:text="@string/upcoming" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/upcomingJourneyRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/pastJourneyLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:visibilityView="@{visibilityPast}">
+
+                <TextView
+                    style="@style/MainText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/small_margin_padding"
+                    android:text="@string/past" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/pastJourneyRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>
