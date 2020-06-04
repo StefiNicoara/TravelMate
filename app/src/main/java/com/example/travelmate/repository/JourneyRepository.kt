@@ -62,6 +62,22 @@ class JourneyRepository {
         }
     }
 
+    fun getJourneyById(journeyId: String): Single<Resource<Journey>> {
+        return Single.create create@{ emitter ->
+            journeysRef.document(journeyId).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot.exists()) {
+                        val journey = documentSnapshot.toObject(Journey::class.java)
+                        journey?.let { emitter.onSuccess(Resource.Success(it)) }
+                    }
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
     fun getCurrentJourneys(): Single<Resource<List<Journey>>> {
 
         val journeyList = mutableListOf<Journey>()

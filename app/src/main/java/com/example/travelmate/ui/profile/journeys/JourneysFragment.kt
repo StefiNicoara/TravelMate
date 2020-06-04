@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.travelmate.R
 import com.example.travelmate.databinding.FragmentJourneysBinding
 import com.example.travelmate.model.Journey
+import com.example.travelmate.ui.dashboard.DashboardFragmentDirections
+import com.example.travelmate.ui.profile.ProfileFragmentDirections
 import com.example.travelmate.ui.profile.journeys.recyclerViewAdapters.JourneyRVAdapter
 import com.example.travelmate.utils.Resource
 import org.koin.android.ext.android.inject
@@ -50,6 +52,7 @@ class JourneysFragment : Fragment() {
         observeUpcomingJourneys()
         observePastJourneys()
         observeStartJourney()
+        observeNavigation()
 
         binding.button.setOnClickListener {
             val navController = findNavController()
@@ -142,6 +145,16 @@ class JourneysFragment : Fragment() {
                 is Resource.Error -> {
                     Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
                 }
+            }
+        })
+    }
+
+    private fun observeNavigation() {
+        viewModel.navigateToJourneyPlans.observe(this, Observer { result ->
+            if (result != null) {
+                val navController = findNavController()
+                val actions = ProfileFragmentDirections.fromProfileToJourneyPlan(result)
+                navController.navigate(actions)
             }
         })
     }

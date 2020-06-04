@@ -33,6 +33,9 @@ class JourneysViewModel(private val repository: JourneyRepository) : ViewModel()
     val startJourney: LiveData<Resource<Boolean>> get() = mutableStartJourney
     private var mutableStartJourney: MutableLiveData<Resource<Boolean>> = MutableLiveData()
 
+    val navigateToJourneyPlans: LiveData<String> get() = mutableNavigation
+    private var mutableNavigation: MutableLiveData<String> = MutableLiveData()
+
     fun loadPendingJourneys() {
         val observer = repository.getPendingJourneys()
             .subscribeOn(Schedulers.io())
@@ -101,5 +104,9 @@ class JourneysViewModel(private val repository: JourneyRepository) : ViewModel()
                 }
             )
         subscriptions.add(observer)
+    }
+
+    fun handleNavigationToPlans(journeyId: String) {
+        mutableNavigation.postValue(journeyId)
     }
 }

@@ -12,25 +12,6 @@
         tools:layout="@layout/fragment_add_attraction" />
 
     <fragment
-        android:id="@+id/navigation_create_plan"
-        android:name="com.example.travelmate.ui.createJourneyPlan.CreateJourneyPlanFragment"
-        android:label="Create plan"
-        tools:layout="@layout/fragment_create_journey_plan">
-        <argument
-            android:name="attractionId"
-            app:argType="string" />
-        <action
-            android:id="@+id/from_create_plan_to_details"
-            app:destination="@+id/navigation_attraction_details"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim">
-            <argument
-                android:name="attractionId"
-                app:argType="string" />
-        </action>
-    </fragment>
-
-    <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.travelmate.ui.profile.ProfileFragment"
         android:label="@string/title_notifications"
@@ -42,6 +23,15 @@
             app:exitAnim="@anim/nav_default_exit_anim">
             <argument
                 android:name="attractionId"
+                app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/from_profile_to_journey_plan"
+            app:destination="@+id/navigation_journey_plan"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim">
+            <argument
+                android:name="journeyId"
                 app:argType="string" />
         </action>
     </fragment>
@@ -91,4 +81,32 @@
         android:label="@string/add_journey"
         tools:layout="@layout/fragment_add_journey" />
 
+    <fragment
+        android:id="@+id/navigation_create_plan"
+        android:name="com.example.travelmate.ui.createJourneyPlan.CreateJourneyPlanFragment"
+        android:label="Create plan"
+        tools:layout="@layout/fragment_create_journey_plan">
+        <argument
+            android:name="attractionId"
+            app:argType="string" />
+        <action
+            android:id="@+id/from_create_plan_to_details"
+            app:destination="@+id/navigation_attraction_details"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim">
+            <argument
+                android:name="attractionId"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_journey_plan"
+        android:name="com.example.travelmate.ui.profile.journeys.journeyPlan.JourneyPlanFragment"
+        android:label="Journey Plans"
+        tools:layout="@layout/fragment_journey_plan">
+        <argument
+            android:name="journeyId"
+            app:argType="string" />
+    </fragment>
 </navigation>

@@ -49,6 +49,12 @@ class JourneyRVAdapter(
         }
     }
 
+    private fun cardClick(holder: JourneysViewHolder, position: Int) {
+        holder.journeyInfoBinding.cardViewId.setOnClickListener {
+            viewModel.handleNavigationToPlans(journeyList[position].journeyId)
+        }
+    }
+
     override fun onBindViewHolder(holder: JourneysViewHolder, position: Int) {
         holder.journeyInfoBinding.journey = journeyList[position]
         holder.journeyInfoBinding.startDate = DateFormat.getDateInstance(DateFormat.DATE_FIELD)
@@ -58,6 +64,7 @@ class JourneyRVAdapter(
         holder.journeyInfoBinding.isUpcoming = isUpcoming
         loadPhoto(holder, position)
         startJourneyClick(holder, position)
+        cardClick(holder, position)
     }
 
     class JourneysViewHolder(itemBinding: LayoutJourneyCellBinding) :
