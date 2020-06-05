@@ -58,6 +58,14 @@ class UserAccountRepository {
         }
     }
 
+    fun logOutUser(): Single<Resource<Boolean>> {
+        return Single.create create@{ emitter ->
+            fbAuth.signOut()
+            emitter.onSuccess(Resource.Success(true))
+            return@create
+        }
+    }
+
     fun getCurrentUser(): Single<User> {
         val userId = fbAuth.currentUser!!.uid
 

@@ -32,7 +32,7 @@ val viewModelModule = module {
     viewModel { AddAttractionViewModel(get()) }
     viewModel { DashboardViewModel(get()) }
     viewModel { AttractionDetailViewModel(get()) }
-    viewModel { ProfileViewModel() }
+    viewModel { ProfileViewModel(get()) }
     viewModel { FavoritesViewModel(get()) }
     viewModel { UploadsViewModel(get()) }
     viewModel { AddJourneyViewModel(get()) }

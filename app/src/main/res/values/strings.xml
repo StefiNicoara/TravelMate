@@ -69,4 +69,7 @@
     <string name="select_the_journey_below">Select the journey below</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="log_out">Log out</string>
+    <string name="change_password">Change password</string>
+    <string name="menu_button">Menu Button</string>
 </resources>
