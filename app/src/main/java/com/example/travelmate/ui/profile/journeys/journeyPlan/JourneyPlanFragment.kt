@@ -20,6 +20,9 @@ import com.example.travelmate.utils.Resource
 import com.squareup.picasso.Picasso
 import org.koin.android.ext.android.inject
 import java.text.DateFormat
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ItemTouchHelper
+
 
 class JourneyPlanFragment : Fragment() {
 
@@ -49,6 +52,7 @@ class JourneyPlanFragment : Fragment() {
         binding.hasPlans = false
         viewModel.loadJourney(arguments?.get("journeyId") as String)
         observeJourney()
+        observeDelete()
     }
 
     private fun observeJourney() {
@@ -67,6 +71,23 @@ class JourneyPlanFragment : Fragment() {
         })
     }
 
+    private fun observeDelete() {
+        viewModel.deleteResponse.observe(this, Observer { result ->
+            when (result) {
+                is Resource.Loading -> {
+
+                }
+                is Resource.Success -> {
+                    viewModel.loadJourney(arguments?.get("journeyId") as String)
+                    Toast.makeText(context, "Deleted", Toast.LENGTH_LONG).show()
+                }
+                is Resource.Error -> {
+                    Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        })
+    }
+
 
     private fun setJourneyPlansRV(plansList: List<JourneyPlan>) {
 
@@ -75,14 +96,28 @@ class JourneyPlanFragment : Fragment() {
         }
 
         val adapter = context?.let {
-            JourneyPlansRVAdapter(
-                it,
-                list,
-                viewModel
-            )
+            JourneyPlansRVAdapter(it, list, viewModel)
         }
-        binding.plansRV.layoutManager =
-            LinearLayoutManager(context)
+        binding.plansRV.layoutManager = LinearLayoutManager(context)
+
+        ItemTouchHelper(object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                viewModel.deletePlan(
+                    adapter!!.getPlanAtPosition(viewHolder.adapterPosition),
+                    arguments?.get("journeyId") as String
+                )
+            }
+        }).attachToRecyclerView(binding.plansRV)
         binding.plansRV.adapter = adapter
     }
 

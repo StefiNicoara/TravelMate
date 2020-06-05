@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.travelmate.model.Journey
+import com.example.travelmate.model.JourneyPlan
 import com.example.travelmate.repository.JourneyRepository
 import com.example.travelmate.utils.AppError
 import com.example.travelmate.utils.Resource
@@ -19,6 +20,10 @@ class JourneyPlanViewModel(private val repository: JourneyRepository) : ViewMode
     private var mutableJourney: MutableLiveData<Resource<Journey>> =
         MutableLiveData()
 
+    val deleteResponse: LiveData<Resource<Boolean>> get() = mutableDeleteResponse
+    private var mutableDeleteResponse: MutableLiveData<Resource<Boolean>> =
+        MutableLiveData()
+
 
     fun loadJourney(journeyId: String) {
         val observer = repository.getJourneyById(journeyId)
@@ -32,5 +37,20 @@ class JourneyPlanViewModel(private val repository: JourneyRepository) : ViewMode
                 }
             )
         subscriptions.add(observer)
+    }
+
+    fun deletePlan(plan: JourneyPlan, journeyId: String) {
+        val observer = repository.deleteJourneyPlan(plan, journeyId)
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onSuccess = {
+                    mutableDeleteResponse.postValue(it)
+                },
+                onError = {
+                    mutableDeleteResponse.postValue(Resource.Error(AppError(message = it.message)))
+                }
+            )
+        subscriptions.add(observer)
+
     }
 }

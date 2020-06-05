@@ -36,6 +36,10 @@ class JourneyPlansRVAdapter(
         return plansList.size
     }
 
+    fun getPlanAtPosition(position: Int): JourneyPlan {
+        return plansList[position]
+    }
+
     private fun loadPhoto(holder: JourneyPlansViewHolder, position: Int) {
         Picasso.with(context)
             .load(plansList[position].attraction.image)

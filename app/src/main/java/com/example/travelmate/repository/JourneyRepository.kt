@@ -214,4 +214,18 @@ class JourneyRepository {
             return@create
         }
     }
+
+    fun deleteJourneyPlan(plan: JourneyPlan, journeyId: String): Single<Resource<Boolean>> {
+        return Single.create create@{ emitter ->
+            journeysRef.document(journeyId)
+                .update("journeyPlans", FieldValue.arrayRemove(plan))
+                .addOnSuccessListener {
+                    emitter.onSuccess(Resource.Success(true))
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
 }
