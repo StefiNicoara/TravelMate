@@ -1,5 +1,6 @@
 package com.example.travelmate.repository
 
+import com.example.travelmate.model.Attraction
 import com.example.travelmate.model.User
 import com.example.travelmate.utils.AppError
 import com.example.travelmate.utils.Resource
@@ -16,12 +17,18 @@ class UserAccountRepository {
     private val usersRef = db.collection("Users")
 
 
-    fun registerUser(nickname: String, email: String, password: String): Single<Resource<Boolean>> {
+    fun registerUser(
+        nickname: String,
+        username: String,
+        email: String,
+        password: String
+    ): Single<Resource<Boolean>> {
         return Single.create create@{ emitter ->
             fbAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful) {
                     val user = User(
                         userId = it.result?.user!!.uid,
+                        username = username,
                         nickname = nickname,
                         email = email,
                         journeys = null,
@@ -62,6 +69,26 @@ class UserAccountRepository {
         return Single.create create@{ emitter ->
             fbAuth.signOut()
             emitter.onSuccess(Resource.Success(true))
+            return@create
+        }
+    }
+
+    fun searchByUsername(username: String): Single<Resource<User>> {
+        return Single.create create@{ emitter ->
+            usersRef.whereEqualTo("username", username)
+                .get()
+                .addOnSuccessListener { queryDocumentSnapshot ->
+                    if (queryDocumentSnapshot.isEmpty) {
+                        emitter.onSuccess(Resource.Error(AppError(message = "No user found")))
+                    }
+                    for (documentSnapshot in queryDocumentSnapshot) {
+                        val user = documentSnapshot.toObject(User::class.java)
+                        emitter.onSuccess(Resource.Success(user))
+                    }
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
             return@create
         }
     }

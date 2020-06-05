@@ -5,6 +5,7 @@ import com.google.firebase.firestore.Exclude
 data class User(
     @Exclude
     val userId: String,
+    val username: String,
     var nickname: String,
     var email: String,
     var journeys: List<Journey>?,
@@ -12,6 +13,7 @@ data class User(
     var likes: List<String>?
 ) {
     constructor() : this(
+        "",
         "",
         "",
         "",

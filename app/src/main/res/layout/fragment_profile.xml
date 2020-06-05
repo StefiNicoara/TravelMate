@@ -2,6 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="nickname"
+            type="String" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,11 +33,11 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <ImageView
-                    android:layout_margin="@dimen/default_margin_padding"
                     android:id="@+id/menuButton"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="end"
+                    android:layout_margin="@dimen/default_margin_padding"
                     android:background="@drawable/ic_more_vert_black_24dp"
                     android:contentDescription="@string/menu_button" />
 
@@ -64,7 +71,7 @@
                             android:layout_height="wrap_content"
                             android:alpha="0.0"
                             android:fontFamily="@font/sarabun_bold"
-                            android:text="Stefi"
+                            android:text="@{nickname}"
                             android:textColor="@color/mainTextColorDark" />
 
                     </LinearLayout>
@@ -100,8 +107,17 @@
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        </androidx.viewpager.widget.ViewPager>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="@dimen/default_margin_padding"
+            android:background="@drawable/add_journey_floating" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

@@ -1,8 +1,11 @@
 package com.example.travelmate.ui.profile.journeys.recyclerViewAdapters
 
 import android.content.Context
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.core.view.marginStart
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelmate.R
@@ -11,6 +14,7 @@ import com.example.travelmate.model.Journey
 import com.example.travelmate.ui.profile.journeys.JourneysViewModel
 import com.squareup.picasso.Picasso
 import java.text.DateFormat
+import kotlin.math.roundToInt
 
 class JourneyRVAdapter(
     private val context: Context,
@@ -43,6 +47,12 @@ class JourneyRVAdapter(
             .into(holder.journeyInfoBinding.journeyImage)
     }
 
+    private fun shareJourneyClick(holder: JourneysViewHolder, position: Int) {
+        holder.journeyInfoBinding.shareJourney.setOnClickListener {
+            viewModel.shareJourney(journeyList[position].journeyId)
+        }
+    }
+
     private fun startJourneyClick(holder: JourneysViewHolder, position: Int) {
         holder.journeyInfoBinding.markStart.setOnClickListener {
             viewModel.startJourney(journeyList[position].journeyId)
@@ -65,6 +75,7 @@ class JourneyRVAdapter(
         loadPhoto(holder, position)
         startJourneyClick(holder, position)
         cardClick(holder, position)
+        shareJourneyClick(holder, position)
     }
 
     class JourneysViewHolder(itemBinding: LayoutJourneyCellBinding) :

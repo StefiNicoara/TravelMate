@@ -9,15 +9,18 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.travelmate.R
 import com.example.travelmate.databinding.FragmentJourneysBinding
 import com.example.travelmate.model.Journey
-import com.example.travelmate.ui.dashboard.DashboardFragmentDirections
 import com.example.travelmate.ui.profile.ProfileFragmentDirections
 import com.example.travelmate.ui.profile.journeys.recyclerViewAdapters.JourneyRVAdapter
+import com.example.travelmate.ui.profile.journeys.recyclerViewAdapters.PendingJourneysRVAdapter
+import com.example.travelmate.ui.profile.journeys.shareJourney.ShareJourneyDialogFragment
+import com.example.travelmate.utils.NEW_DIALOG
 import com.example.travelmate.utils.Resource
 import org.koin.android.ext.android.inject
 
@@ -53,11 +56,9 @@ class JourneysFragment : Fragment() {
         observePastJourneys()
         observeStartJourney()
         observeNavigation()
-
-        binding.button.setOnClickListener {
-            val navController = findNavController()
-            navController.navigate(R.id.navigation_add_journey)
-        }
+        observeShareJourney()
+        observeAcceptJourney()
+        observeDeclineJourney()
     }
 
     private fun observeStartJourney() {
@@ -77,6 +78,55 @@ class JourneysFragment : Fragment() {
         })
     }
 
+    private fun observeShareJourney() {
+        viewModel.shareJourney.observe(this, Observer { journeyId ->
+            if (journeyId != null) {
+                val dialog = ShareJourneyDialogFragment.newInstance(journeyId)
+                dialog.show(childFragmentManager, NEW_DIALOG)
+            }
+        })
+    }
+
+    private fun observeAcceptJourney() {
+        viewModel.acceptJourney.observe(this, Observer { response ->
+            when (response) {
+                is Resource.Loading -> {
+
+                }
+                is Resource.Success -> {
+                    viewModel.loadPendingJourneys()
+                    viewModel.loadCurrentJourneys()
+                    viewModel.loadUpcomingJourneys()
+                    viewModel.loadPastJourneys()
+                    Toast.makeText(context, "Accepted!", Toast.LENGTH_LONG).show()
+                }
+                is Resource.Error -> {
+                    Toast.makeText(context, response.error?.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        })
+    }
+
+    private fun observeDeclineJourney() {
+        viewModel.declineJourney.observe(this, Observer { response ->
+            when (response) {
+                is Resource.Loading -> {
+
+                }
+                is Resource.Success -> {
+                    viewModel.loadPendingJourneys()
+                    viewModel.loadCurrentJourneys()
+                    viewModel.loadUpcomingJourneys()
+                    viewModel.loadPastJourneys()
+                    Toast.makeText(context, "Declined!", Toast.LENGTH_LONG).show()
+                }
+                is Resource.Error -> {
+                    Toast.makeText(context, response.error?.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        })
+    }
+
     private fun observePendingJourneys() {
         viewModel.loadPendingJourneys.observe(this, Observer { result ->
             when (result) {
@@ -84,7 +134,7 @@ class JourneysFragment : Fragment() {
 
                 }
                 is Resource.Success -> {
-                    //result.data?.let { setUpPendingRV(it) }
+                    result.data?.let { setUpPendingJourneyRV(it) }
                     binding.visibilityPending = result.data?.isEmpty() != true
                     binding.pendingJourneys.adapter?.notifyDataSetChanged()
                 }
@@ -157,6 +207,37 @@ class JourneysFragment : Fragment() {
                 navController.navigate(actions)
             }
         })
+    }
+
+    private fun setUpPendingJourneyRV(journeyList: List<Journey>) {
+
+        val adapter = context?.let {
+            PendingJourneysRVAdapter(
+                journeyList,
+                viewModel
+            )
+        }
+        binding.pendingJourneys.layoutManager = LinearLayoutManager(context)
+
+        ItemTouchHelper(object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                viewModel.deletePendingInvitation(
+                    adapter!!.getJourneyIdAtPosition(viewHolder.adapterPosition)
+                )
+            }
+        }).attachToRecyclerView(binding.pendingJourneys)
+
+        binding.pendingJourneys.adapter = adapter
     }
 
     private fun setJourneyRV(journeyList: List<Journey>, rv: RecyclerView, isUpcoming: Boolean) {

@@ -6,9 +6,12 @@ import com.example.travelmate.model.Journey
 import com.example.travelmate.model.JourneyPlan
 import com.example.travelmate.utils.AppError
 import com.example.travelmate.utils.Resource
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import io.reactivex.Single
 import org.w3c.dom.Attr
@@ -128,6 +131,7 @@ class JourneyRepository {
         return Single.create create@{ emitter ->
             journeysRef.whereArrayContains("users", fbAuth.currentUser!!.uid)
                 .whereLessThan("startDate", Date())
+                .whereEqualTo("started", false)
                 .get()
                 .addOnSuccessListener { queryDocumentSnapshot ->
                     for (documentSnapshot in queryDocumentSnapshot) {
@@ -198,6 +202,52 @@ class JourneyRepository {
         }
     }
 
+    fun shareJourney(journeyId: String, userId: String): Single<Resource<Boolean>> {
+        return Single.create create@{ emitter ->
+            journeysRef.document(journeyId)
+                .update("pending", FieldValue.arrayUnion(userId))
+                .addOnSuccessListener {
+                    emitter.onSuccess(Resource.Success(true))
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
+    fun acceptJourney(journeyId: String): Single<Resource<Boolean>> {
+        return Single.create create@{ emitter ->
+
+            val task1 = journeysRef.document(journeyId)
+                .update("users", FieldValue.arrayUnion(fbAuth.currentUser!!.uid))
+            val task2 = journeysRef.document(journeyId)
+                .update("pending", FieldValue.arrayRemove(fbAuth.currentUser!!.uid))
+
+            val tasks: Task<List<QuerySnapshot>> = Tasks.whenAllSuccess(task1, task2)
+            tasks.addOnSuccessListener {
+                emitter.onSuccess(Resource.Success(true))
+            }.addOnFailureListener {
+                emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+            }
+            return@create
+        }
+    }
+
+    fun declineJourney(journeyId: String): Single<Resource<Boolean>> {
+        return Single.create create@{ emitter ->
+            journeysRef.document(journeyId)
+                .update("pending", FieldValue.arrayRemove(fbAuth.currentUser!!.uid))
+                .addOnSuccessListener {
+                    emitter.onSuccess(Resource.Success(true))
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
     fun addAttractionToJourneyPlan(
         journeyId: String,
         journeyPlan: JourneyPlan
@@ -228,4 +278,6 @@ class JourneyRepository {
             return@create
         }
     }
+
+
 }

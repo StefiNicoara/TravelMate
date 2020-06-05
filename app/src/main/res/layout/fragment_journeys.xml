@@ -30,29 +30,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/default_margin_padding"
-            android:layout_marginEnd="@dimen/default_margin_padding"
             android:orientation="vertical"
             tools:context=".ui.profile.journeys.JourneysFragment">
-
-            <ImageView
-                android:id="@+id/button"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="end"
-                android:background="@drawable/ic_add_journey"
-                android:clickable="true"
-                android:contentDescription="@null" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin_padding"
+                android:layout_marginEnd="@dimen/default_margin_padding"
                 app:visibilityView="@{visibilityPending}">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/pendingJourneys"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_margin_padding"
                     android:orientation="horizontal" />
             </LinearLayout>
 
@@ -60,6 +52,8 @@
                 android:id="@+id/currentJourneyLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin_padding"
+                android:clipToPadding="false"
                 android:orientation="vertical"
                 app:visibilityView="@{visibilityCurrent}">
 
@@ -67,13 +61,15 @@
                     style="@style/MainText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_margin_padding"
                     android:layout_marginBottom="@dimen/small_margin_padding"
                     android:text="@string/current" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/currentJourneyRV"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_margin_padding" />
             </LinearLayout>
 
             <LinearLayout
@@ -87,6 +83,7 @@
                     style="@style/MainText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_margin_padding"
                     android:layout_marginBottom="@dimen/small_margin_padding"
                     android:text="@string/upcoming" />
 
@@ -94,6 +91,7 @@
                     android:id="@+id/upcomingJourneyRV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_margin_padding"
                     android:orientation="horizontal" />
 
             </LinearLayout>
@@ -110,13 +108,15 @@
                     style="@style/MainText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_margin_padding"
                     android:layout_marginBottom="@dimen/small_margin_padding"
                     android:text="@string/past" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/pastJourneyRV"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_margin_padding" />
 
             </LinearLayout>
         </LinearLayout>

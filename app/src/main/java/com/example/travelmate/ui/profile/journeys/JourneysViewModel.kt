@@ -33,6 +33,15 @@ class JourneysViewModel(private val repository: JourneyRepository) : ViewModel()
     val startJourney: LiveData<Resource<Boolean>> get() = mutableStartJourney
     private var mutableStartJourney: MutableLiveData<Resource<Boolean>> = MutableLiveData()
 
+    val shareJourney: LiveData<String> get() = mutableShareJourney
+    private var mutableShareJourney: MutableLiveData<String> = MutableLiveData()
+
+    val acceptJourney: LiveData<Resource<Boolean>> get() = mutableAcceptJourney
+    private var mutableAcceptJourney: MutableLiveData<Resource<Boolean>> = MutableLiveData()
+
+    val declineJourney: LiveData<Resource<Boolean>> get() = mutableDeclineJourney
+    private var mutableDeclineJourney: MutableLiveData<Resource<Boolean>> = MutableLiveData()
+
     val navigateToJourneyPlans: LiveData<String> get() = mutableNavigation
     private var mutableNavigation: MutableLiveData<String> = MutableLiveData()
 
@@ -101,6 +110,38 @@ class JourneysViewModel(private val repository: JourneyRepository) : ViewModel()
                 },
                 onError = {
                     mutableStartJourney.postValue(Resource.Error(AppError(message = it.message)))
+                }
+            )
+        subscriptions.add(observer)
+    }
+
+    fun shareJourney(journeyId: String) {
+        mutableShareJourney.postValue(journeyId)
+    }
+
+    fun acceptJourney(journeyId: String) {
+        val observer = repository.acceptJourney(journeyId)
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onSuccess = {
+                    mutableAcceptJourney.postValue(it)
+                },
+                onError = {
+                    mutableAcceptJourney.postValue(Resource.Error(AppError(message = it.message)))
+                }
+            )
+        subscriptions.add(observer)
+    }
+
+    fun deletePendingInvitation(journeyId: String) {
+        val observer = repository.declineJourney(journeyId)
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onSuccess = {
+                    mutableDeclineJourney.postValue(it)
+                },
+                onError = {
+                    mutableDeclineJourney.postValue(Resource.Error(AppError(message = it.message)))
                 }
             )
         subscriptions.add(observer)

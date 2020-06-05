@@ -1,7 +1,6 @@
 package com.example.travelmate.ui.profile
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -17,6 +16,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.Observer
 import com.example.travelmate.utils.Resource
 import android.content.Intent
+import androidx.navigation.fragment.findNavController
 import com.example.travelmate.ui.splashscreen.SplashScreen
 
 
@@ -43,13 +43,30 @@ class ProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 childFragmentManager
             )
         }
+
+
+        binding.button.setOnClickListener {
+            val navController = findNavController()
+            navController.navigate(R.id.navigation_add_journey)
+        }
+
         val viewPager: ViewPager = binding.viewPager
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = binding.tabs
         tabs.setupWithViewPager(viewPager)
+        viewModel.getCurrnetUser()
+        observeUser()
         addGreetAnimation()
         showPopup()
         observeLogOut()
+    }
+
+    private fun observeUser() {
+        viewModel.user.observe(this, Observer { result ->
+            if (result != null) {
+                binding.nickname = result.nickname
+            }
+        })
     }
 
     private fun observeLogOut() {
@@ -94,7 +111,6 @@ class ProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             else -> false
         }
     }
-
 
     private fun addGreetAnimation() {
         binding.hiLabel.animate().alpha(1.0f).setDuration(ANIMATION_DURATION).start()

@@ -14,6 +14,7 @@ import com.example.travelmate.ui.profile.favorites.FavoritesViewModel
 import com.example.travelmate.ui.profile.journeys.AddJourneyViewModel
 import com.example.travelmate.ui.profile.journeys.JourneysViewModel
 import com.example.travelmate.ui.profile.journeys.journeyPlan.JourneyPlanViewModel
+import com.example.travelmate.ui.profile.journeys.shareJourney.ShareJourneyViewModel
 import com.example.travelmate.ui.profile.uploads.UploadsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -39,4 +40,5 @@ val viewModelModule = module {
     viewModel { JourneysViewModel(get()) }
     viewModel { CreateJourneyPlanViewModel(get(), get()) }
     viewModel { JourneyPlanViewModel(get()) }
+    viewModel { ShareJourneyViewModel(get(), get()) }
 }

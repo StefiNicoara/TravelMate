@@ -15,6 +15,7 @@ import io.reactivex.schedulers.Schedulers
 class RegisterViewModel(private val repository: UserAccountRepository) : ViewModel() {
 
     var nickname: ObservableField<String> = ObservableField()
+    var username: ObservableField<String> = ObservableField()
     var email: ObservableField<String> = ObservableField()
     var password: ObservableField<String> = ObservableField()
     var confirmPassword: ObservableField<String> = ObservableField()
@@ -44,6 +45,7 @@ class RegisterViewModel(private val repository: UserAccountRepository) : ViewMod
         val observer =
             repository.registerUser(
                 nickname.get().toString(),
+                username.get().toString(),
                 email.get().toString(),
                 password.get().toString()
             )
@@ -66,7 +68,8 @@ class RegisterViewModel(private val repository: UserAccountRepository) : ViewMod
             if (checkPasswordsMatch()) {
                 callRepositoryFunction()
             } else {
-                mutableRegisterResponse.value = Resource.Error(AppError(R.string.no_matching_passwords))
+                mutableRegisterResponse.value =
+                    Resource.Error(AppError(R.string.no_matching_passwords))
             }
         } else {
             mutableRegisterResponse.value = Resource.Error(AppError(R.string.no_empty_fields))

@@ -32,6 +32,7 @@
         android:layout_marginEnd="@dimen/small_margin_padding"
         android:layout_marginBottom="@dimen/small_margin_padding"
         android:clickable="true"
+        android:paddingStart="@dimen/default_margin_padding"
         app:cardBackgroundColor="@color/mainBackground"
         app:cardCornerRadius="@dimen/default_margin_padding">
 
@@ -53,9 +54,9 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_gravity="bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:orientation="vertical">
 
             <TextView

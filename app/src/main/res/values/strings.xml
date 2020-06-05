@@ -72,4 +72,10 @@
     <string name="log_out">Log out</string>
     <string name="change_password">Change password</string>
     <string name="menu_button">Menu Button</string>
+    <string name="search_your_friend_by_username">Search your friend by username</string>
+    <string name="search">search</string>
+    <string name="no_user_with_that_username_was_found">No user with that username was found</string>
+    <string name="username">Username</string>
+    <string name="you_have_an_invitation_to_join">You have an invitation to join</string>
+    <string name="accept">Accept</string>
 </resources>
