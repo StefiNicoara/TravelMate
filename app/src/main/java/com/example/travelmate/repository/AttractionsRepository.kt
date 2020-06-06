@@ -20,6 +20,7 @@ class AttractionsRepository {
     private val db = FirebaseFirestore.getInstance()
     private val attractionsRef = db.collection("Attractions")
     private val usersRef = db.collection("Users")
+    private val commentsRef = db.collection("Comments")
     private val currentUserRef = fbAuth.currentUser?.uid?.let { usersRef.document(it) }
 
     private var currentUser: User = User()
@@ -282,6 +283,40 @@ class AttractionsRepository {
                     emitter.onSuccess(Resource.Success(attractionsList))
                 }
             }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
+    fun getComments(attractionId: String): Single<Resource<List<Comment>>> {
+        return Single.create create@{ emitter ->
+            attractionsRef.document(attractionId).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot.exists()) {
+                        val attraction = documentSnapshot.toObject(Attraction::class.java)
+                        if (attraction?.comments == null) {
+                            emitter.onSuccess(Resource.Success(mutableListOf()))
+                        } else {
+                            emitter.onSuccess(Resource.Success(attraction.comments!!))
+                        }
+                    }
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
+    fun addComment(attractionId: String, comment: Comment): Single<Resource<Boolean>> {
+        return Single.create create@{ emitter ->
+            attractionsRef.document(attractionId)
+                .update("comments", FieldValue.arrayUnion(comment))
+                .addOnSuccessListener {
+                    emitter.onSuccess(Resource.Success(true))
+                }
                 .addOnFailureListener {
                     emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
                 }

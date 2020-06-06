@@ -7,6 +7,7 @@ import com.example.travelmate.ui.account.login.LoginViewModel
 import com.example.travelmate.ui.account.register.RegisterViewModel
 import com.example.travelmate.ui.addAttraction.AddAttractionViewModel
 import com.example.travelmate.ui.attractionDetails.AttractionDetailViewModel
+import com.example.travelmate.ui.attractionDetails.comments.CommentsViewModel
 import com.example.travelmate.ui.createJourneyPlan.CreateJourneyPlanViewModel
 import com.example.travelmate.ui.dashboard.DashboardViewModel
 import com.example.travelmate.ui.profile.ProfileViewModel
@@ -41,4 +42,5 @@ val viewModelModule = module {
     viewModel { CreateJourneyPlanViewModel(get(), get()) }
     viewModel { JourneyPlanViewModel(get()) }
     viewModel { ShareJourneyViewModel(get(), get()) }
+    viewModel { CommentsViewModel(get(), get()) }
 }

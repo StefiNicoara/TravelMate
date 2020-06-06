@@ -78,4 +78,7 @@
     <string name="username">Username</string>
     <string name="you_have_an_invitation_to_join">You have an invitation to join</string>
     <string name="accept">Accept</string>
+    <string name="add_a_comment">Add a comment</string>
+    <string name="send">Send</string>
+    <string name="sorry_there_are_no_comments_yet">Sorry, there are no comments yet!</string>
 </resources>

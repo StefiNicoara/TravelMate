@@ -47,6 +47,7 @@ class AttractionDetailFragment : Fragment() {
         viewModel.getCurrentAttraction(arguments?.get("attractionId") as String)
         observeAttractions()
         handleAddClick()
+        handleCommentsClick()
     }
 
     private fun observeAttractions() {
@@ -102,6 +103,14 @@ class AttractionDetailFragment : Fragment() {
                 AttractionDetailFragmentDirections.fromDetailsToCreatePlan(arguments?.get("attractionId") as String)
             navController.navigate(actions)
         }
+    }
 
+    private fun handleCommentsClick() {
+        binding.addComment.setOnClickListener {
+            val navController = findNavController()
+            val actions =
+                AttractionDetailFragmentDirections.fromDetailsToComments(arguments?.get("attractionId") as String)
+            navController.navigate(actions)
+        }
     }
 }

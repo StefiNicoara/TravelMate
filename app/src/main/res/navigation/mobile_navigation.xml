@@ -73,6 +73,34 @@
                 android:name="attractionId"
                 app:argType="string" />
         </action>
+        <action
+            android:id="@+id/from_details_to_comments"
+            app:destination="@+id/navigation_comments"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim">
+            <argument
+                android:name="attractionId"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_comments"
+        android:name="com.example.travelmate.ui.attractionDetails.comments.CommentsFragment"
+        android:label="Comments"
+        tools:layout="@layout/fragment_comments">
+        <argument
+            android:name="attractionId"
+            app:argType="string" />
+        <action
+            android:id="@+id/from_comments_to_attraction_details"
+            app:destination="@+id/navigation_attraction_details"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim">
+            <argument
+                android:name="attractionId"
+                app:argType="string" />
+        </action>
     </fragment>
 
     <fragment

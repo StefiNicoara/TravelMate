@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.travelmate.ui.attractionDetails.comments.CommentsViewModel" />
+
+        <variable
+            name="showComments"
+            type="Boolean" />
+
+        <variable
+            name="showEmpty"
+            type="Boolean" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.attractionDetails.comments.CommentsFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@android:color/white">
+
+            <EditText
+                android:id="@+id/editTextField"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:autofillHints="@null"
+                android:backgroundTint="@color/bottom_nav_dark"
+                android:cursorVisible="false"
+                android:hint="@string/add_a_comment"
+                android:inputType="text"
+                android:paddingStart="@dimen/default_margin_padding"
+                android:paddingEnd="@dimen/default_margin_padding" />
+
+            <ImageView
+                android:id="@+id/sendBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/default_margin_padding"
+                android:background="@drawable/ic_send"
+                android:contentDescription="@string/send" />
+        </LinearLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/commentsRv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:visibilityView="@{showComments}" />
+
+        <TextView
+            style="@style/MainText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/large_margin_padding"
+            android:text="@string/sorry_there_are_no_comments_yet"
+            app:visibilityView="@{showEmpty}" />
+
+    </LinearLayout>
+</layout>

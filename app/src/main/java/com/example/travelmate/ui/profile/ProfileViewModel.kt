@@ -25,7 +25,7 @@ class ProfileViewModel(private val repository: UserAccountRepository) : ViewMode
         MutableLiveData()
 
 
-    fun getCurrnetUser() {
+    fun getCurrentUser() {
         val observer = repository.getCurrentUser()
             .subscribeOn(Schedulers.io())
             .subscribeBy(

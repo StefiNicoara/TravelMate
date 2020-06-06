@@ -54,7 +54,7 @@ class ProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = binding.tabs
         tabs.setupWithViewPager(viewPager)
-        viewModel.getCurrnetUser()
+        viewModel.getCurrentUser()
         observeUser()
         addGreetAnimation()
         showPopup()

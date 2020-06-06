@@ -1,8 +1,11 @@
 package com.example.travelmate.model
 
+import java.util.*
+
 data class Comment(
-    val user: User,
+    val username: String,
+    val date: Date,
     val content: String
 ) {
-    constructor() : this(User(), "")
+    constructor() : this("", Date(), "")
 }
