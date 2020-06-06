@@ -22,6 +22,9 @@ class LoginViewModel(private val repository: UserAccountRepository) : ViewModel(
     val logInResponse: LiveData<Resource<Boolean>> get() = mutableLoginResponse
     private var mutableLoginResponse: MutableLiveData<Resource<Boolean>> = MutableLiveData()
 
+    val resetPassword: LiveData<Boolean> get() = mutableResetPassword
+    private var mutableResetPassword: MutableLiveData<Boolean> = MutableLiveData()
+
     private fun checkFieldsNotEmpty(): Boolean {
         if (email.get()?.isNotEmpty() == true && password.get()?.isNotEmpty() == true) {
             return true
@@ -54,5 +57,9 @@ class LoginViewModel(private val repository: UserAccountRepository) : ViewModel(
         } else {
             mutableLoginResponse.value = Resource.Error(AppError(R.string.no_empty_fields))
         }
+    }
+
+    fun forgotPassword() {
+        mutableResetPassword.postValue(true)
     }
 }

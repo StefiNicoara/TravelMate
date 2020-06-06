@@ -104,7 +104,8 @@
             android:layout_below="@+id/inputLayout"
             android:layout_marginStart="@dimen/large_margin_padding"
             android:layout_marginTop="@dimen/default_margin_padding"
-            android:text="@string/forgot_password" />
+            android:text="@string/forgot_password"
+            app:onSingleClick="@{() -> loginViewModel.forgotPassword()}" />
 
         <ImageView
             android:id="@+id/planeId"
@@ -123,8 +124,8 @@
             android:layout_marginEnd="@dimen/large_margin_padding"
             android:layout_marginBottom="@dimen/large_margin_padding"
             android:background="@drawable/ic_navigate_next"
-            android:contentDescription="@null"
             android:clickable="true"
+            android:contentDescription="@null"
             app:onSingleClick="@{() -> loginViewModel.loginUser()}" />
 
 

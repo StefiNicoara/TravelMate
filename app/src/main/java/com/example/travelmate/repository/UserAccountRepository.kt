@@ -73,6 +73,19 @@ class UserAccountRepository {
         }
     }
 
+    fun forgotPassword(email: String): Single<Resource<Boolean>> {
+        return Single.create create@{ emitter ->
+            fbAuth.sendPasswordResetEmail(email)
+                .addOnSuccessListener {
+                    emitter.onSuccess(Resource.Success(true))
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
     fun searchByUsername(username: String): Single<Resource<User>> {
         return Single.create create@{ emitter ->
             usersRef.whereEqualTo("username", username)

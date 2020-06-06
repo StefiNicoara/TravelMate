@@ -20,8 +20,6 @@ class AttractionsRepository {
     private val db = FirebaseFirestore.getInstance()
     private val attractionsRef = db.collection("Attractions")
     private val usersRef = db.collection("Users")
-    private val commentsRef = db.collection("Comments")
-    private val currentUserRef = fbAuth.currentUser?.uid?.let { usersRef.document(it) }
 
     private var currentUser: User = User()
 
@@ -325,6 +323,8 @@ class AttractionsRepository {
     }
 
     fun likeAttractionTransaction(attractionId: String) {
+
+        val currentUserRef = fbAuth.currentUser?.uid?.let { usersRef.document(it) }
         currentUserRef?.update("likes", FieldValue.arrayUnion(attractionId))
         db.runTransaction { transaction ->
             val attractionRef = attractionsRef.document(attractionId)
@@ -336,6 +336,8 @@ class AttractionsRepository {
     }
 
     fun undoLikeAttractionTransaction(attractionId: String) {
+
+        val currentUserRef = fbAuth.currentUser?.uid?.let { usersRef.document(it) }
         currentUserRef?.update("likes", FieldValue.arrayRemove(attractionId))
         db.runTransaction { transaction ->
             val attractionRef = attractionsRef.document(attractionId)
@@ -347,12 +349,14 @@ class AttractionsRepository {
     }
 
     fun addAttractionToFavorites(attraction: Attraction) {
+        val currentUserRef = fbAuth.currentUser?.uid?.let { usersRef.document(it) }
         currentUserRef?.update("favorites", FieldValue.arrayUnion(attraction.id))
         attractionsRef.document(attraction.id)
             .update("favoriteBy", FieldValue.arrayUnion(fbAuth.currentUser!!.uid))
     }
 
     fun removeAttractionFromFavorites(attraction: Attraction) {
+        val currentUserRef = fbAuth.currentUser?.uid?.let { usersRef.document(it) }
         currentUserRef?.update("favorites", FieldValue.arrayRemove(attraction.id))
         attractionsRef.document(attraction.id)
             .update("favoriteBy", FieldValue.arrayRemove(fbAuth.currentUser!!.uid))

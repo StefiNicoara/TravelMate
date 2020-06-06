@@ -53,6 +53,8 @@ class JourneyPlanFragment : Fragment() {
         viewModel.loadJourney(arguments?.get("journeyId") as String)
         observeJourney()
         observeDelete()
+        markComplete()
+        observeMarkComplete()
     }
 
     private fun observeJourney() {
@@ -88,6 +90,24 @@ class JourneyPlanFragment : Fragment() {
         })
     }
 
+    private fun observeMarkComplete() {
+        viewModel.markCompleteResponse.observe(this, Observer { result ->
+            when (result) {
+                is Resource.Loading -> {
+
+                }
+                is Resource.Success -> {
+                    Toast.makeText(context, "Journey complete!", Toast.LENGTH_LONG).show()
+                    val navController = findNavController()
+                    navController.navigate(R.id.navigation_profile)
+
+                }
+                is Resource.Error -> {
+                    Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        })
+    }
 
     private fun setJourneyPlansRV(plansList: List<JourneyPlan>) {
 
@@ -119,6 +139,12 @@ class JourneyPlanFragment : Fragment() {
             }
         }).attachToRecyclerView(binding.plansRV)
         binding.plansRV.adapter = adapter
+    }
+
+    private fun markComplete() {
+        binding.completeBtn.setOnClickListener {
+            viewModel.markJourneyComplete(arguments?.get("journeyId") as String)
+        }
     }
 
     private fun setPhoto(img: String) {

@@ -44,7 +44,6 @@ class ProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             )
         }
 
-
         binding.button.setOnClickListener {
             val navController = findNavController()
             navController.navigate(R.id.navigation_add_journey)
@@ -103,10 +102,6 @@ class ProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 viewModel.logOut()
                 true
 
-            }
-            R.id.change_password -> {
-                viewModel.changePassword()
-                true
             }
             else -> false
         }

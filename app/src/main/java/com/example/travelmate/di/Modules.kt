@@ -4,6 +4,7 @@ import com.example.travelmate.repository.AttractionsRepository
 import com.example.travelmate.repository.JourneyRepository
 import com.example.travelmate.repository.UserAccountRepository
 import com.example.travelmate.ui.account.login.LoginViewModel
+import com.example.travelmate.ui.account.login.resetPassword.ForgotPasswordViewModel
 import com.example.travelmate.ui.account.register.RegisterViewModel
 import com.example.travelmate.ui.addAttraction.AddAttractionViewModel
 import com.example.travelmate.ui.attractionDetails.AttractionDetailViewModel
@@ -43,4 +44,5 @@ val viewModelModule = module {
     viewModel { JourneyPlanViewModel(get()) }
     viewModel { ShareJourneyViewModel(get(), get()) }
     viewModel { CommentsViewModel(get(), get()) }
+    viewModel { ForgotPasswordViewModel(get()) }
 }

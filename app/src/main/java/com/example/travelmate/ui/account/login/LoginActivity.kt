@@ -1,7 +1,6 @@
 package com.example.travelmate.ui.account.login
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
@@ -9,8 +8,10 @@ import androidx.lifecycle.Observer
 import com.example.travelmate.MainActivity
 import com.example.travelmate.R
 import com.example.travelmate.databinding.ActivityLoginBinding
+import com.example.travelmate.ui.account.login.resetPassword.ForgotPasswordDialogFragment
 import com.example.travelmate.utils.ANIMATION_DURATION
 import com.example.travelmate.utils.BaseActivity
+import com.example.travelmate.utils.NEW_DIALOG
 import com.example.travelmate.utils.Resource
 import org.koin.android.ext.android.inject
 
@@ -38,6 +39,13 @@ class LoginActivity : BaseActivity() {
                 is Resource.Error -> {
                     displayError(response.error)
                 }
+            }
+        })
+
+        viewModel.resetPassword.observe(this, Observer { response ->
+            if (response == true) {
+                val dialog = ForgotPasswordDialogFragment()
+                dialog.show(supportFragmentManager, NEW_DIALOG)
             }
         })
     }

@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import io.reactivex.Single
@@ -88,6 +89,7 @@ class JourneyRepository {
         return Single.create create@{ emitter ->
             journeysRef.whereArrayContains("users", fbAuth.currentUser!!.uid)
                 .whereEqualTo("started", true)
+                .orderBy("startDate", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener { queryDocumentSnapshot ->
                     for (documentSnapshot in queryDocumentSnapshot) {
@@ -110,6 +112,7 @@ class JourneyRepository {
             journeysRef.whereArrayContains("users", fbAuth.currentUser!!.uid)
                 .whereGreaterThanOrEqualTo("startDate", Date())
                 .whereEqualTo("started", false)
+                .orderBy("startDate", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener { queryDocumentSnapshot ->
                     for (documentSnapshot in queryDocumentSnapshot) {
@@ -129,14 +132,25 @@ class JourneyRepository {
         val journeyList = mutableListOf<Journey>()
 
         return Single.create create@{ emitter ->
-            journeysRef.whereArrayContains("users", fbAuth.currentUser!!.uid)
+            val task1 = journeysRef.whereArrayContains("users", fbAuth.currentUser!!.uid)
                 .whereLessThan("startDate", Date())
                 .whereEqualTo("started", false)
+                .orderBy("startDate", Query.Direction.DESCENDING)
                 .get()
-                .addOnSuccessListener { queryDocumentSnapshot ->
-                    for (documentSnapshot in queryDocumentSnapshot) {
-                        val journey = documentSnapshot.toObject(Journey::class.java)
-                        journeyList.add(journey)
+            val task2 = journeysRef.whereArrayContains("users", fbAuth.currentUser!!.uid)
+                .whereEqualTo("completed", true)
+                .orderBy("startDate", Query.Direction.DESCENDING)
+                .get()
+
+            val tasks: Task<List<QuerySnapshot>> = Tasks.whenAllSuccess(task1, task2)
+
+            tasks
+                .addOnSuccessListener { querySnapshots ->
+                    for (querySnapshot in querySnapshots) {
+                        for (documentSnapshot in querySnapshot) {
+                            val journey = documentSnapshot.toObject(Journey::class.java)
+                            journeyList.add(journey)
+                        }
                     }
                     emitter.onSuccess(Resource.Success(journeyList))
                 }
@@ -173,6 +187,7 @@ class JourneyRepository {
         return Single.create create@{ emitter ->
             journeysRef.whereArrayContains("users", fbAuth.currentUser!!.uid)
                 .whereGreaterThanOrEqualTo("startDate", Date())
+                .orderBy("startDate", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener { queryDocumentSnapshot ->
                     for (documentSnapshot in queryDocumentSnapshot) {
@@ -195,6 +210,25 @@ class JourneyRepository {
                 .addOnSuccessListener {
                     emitter.onSuccess(Resource.Success(true))
                 }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                }
+            return@create
+        }
+    }
+
+    fun markJourneyComplete(journeyId: String): Single<Resource<Boolean>> {
+        return Single.create create@{ emitter ->
+
+            val task1 = journeysRef.document(journeyId)
+                .update("completed", true)
+            val task2 = journeysRef.document(journeyId)
+                .update("started", false)
+
+            val tasks: Task<List<QuerySnapshot>> = Tasks.whenAllSuccess(task1, task2)
+            tasks.addOnSuccessListener {
+                emitter.onSuccess(Resource.Success(true))
+            }
                 .addOnFailureListener {
                     emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
                 }
@@ -278,6 +312,4 @@ class JourneyRepository {
             return@create
         }
     }
-
-
 }

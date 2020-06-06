@@ -24,6 +24,10 @@ class JourneyPlanViewModel(private val repository: JourneyRepository) : ViewMode
     private var mutableDeleteResponse: MutableLiveData<Resource<Boolean>> =
         MutableLiveData()
 
+    val markCompleteResponse: LiveData<Resource<Boolean>> get() = mutableMarkComplete
+    private var mutableMarkComplete: MutableLiveData<Resource<Boolean>> =
+        MutableLiveData()
+
 
     fun loadJourney(journeyId: String) {
         val observer = repository.getJourneyById(journeyId)
@@ -51,6 +55,19 @@ class JourneyPlanViewModel(private val repository: JourneyRepository) : ViewMode
                 }
             )
         subscriptions.add(observer)
+    }
 
+    fun markJourneyComplete(journeyId: String) {
+        val observer = repository.markJourneyComplete(journeyId)
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onSuccess = {
+                    mutableMarkComplete.postValue(it)
+                },
+                onError = {
+                    mutableMarkComplete.postValue(Resource.Error(AppError(message = it.message)))
+                }
+            )
+        subscriptions.add(observer)
     }
 }
