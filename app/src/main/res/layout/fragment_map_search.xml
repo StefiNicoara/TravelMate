@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="foundPin"
+            type="Boolean" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.addAttraction.mapSearch.MapSearchFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/map_search_bar"
+            android:elevation="5dp">
+
+            <EditText
+                android:id="@+id/searchText"
+                style="@style/MainText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/default_margin_padding"
+                android:layout_weight="1"
+                android:backgroundTint="@color/bottom_nav_dark"
+                android:cursorVisible="false"
+                android:hint="@string/search"
+                android:inputType="text" />
+
+            <ImageView
+                android:id="@+id/searchBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/default_margin_padding"
+                android:background="@drawable/ic_search"
+                android:contentDescription="@null" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/confirmBtn"
+            style="@style/MainButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="@dimen/default_margin_padding"
+            android:layout_marginTop="@dimen/default_margin_padding"
+            android:layout_marginBottom="20dp"
+            android:paddingStart="@dimen/default_margin_padding"
+            android:paddingEnd="@dimen/default_margin_padding"
+            android:text="@string/confirm_location"
+            app:visibilityView="@{foundPin}" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+</layout>

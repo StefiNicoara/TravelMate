@@ -98,4 +98,7 @@ dependencies {
 
     //Picasso
     implementation "com.squareup.picasso:picasso:2.5.2"
+
+    //Google play services
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 }

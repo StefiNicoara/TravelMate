@@ -48,6 +48,7 @@ class AttractionDetailFragment : Fragment() {
         observeAttractions()
         handleAddClick()
         handleCommentsClick()
+        handleViewOnMapClick()
     }
 
     private fun observeAttractions() {
@@ -110,6 +111,15 @@ class AttractionDetailFragment : Fragment() {
             val navController = findNavController()
             val actions =
                 AttractionDetailFragmentDirections.fromDetailsToComments(arguments?.get("attractionId") as String)
+            navController.navigate(actions)
+        }
+    }
+
+    private fun handleViewOnMapClick() {
+        binding.viewOnMapBtn.setOnClickListener {
+            val navController = findNavController()
+            val actions =
+                AttractionDetailFragmentDirections.fromDetailsToViewOnMap(arguments?.get("attractionId") as String)
             navController.navigate(actions)
         }
     }

@@ -1,4 +1,8 @@
 <resources>
+
+    <!--    Maps Api Key-->
+    <string name="google_maps_api_key">AIzaSyBffr3xN2gx53jUmunyVO2S1BQxtk2S5VM</string>
+
     <string name="app_name">TravelMate</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -34,7 +38,7 @@
     <string name="fun">FUN</string>
     <string name="food">FOOD</string>
     <string name="accommodation">ACCOMMODATION</string>
-    <string name="please_tell_us_what_this_location_is_actually_about">Please tell us what this location is actually about!</string>
+    <string name="please_tell_us_what_this_location_is_actually_about">Please tell us what this location is all about!</string>
     <string name="cafe">CAFE</string>
     <string name="bar">BAR</string>
     <string name="description">Description...</string>
@@ -49,9 +53,6 @@
     <string name="tab_text_4">Visited</string>
     <string name="feeling_adventurous_yet">Feeling adventurous yet?</string>
     <string name="hi">Hi</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="give_it_a_name">Give it a name</string>
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
@@ -73,7 +74,7 @@
     <string name="change_password">Change password</string>
     <string name="menu_button">Menu Button</string>
     <string name="search_your_friend_by_username">Search your friend by username</string>
-    <string name="search">search</string>
+    <string name="search">Search</string>
     <string name="no_user_with_that_username_was_found">No user with that username was found</string>
     <string name="username">Username</string>
     <string name="you_have_an_invitation_to_join">You have an invitation to join</string>
@@ -83,4 +84,10 @@
     <string name="sorry_there_are_no_comments_yet">Sorry, there are no comments yet!</string>
     <string name="complete_journey">Complete Journey</string>
     <string name="complete">Complete</string>
+    <string name="recent">Recent</string>
+    <string name="trending">Trending</string>
+    <string name="confirm_location">Confirm location</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

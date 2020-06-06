@@ -109,16 +109,36 @@
             android:layout_height="wrap_content"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/completeBtn"
-            style="@style/MainButton"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/default_margin_padding"
-            android:paddingStart="@dimen/default_margin_padding"
-            android:paddingEnd="@dimen/default_margin_padding"
-            android:text="@string/complete" />
+            android:background="@color/mainBackground"
+            android:padding="@dimen/default_margin_padding">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/completeBtn"
+                style="@style/MainButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="@dimen/default_margin_padding"
+                android:paddingEnd="@dimen/default_margin_padding"
+                android:text="@string/complete_journey" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/viewOnMapBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/small_margin_padding"
+                android:background="@drawable/tag_button_background"
+                android:drawableStart="@drawable/ic_location"
+                android:minWidth="@dimen/default_button_height"
+                android:minHeight="@dimen/default_button_height"
+                android:paddingStart="@dimen/default_margin_padding"
+                android:paddingEnd="@dimen/default_margin_padding" />
+        </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

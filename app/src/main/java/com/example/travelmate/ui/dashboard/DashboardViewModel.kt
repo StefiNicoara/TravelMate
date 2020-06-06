@@ -53,8 +53,22 @@ class DashboardViewModel(private val repository: AttractionsRepository) : ViewMo
         repository.removeAttractionFromFavorites(attraction)
     }
 
-    fun loadAttractions() {
-        val observer = repository.loadAllAttractions()
+    fun loadAttractionsTimeline() {
+        val observer = repository.loadAllAttractionsTimeline()
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onSuccess = {
+                    mutableLoadAttractions.postValue(it)
+                },
+                onError = {
+                    mutableLoadAttractions.postValue(Resource.Error(AppError(message = it.message)))
+                }
+            )
+        subscriptions.add(observer)
+    }
+
+    fun loadAttractionsTrending() {
+        val observer = repository.loadAllAttractionsTrending()
             .subscribeOn(Schedulers.io())
             .subscribeBy(
                 onSuccess = {

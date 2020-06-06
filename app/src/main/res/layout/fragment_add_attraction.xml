@@ -31,88 +31,49 @@
                 android:layout_margin="@dimen/default_margin_padding"
                 android:orientation="vertical">
 
+                <TextView
+                    style="@style/LogoText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin_padding"
+                    android:text="@string/please_tell_us_what_this_location_is_actually_about"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
+                    <EditText
+                        style="@style/MainText"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/large_margin_padding"
+                        android:layout_weight="1"
+                        android:autofillHints="@string/no_empty_fields"
+                        android:background="@drawable/rounded_bg"
+                        android:hint="@string/title"
+                        android:inputType="text"
+                        android:paddingStart="@dimen/small_margin_padding"
+                        android:paddingEnd="@dimen/small_margin_padding"
+                        android:text="@={viewModel.title}"
+                        android:textColorHint="@color/mainTextColor" />
+
                     <ImageView
                         android:id="@+id/addedPhoto"
-                        android:layout_width="110dp"
-                        android:layout_height="92dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="@dimen/default_margin_padding"
                         android:layout_marginEnd="@dimen/small_margin_padding"
                         android:background="@drawable/addphoto"
                         android:clickable="true"
                         android:contentDescription="@null"
-                        android:layout_gravity="center"
-                        app:onSingleClick="@{() -> viewModel.chooseImage()}"/>
+                        app:onSingleClick="@{() -> viewModel.chooseImage()}" />
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
 
-                        <EditText
-                            style="@style/MainText"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/large_margin_padding"
-                            android:autofillHints="@string/no_empty_fields"
-                            android:background="@drawable/rounded_bg"
-                            android:hint="@string/title"
-                            android:inputType="text"
-                            android:paddingStart="@dimen/small_margin_padding"
-                            android:text="@={viewModel.title}"
-                            android:textColorHint="@color/mainTextColor"
-                            tools:ignore="RtlSymmetry" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <EditText
-                                style="@style/MainText"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/large_margin_padding"
-                                android:layout_marginTop="@dimen/default_margin_padding"
-                                android:layout_marginEnd="@dimen/xsmall_margin_padding"
-                                android:layout_weight="1"
-                                android:autofillHints="@string/no_empty_fields"
-                                android:background="@drawable/rounded_bg"
-                                android:hint="@string/city"
-                                android:inputType="text"
-                                android:paddingStart="@dimen/small_margin_padding"
-                                android:text="@={viewModel.city}"
-                                android:textColorHint="@color/mainTextColor"
-                                tools:ignore="RtlSymmetry" />
-
-                            <EditText
-                                style="@style/MainText"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/large_margin_padding"
-                                android:layout_marginStart="@dimen/xsmall_margin_padding"
-                                android:layout_marginTop="@dimen/default_margin_padding"
-                                android:layout_weight="1"
-                                android:autofillHints="@string/no_empty_fields"
-                                android:background="@drawable/rounded_bg"
-                                android:hint="@string/country"
-                                android:inputType="text"
-                                android:paddingStart="@dimen/small_margin_padding"
-                                android:text="@={viewModel.country}"
-                                android:textColorHint="@color/mainTextColor"
-                                tools:ignore="RtlSymmetry" />
-                        </LinearLayout>
-                    </LinearLayout>
                 </LinearLayout>
 
-                <TextView
-                    style="@style/MainText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/large_margin_padding"
-                    android:text="@string/please_tell_us_what_this_location_is_actually_about" />
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -296,14 +257,15 @@
 
         </androidx.cardview.widget.CardView>
 
-        <androidx.appcompat.widget.AppCompatButton
-            style="@style/MainButton"
-            android:layout_marginStart="@dimen/default_margin_padding"
-            android:layout_marginEnd="@dimen/default_margin_padding"
+        <ImageView
+            android:id="@+id/addMapLocation"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/default_margin_padding"
             android:layout_marginBottom="@dimen/default_margin_padding"
-            android:text="@string/publish"
-            app:onSingleClick="@{() -> viewModel.publishAttraction()}" />
+            android:background="@drawable/ic_navigate_next"
+            android:contentDescription="@null" />
 
     </LinearLayout>
 

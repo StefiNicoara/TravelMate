@@ -22,8 +22,6 @@ class AddAttractionViewModel(private val repository: AttractionsRepository) : Vi
     lateinit var imageExtension: String
 
     var title: ObservableField<String> = ObservableField()
-    var city: ObservableField<String> = ObservableField()
-    var country: ObservableField<String> = ObservableField()
     var description: ObservableField<String> = ObservableField()
     var tags: MutableList<AttractionTag> = mutableListOf()
 
@@ -32,8 +30,8 @@ class AddAttractionViewModel(private val repository: AttractionsRepository) : Vi
     val chooseImageClick: LiveData<Boolean> get() = mutableChooseImgClick
     private var mutableChooseImgClick: MutableLiveData<Boolean> = MutableLiveData()
 
-    val publishAttraction: LiveData<Resource<Boolean>> get() = mutablePublishClick
-    private var mutablePublishClick: MutableLiveData<Resource<Boolean>> = MutableLiveData()
+    val publishAttraction: LiveData<Resource<String>> get() = mutablePublishClick
+    private var mutablePublishClick: MutableLiveData<Resource<String>> = MutableLiveData()
 
 
     fun chooseImage() {
@@ -42,8 +40,6 @@ class AddAttractionViewModel(private val repository: AttractionsRepository) : Vi
 
     private fun checkFieldsNotEmpty(): Boolean {
         if (title.get()?.isNotEmpty() == true &&
-            city.get()?.isNotEmpty() == true &&
-            country.get()?.isNotEmpty() == true &&
             description.get()?.isNotEmpty() == true
         ) {
             return true
@@ -68,10 +64,6 @@ class AddAttractionViewModel(private val repository: AttractionsRepository) : Vi
     private fun callRepositoryFunction() {
         val observer = repository.uploadAttraction(
             title.get().toString().removePrefix(" "),
-            City(
-                city.get().toString().removePrefix(" "),
-                country.get().toString().removePrefix(" ")
-            ),
             description.get().toString().removePrefix(" "),
             tags,
             imageUri,

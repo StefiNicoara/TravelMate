@@ -39,9 +39,10 @@ class DashboardFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.loadAttractions()
+        viewModel.loadAttractionsTimeline()
         handleTags()
         handleSearch()
+        handleFilter()
         observeAttractions()
         observeNavigation()
     }
@@ -86,6 +87,15 @@ class DashboardFragment : Fragment() {
         binding.attractionsRV.adapter = adapter
     }
 
+    private fun handleFilter() {
+        binding.timeline.setOnClickListener {
+            viewModel.loadAttractionsTimeline()
+        }
+        binding.trending.setOnClickListener {
+            viewModel.loadAttractionsTrending()
+        }
+    }
+
 
     private fun handleSearch() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -105,7 +115,7 @@ class DashboardFragment : Fragment() {
 
         binding.searchView.setOnCloseListener {
             searchTerm = ""
-            viewModel.loadAttractions()
+            viewModel.loadAttractionsTimeline()
             true
         }
     }

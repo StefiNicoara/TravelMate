@@ -114,6 +114,18 @@
                     android:text="@string/add_to_journey" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/viewOnMapBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/small_margin_padding"
+                    android:background="@drawable/tag_button_background"
+                    android:drawableStart="@drawable/ic_location"
+                    android:minWidth="@dimen/default_button_height"
+                    android:minHeight="@dimen/default_button_height"
+                    android:paddingStart="@dimen/default_margin_padding"
+                    android:paddingEnd="@dimen/default_margin_padding" />
+
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/addComment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

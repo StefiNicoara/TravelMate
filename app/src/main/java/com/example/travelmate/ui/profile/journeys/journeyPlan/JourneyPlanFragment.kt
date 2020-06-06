@@ -22,6 +22,7 @@ import org.koin.android.ext.android.inject
 import java.text.DateFormat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.example.travelmate.ui.profile.journeys.journeyPlan.viewJourneyOnMap.ViewJourneyOnMapFragmentDirections
 
 
 class JourneyPlanFragment : Fragment() {
@@ -55,6 +56,7 @@ class JourneyPlanFragment : Fragment() {
         observeDelete()
         markComplete()
         observeMarkComplete()
+        observeViewOnMap()
     }
 
     private fun observeJourney() {
@@ -107,6 +109,15 @@ class JourneyPlanFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun observeViewOnMap() {
+        binding.viewOnMapBtn.setOnClickListener {
+            val navController = findNavController()
+            val actions =
+                JourneyPlanFragmentDirections.fromJourneyPlanToViewJourneyOnMap(arguments?.get("journeyId") as String)
+            navController.navigate(actions)
+        }
     }
 
     private fun setJourneyPlansRV(plansList: List<JourneyPlan>) {

@@ -9,7 +9,65 @@
         android:id="@+id/navigation_add_attraction"
         android:name="com.example.travelmate.ui.addAttraction.AddAttractionFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_add_attraction" />
+        tools:layout="@layout/fragment_add_attraction">
+        <action
+            android:id="@+id/from_add_attraction_to_add_location"
+            app:destination="@+id/navigation_add_location"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim">
+            <argument
+                android:name="attractionId"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_add_location"
+        android:name="com.example.travelmate.ui.addAttraction.mapSearch.MapSearchFragment"
+        android:label="Map Search"
+        tools:layout="@layout/fragment_map_search">
+        <argument
+            android:name="attractionId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_view_journey_on_map"
+        android:name="com.example.travelmate.ui.profile.journeys.journeyPlan.viewJourneyOnMap.ViewJourneyOnMapFragment"
+        android:label="Map Search"
+        tools:layout="@layout/fragment_view_on_map">
+        <argument
+            android:name="journeyId"
+            app:argType="string" />
+        <action
+            android:id="@+id/from_view_journey_on_map_to_journey_plan"
+            app:destination="@+id/navigation_journey_plan"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim">
+            <argument
+                android:name="journeyId"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_view_on_map"
+        android:name="com.example.travelmate.ui.attractionDetails.viewOnMap.ViewOnMapFragment"
+        android:label="View on map"
+        tools:layout="@layout/fragment_view_on_map">
+        <argument
+            android:name="attractionId"
+            app:argType="string" />
+        <action
+            android:id="@+id/from_view_on_map_to_details"
+            app:destination="@+id/navigation_attraction_details"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim">
+            <argument
+                android:name="attractionId"
+                app:argType="string" />
+        </action>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_profile"
@@ -62,9 +120,6 @@
             android:name="attractionId"
             app:argType="string" />
         <action
-            android:id="@+id/from_details_to_dashboard"
-            app:destination="@+id/navigation_dashboard" />
-        <action
             android:id="@+id/from_details_to_create_plan"
             app:destination="@+id/navigation_create_plan"
             app:enterAnim="@anim/nav_default_enter_anim"
@@ -76,6 +131,15 @@
         <action
             android:id="@+id/from_details_to_comments"
             app:destination="@+id/navigation_comments"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim">
+            <argument
+                android:name="attractionId"
+                app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/from_details_to_view_on_map"
+            app:destination="@+id/navigation_view_on_map"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim">
             <argument
@@ -136,5 +200,14 @@
         <argument
             android:name="journeyId"
             app:argType="string" />
+        <action
+            android:id="@+id/from_journey_plan_to_view_journey_on_map"
+            app:destination="@+id/navigation_view_journey_on_map"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim">
+            <argument
+                android:name="journeyId"
+                app:argType="string" />
+        </action>
     </fragment>
 </navigation>

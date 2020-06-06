@@ -16,13 +16,13 @@ import androidx.lifecycle.Observer
 import com.example.travelmate.R
 import com.example.travelmate.databinding.FragmentAddAttractionBinding
 import com.example.travelmate.model.AttractionTag
-import com.example.travelmate.ui.dashboard.DashboardFragment
 import com.example.travelmate.utils.PICK_IMAGE_REQUEST
 import com.example.travelmate.utils.Resource
 import com.squareup.picasso.Picasso
 import org.koin.android.ext.android.inject
 import androidx.navigation.fragment.findNavController
-
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.ConnectionResult
 
 class AddAttractionFragment : Fragment() {
 
@@ -47,6 +47,7 @@ class AddAttractionFragment : Fragment() {
         addPhoto()
         handleTags()
         publishAttraction()
+        addLocation()
     }
 
     private fun publishAttraction() {
@@ -56,9 +57,12 @@ class AddAttractionFragment : Fragment() {
 
                 }
                 is Resource.Success -> {
-                    Toast.makeText(context, "Published!", Toast.LENGTH_LONG).show()
-                    val navController = findNavController()
-                    navController.navigate(R.id.navigation_dashboard)
+                    if (result.data != null) {
+                        val navController = findNavController()
+                        val actions =
+                            AddAttractionFragmentDirections.fromAddAttractionToAddLocation(result.data)
+                        navController.navigate(actions)
+                    }
                 }
                 is Resource.Error -> {
                     Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
@@ -102,6 +106,34 @@ class AddAttractionFragment : Fragment() {
         val cR: ContentResolver? = context?.contentResolver
         val mime: MimeTypeMap = MimeTypeMap.getSingleton()
         return mime.getExtensionFromMimeType(cR?.getType(uri)).toString()
+    }
+
+    private fun addLocation() {
+        binding.addMapLocation.setOnClickListener {
+            if (isServicesOK()) {
+                viewModel.publishAttraction()
+            }
+        }
+    }
+
+    private fun isServicesOK(): Boolean {
+        val available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context)
+        when {
+            available == ConnectionResult.SUCCESS -> {
+                return true
+            }
+            GoogleApiAvailability.getInstance().isUserResolvableError(available) -> {
+                val dialog = GoogleApiAvailability.getInstance()
+                    .getErrorDialog(activity, available, 1)
+                dialog.show()
+            }
+            else -> Toast.makeText(
+                context,
+                "You can't make map requests",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        return false
     }
 
     private fun handleTags() {

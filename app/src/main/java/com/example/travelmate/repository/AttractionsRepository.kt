@@ -10,6 +10,7 @@ import com.google.firebase.storage.FirebaseStorage
 import io.reactivex.Single
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
+import java.util.*
 
 
 @Suppress("UNCHECKED_CAST")
@@ -20,18 +21,16 @@ class AttractionsRepository {
     private val db = FirebaseFirestore.getInstance()
     private val attractionsRef = db.collection("Attractions")
     private val usersRef = db.collection("Users")
-
     private var currentUser: User = User()
 
 
     fun uploadAttraction(
         title: String,
-        city: City,
         description: String,
         tags: List<AttractionTag>,
         imageUri: Uri,
         fileExtension: String
-    ): Single<Resource<Boolean>> {
+    ): Single<Resource<String>> {
         val fileReference =
             storageReference.child(System.currentTimeMillis().toString() + "." + fileExtension)
 
@@ -43,10 +42,13 @@ class AttractionsRepository {
                             id = "",
                             author = fbAuth.currentUser!!.uid,
                             title = title,
-                            city = city,
+                            city = City(),
+                            latitude = null,
+                            longitude = null,
                             description = description,
                             tags = tags,
                             likes = 0,
+                            publishDate = Date(),
                             favoriteBy = null,
                             image = it.toString(),
                             comments = null,
@@ -55,15 +57,40 @@ class AttractionsRepository {
                         )
                         attractionsRef.add(attraction).addOnSuccessListener { documentReference ->
                             documentReference.update("id", documentReference.id)
+                            emitter.onSuccess(
+                                Resource.Success(documentReference.id)
+                            )
                         }
-                        emitter.onSuccess(
-                            Resource.Success(true)
-                        )
                     }
                 }
                 .addOnFailureListener {
                     emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
                 }
+            return@create
+        }
+    }
+
+    fun updateAttraction(
+        attractionId: String,
+        city: City,
+        latitude: Double,
+        longitude: Double
+    ): Single<Resource<Boolean>> {
+        return Single.create create@{ emitter ->
+
+            val task1 = attractionsRef.document(attractionId)
+                .update("city", city)
+            val task2 = attractionsRef.document(attractionId)
+                .update("latitude", latitude)
+            val task3 = attractionsRef.document(attractionId)
+                .update("longitude", longitude)
+
+            val tasks: Task<List<QuerySnapshot>> = Tasks.whenAllSuccess(task1, task2, task3)
+            tasks.addOnSuccessListener {
+                emitter.onSuccess(Resource.Success(true))
+            }.addOnFailureListener {
+                emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+            }
             return@create
         }
     }
@@ -89,7 +116,7 @@ class AttractionsRepository {
         }
     }
 
-    fun loadAllAttractions(): Single<Resource<List<Attraction>>> {
+    fun loadAllAttractionsTimeline(): Single<Resource<List<Attraction>>> {
         val attractionsList = mutableListOf<Attraction>()
         val userId = fbAuth.currentUser!!.uid
 
@@ -100,7 +127,41 @@ class AttractionsRepository {
                         val user = documentSnapshotUser.toObject(User::class.java)
                         if (user != null) {
                             currentUser = user
-                            attractionsRef.get()
+                            attractionsRef
+                                .orderBy("publishDate", Query.Direction.DESCENDING)
+                                .get()
+                                .addOnSuccessListener { queryDocumentSnapshot ->
+                                    for (documentSnapshot in queryDocumentSnapshot) {
+                                        val attraction =
+                                            documentSnapshot.toObject(Attraction::class.java)
+                                        setUserPreferences(attraction, user)
+                                        attractionsList.add(attraction)
+                                    }
+                                    emitter.onSuccess(Resource.Success(attractionsList))
+                                }
+                                .addOnFailureListener {
+                                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
+                                }
+                        }
+                    }
+                }
+        }
+    }
+
+    fun loadAllAttractionsTrending(): Single<Resource<List<Attraction>>> {
+        val attractionsList = mutableListOf<Attraction>()
+        val userId = fbAuth.currentUser!!.uid
+
+        return Single.create create@{ emitter ->
+            usersRef.document(userId).get()
+                .addOnSuccessListener { documentSnapshotUser ->
+                    if (documentSnapshotUser.exists()) {
+                        val user = documentSnapshotUser.toObject(User::class.java)
+                        if (user != null) {
+                            currentUser = user
+                            attractionsRef
+                                .orderBy("likes", Query.Direction.DESCENDING)
+                                .get()
                                 .addOnSuccessListener { queryDocumentSnapshot ->
                                     for (documentSnapshot in queryDocumentSnapshot) {
                                         val attraction =
@@ -170,7 +231,7 @@ class AttractionsRepository {
             filterByTagsAndSearch(tags, searchTerm)
         } else {
             if (tags.isEmpty() && searchTerm == "") {
-                loadAllAttractions()
+                loadAllAttractionsTimeline()
             } else {
                 if (tags.isEmpty()) {
                     filterBySearch(searchTerm)
