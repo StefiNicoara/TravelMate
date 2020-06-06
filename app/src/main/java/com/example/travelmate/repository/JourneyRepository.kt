@@ -112,6 +112,7 @@ class JourneyRepository {
             journeysRef.whereArrayContains("users", fbAuth.currentUser!!.uid)
                 .whereGreaterThanOrEqualTo("startDate", Date())
                 .whereEqualTo("started", false)
+                .whereEqualTo("completed", false)
                 .orderBy("startDate", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener { queryDocumentSnapshot ->
