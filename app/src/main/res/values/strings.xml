@@ -1,8 +1,5 @@
 <resources>
 
-    <!--    Maps Api Key-->
-    <string name="google_maps_api_key">AIzaSyBffr3xN2gx53jUmunyVO2S1BQxtk2S5VM</string>
-
     <string name="app_name">TravelMate</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
