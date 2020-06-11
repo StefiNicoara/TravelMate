@@ -51,9 +51,7 @@ class AttractionsRepository {
                             publishDate = Date(),
                             favoriteBy = null,
                             image = it.toString(),
-                            comments = null,
-                            isLikedByCurrentUser = false,
-                            isFavoriteByCurrentUser = false
+                            comments = null
                         )
                         attractionsRef.add(attraction).addOnSuccessListener { documentReference ->
                             documentReference.update("id", documentReference.id)
@@ -101,11 +99,6 @@ class AttractionsRepository {
                 .addOnSuccessListener { documentSnapshot ->
                     if (documentSnapshot.exists()) {
                         val attraction = documentSnapshot.toObject(Attraction::class.java)
-                        if (currentUser.favorites != null) {
-                            if (currentUser.favorites?.contains(attractionId) == true) {
-                                attraction?.isFavoriteByCurrentUser = true
-                            }
-                        }
                         attraction?.let { emitter.onSuccess(Resource.Success(it)) }
                     }
                 }
@@ -118,67 +111,47 @@ class AttractionsRepository {
 
     fun loadAllAttractionsTimeline(): Single<Resource<List<Attraction>>> {
         val attractionsList = mutableListOf<Attraction>()
-        val userId = fbAuth.currentUser!!.uid
 
         return Single.create create@{ emitter ->
-            usersRef.document(userId).get()
-                .addOnSuccessListener { documentSnapshotUser ->
-                    if (documentSnapshotUser.exists()) {
-                        val user = documentSnapshotUser.toObject(User::class.java)
-                        if (user != null) {
-                            currentUser = user
-                            attractionsRef
-                                .orderBy("publishDate", Query.Direction.DESCENDING)
-                                .get()
-                                .addOnSuccessListener { queryDocumentSnapshot ->
-                                    for (documentSnapshot in queryDocumentSnapshot) {
-                                        val attraction =
-                                            documentSnapshot.toObject(Attraction::class.java)
-                                        setUserPreferences(attraction, user)
-                                        attractionsList.add(attraction)
-                                    }
-                                    emitter.onSuccess(Resource.Success(attractionsList))
-                                }
-                                .addOnFailureListener {
-                                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
-                                }
-                        }
+            attractionsRef
+                .orderBy("publishDate", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener { queryDocumentSnapshot ->
+                    for (documentSnapshot in queryDocumentSnapshot) {
+                        val attraction =
+                            documentSnapshot.toObject(Attraction::class.java)
+                        attractionsList.add(attraction)
                     }
+                    emitter.onSuccess(Resource.Success(attractionsList))
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
                 }
         }
     }
+
 
     fun loadAllAttractionsTrending(): Single<Resource<List<Attraction>>> {
         val attractionsList = mutableListOf<Attraction>()
-        val userId = fbAuth.currentUser!!.uid
 
         return Single.create create@{ emitter ->
-            usersRef.document(userId).get()
-                .addOnSuccessListener { documentSnapshotUser ->
-                    if (documentSnapshotUser.exists()) {
-                        val user = documentSnapshotUser.toObject(User::class.java)
-                        if (user != null) {
-                            currentUser = user
-                            attractionsRef
-                                .orderBy("likes", Query.Direction.DESCENDING)
-                                .get()
-                                .addOnSuccessListener { queryDocumentSnapshot ->
-                                    for (documentSnapshot in queryDocumentSnapshot) {
-                                        val attraction =
-                                            documentSnapshot.toObject(Attraction::class.java)
-                                        setUserPreferences(attraction, user)
-                                        attractionsList.add(attraction)
-                                    }
-                                    emitter.onSuccess(Resource.Success(attractionsList))
-                                }
-                                .addOnFailureListener {
-                                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
-                                }
-                        }
+            attractionsRef
+                .orderBy("likes", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener { queryDocumentSnapshot ->
+                    for (documentSnapshot in queryDocumentSnapshot) {
+                        val attraction =
+                            documentSnapshot.toObject(Attraction::class.java)
+                        attractionsList.add(attraction)
                     }
+                    emitter.onSuccess(Resource.Success(attractionsList))
+                }
+                .addOnFailureListener {
+                    emitter.onSuccess(Resource.Error(AppError(message = it.localizedMessage)))
                 }
         }
     }
+
 
     fun loadFavoriteAttractions(): Single<Resource<List<Attraction>>> {
         val userId = fbAuth.currentUser!!.uid
@@ -189,8 +162,6 @@ class AttractionsRepository {
                 .addOnSuccessListener { queryDocumentSnapshot ->
                     for (documentSnapshot in queryDocumentSnapshot) {
                         val attraction = documentSnapshot.toObject(Attraction::class.java)
-                        setUserLikes(attraction, currentUser)
-                        attraction.isFavoriteByCurrentUser = true
                         attractionsList.add(attraction)
                     }
                     emitter.onSuccess(Resource.Success(attractionsList))
@@ -211,7 +182,6 @@ class AttractionsRepository {
                 .addOnSuccessListener { queryDocumentSnapshot ->
                     for (documentSnapshot in queryDocumentSnapshot) {
                         val attraction = documentSnapshot.toObject(Attraction::class.java)
-                        setUserPreferences(attraction, currentUser)
                         attractionsList.add(attraction)
                     }
                     emitter.onSuccess(Resource.Success(attractionsList))
@@ -251,7 +221,6 @@ class AttractionsRepository {
                 .addOnSuccessListener { queryDocumentSnapshot ->
                     for (documentSnapshot in queryDocumentSnapshot) {
                         val attraction = documentSnapshot.toObject(Attraction::class.java)
-                        setUserPreferences(attraction, currentUser)
                         attractionsList.add(attraction)
                     }
                     emitter.onSuccess(Resource.Success(attractionsList))
@@ -270,7 +239,7 @@ class AttractionsRepository {
             val task1 = attractionsRef
                 .orderBy("title")
                 .startAt(searchTerm)
-                .endAt("$searchTerm\uf8ff")
+                .endAt(searchTerm + "\uf8ff")
                 .get()
             val task2 = attractionsRef
                 .orderBy("city.name")
@@ -289,7 +258,6 @@ class AttractionsRepository {
                 for (queryDocumentSnapshot in it) {
                     for (documentSnapshot in queryDocumentSnapshot) {
                         val attraction = documentSnapshot.toObject(Attraction::class.java)
-                        setUserPreferences(attraction, currentUser)
                         attractionsList.add(attraction)
                     }
                     emitter.onSuccess(Resource.Success(attractionsList))
@@ -336,7 +304,6 @@ class AttractionsRepository {
                 for (queryDocumentSnapshot in it) {
                     for (documentSnapshot in queryDocumentSnapshot) {
                         val attraction = documentSnapshot.toObject(Attraction::class.java)
-                        setUserPreferences(attraction, currentUser)
                         attractionsList.add(attraction)
                     }
                     emitter.onSuccess(Resource.Success(attractionsList))
@@ -383,10 +350,50 @@ class AttractionsRepository {
         }
     }
 
-    fun likeAttractionTransaction(attractionId: String) {
+    fun isLikedByCurrentUser(attractionId: String): Single<Boolean> {
+        val userId = fbAuth.currentUser!!.uid
+        return Single.create create@{ emitter ->
+            usersRef.document(userId).get()
+                .addOnSuccessListener { documentSnapshotUser ->
+                    if (documentSnapshotUser.exists()) {
+                        val user = documentSnapshotUser.toObject(User::class.java)
+                        if (user != null) {
+                            if (user.likes?.contains(attractionId) == true) {
+                                emitter.onSuccess(true)
+                            } else {
+                                emitter.onSuccess(false)
+                            }
+                        }
+                    }
+                }
+            return@create
+        }
+    }
 
+    fun isFavoriteByCurrentUser(attractionId: String): Single<Boolean> {
+        val userId = fbAuth.currentUser!!.uid
+        return Single.create create@{ emitter ->
+            usersRef.document(userId).get()
+                .addOnSuccessListener { documentSnapshotUser ->
+                    if (documentSnapshotUser.exists()) {
+                        val user = documentSnapshotUser.toObject(User::class.java)
+                        if (user != null) {
+                            if (user.favorites?.contains(attractionId) == true) {
+                                emitter.onSuccess(true)
+                            } else {
+                                emitter.onSuccess(false)
+                            }
+                        }
+                    }
+                }
+            return@create
+        }
+    }
+
+    fun likeAttractionTransaction(attractionId: String) {
         val currentUserRef = fbAuth.currentUser?.uid?.let { usersRef.document(it) }
         currentUserRef?.update("likes", FieldValue.arrayUnion(attractionId))
+
         db.runTransaction { transaction ->
             val attractionRef = attractionsRef.document(attractionId)
             val attractionSnapshot = transaction.get(attractionRef)
@@ -397,7 +404,6 @@ class AttractionsRepository {
     }
 
     fun undoLikeAttractionTransaction(attractionId: String) {
-
         val currentUserRef = fbAuth.currentUser?.uid?.let { usersRef.document(it) }
         currentUserRef?.update("likes", FieldValue.arrayRemove(attractionId))
         db.runTransaction { transaction ->
@@ -423,22 +429,4 @@ class AttractionsRepository {
             .update("favoriteBy", FieldValue.arrayRemove(fbAuth.currentUser!!.uid))
     }
 
-
-    private fun setUserLikes(attraction: Attraction, user: User) {
-        if (user.likes != null) {
-            if (user.likes?.contains(attraction.id) == true) {
-                attraction.isLikedByCurrentUser = true
-            }
-        }
-    }
-
-    private fun setUserPreferences(attraction: Attraction, user: User) {
-        setUserLikes(attraction, user)
-
-        if (user.favorites != null) {
-            if (user.favorites?.contains(attraction.id) == true) {
-                attraction.isFavoriteByCurrentUser = true
-            }
-        }
-    }
 }

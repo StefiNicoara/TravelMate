@@ -8,6 +8,7 @@ import com.example.travelmate.model.AttractionTag
 import com.example.travelmate.repository.AttractionsRepository
 import com.example.travelmate.utils.AppError
 import com.example.travelmate.utils.Resource
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -38,7 +39,7 @@ class DashboardViewModel(private val repository: AttractionsRepository) : ViewMo
     }
 
     fun addLike(attractionId: String) {
-        repository.likeAttractionTransaction(attractionId)
+        return repository.likeAttractionTransaction(attractionId)
     }
 
     fun undoLike(attractionId: String) {
@@ -51,6 +52,14 @@ class DashboardViewModel(private val repository: AttractionsRepository) : ViewMo
 
     fun removeFromFavorites(attraction: Attraction) {
         repository.removeAttractionFromFavorites(attraction)
+    }
+
+    fun isLikedByCurrentUser(attractionId: String): Single<Boolean> {
+        return repository.isLikedByCurrentUser(attractionId)
+    }
+
+    fun isFavoriteByCurrentUser(attractionId: String): Single<Boolean> {
+        return repository.isFavoriteByCurrentUser(attractionId)
     }
 
     fun loadAttractionsTimeline() {

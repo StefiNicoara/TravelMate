@@ -7,6 +7,7 @@ import com.example.travelmate.model.Attraction
 import com.example.travelmate.repository.AttractionsRepository
 import com.example.travelmate.utils.AppError
 import com.example.travelmate.utils.Resource
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -52,5 +53,15 @@ class FavoritesViewModel(private val repository: AttractionsRepository) : ViewMo
     fun navigateToDetailsScreen(attractionId: String) {
         mutableDetailsScreenNav.postValue(attractionId)
     }
+
+
+    fun isLikedByCurrentUser(attractionId: String): Single<Boolean> {
+        return repository.isLikedByCurrentUser(attractionId)
+    }
+
+    fun isFavoriteByCurrentUser(attractionId: String): Single<Boolean> {
+        return repository.isFavoriteByCurrentUser(attractionId)
+    }
+
 
 }

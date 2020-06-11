@@ -10,8 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.travelmate.R
 import com.example.travelmate.databinding.LayoutAttractionCellBinding
 import com.example.travelmate.model.Attraction
+import com.example.travelmate.ui.dashboard.DashboardRVAdapter
 import com.example.travelmate.ui.profile.favorites.FavoritesViewModel
 import com.squareup.picasso.Picasso
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 
 class UploadsRVAdapter(
     private val context: Context,
@@ -20,8 +24,7 @@ class UploadsRVAdapter(
 ) :
     RecyclerView.Adapter<UploadsRVAdapter.AttractionsViewHolder>() {
 
-    private var isCheckedFavorites = false
-    private var isCheckedLikes = false
+    private val subscriptions = CompositeDisposable()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttractionsViewHolder {
         val binding = DataBindingUtil.inflate<LayoutAttractionCellBinding>(
@@ -37,48 +40,60 @@ class UploadsRVAdapter(
         return attractionsList.size
     }
 
-    private fun handleFavorites(holder: AttractionsViewHolder, position: Int) {
+    private fun handleFavoritesState(holder: AttractionsViewHolder, position: Int) {
+        val observer = viewModel.isFavoriteByCurrentUser(attractionsList[position].id)
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onSuccess = {
+                    holder.attractionInfoBinding.favoritesButton.isChecked = it
+                }
+            )
+        subscriptions.add(observer)
+    }
 
+
+    private fun handleFavorites(holder: AttractionsViewHolder, position: Int) {
         holder.attractionInfoBinding.favoritesButton.setOnClickListener {
-            if (isCheckedFavorites) {
+            if (holder.attractionInfoBinding.favoritesButton.isChecked) {
                 viewModel.addToFavorites(attractionsList[position])
             } else {
                 viewModel.removeFromFavorites(attractionsList[position])
             }
         }
+    }
 
-        holder.attractionInfoBinding.favoritesButton.setOnCheckedChangeListener { _, isChecked ->
-            isCheckedFavorites = isChecked
-        }
+    private fun handleLikeState(holder: AttractionsViewHolder, position: Int) {
+        val observer = viewModel.isLikedByCurrentUser(attractionsList[position].id)
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onSuccess = {
+                    holder.attractionInfoBinding.likeButton.isChecked = it
+                    if (it) {
+                        holder.attractionInfoBinding.likesValue.setTextColor(Color.parseColor("#FF8B85"))
+                    } else {
+                        holder.attractionInfoBinding.likesValue.setTextColor(Color.parseColor("#585858"))
+                    }
+                }
+            )
+        subscriptions.add(observer)
     }
 
 
     private fun handleLikes(holder: AttractionsViewHolder, position: Int) {
         holder.attractionInfoBinding.likeButton.setOnClickListener {
-            if (isCheckedLikes) {
+            if (holder.attractionInfoBinding.likeButton.isChecked) {
                 viewModel.addLike(attractionsList[position].id)
-                displayLikeValue(holder, 1)
+                holder.attractionInfoBinding.likesValue.setTextColor(Color.parseColor("#FF8B85"))
+                attractionsList[position].likes++
+                holder.attractionInfoBinding.likesValue.text =
+                    attractionsList[position].likes.toString()
             } else {
                 viewModel.undoLike(attractionsList[position].id)
-                displayLikeValue(holder, -1)
+                holder.attractionInfoBinding.likesValue.setTextColor(Color.parseColor("#585858"))
+                attractionsList[position].likes--
+                holder.attractionInfoBinding.likesValue.text =
+                    attractionsList[position].likes.toString()
             }
-        }
-
-        holder.attractionInfoBinding.likeButton.setOnCheckedChangeListener { _, isChecked ->
-            isCheckedLikes = isChecked
-        }
-    }
-
-    private fun displayLikeValue(holder: AttractionsViewHolder, addedValue: Int) {
-        val currentLikes = holder.attractionInfoBinding.likesValue.text.toString()
-        val newLikes = currentLikes.toIntOrNull()?.plus(addedValue)
-        holder.attractionInfoBinding.likesValue.text = newLikes.toString()
-
-
-        if (addedValue == 1) {
-            holder.attractionInfoBinding.likesValue.setTextColor(Color.parseColor("#FF8B85"))
-        } else {
-            holder.attractionInfoBinding.likesValue.setTextColor(Color.parseColor("#585858"))
         }
     }
 
@@ -110,7 +125,9 @@ class UploadsRVAdapter(
         holder.attractionInfoBinding.attraction = attractionsList[position]
         loadLocation(holder, position)
         loadPhoto(holder, position)
+        handleLikeState(holder, position)
         handleLikes(holder, position)
+        handleFavoritesState(holder, position)
         handleFavorites(holder, position)
         handleNavigation(holder, position)
     }

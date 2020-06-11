@@ -1,6 +1,5 @@
 package com.example.travelmate.model
 
-import com.google.firebase.firestore.Exclude
 import java.util.*
 
 data class Attraction(
@@ -16,10 +15,7 @@ data class Attraction(
     var likes: Int,
     var publishDate: Date,
     var favoriteBy: List<String>?,
-    var comments: List<Comment>?,
-    @get:Exclude
-    var isLikedByCurrentUser: Boolean,
-    var isFavoriteByCurrentUser: Boolean
+    var comments: List<Comment>?
 ) {
     constructor() : this(
         id = "",
@@ -34,8 +30,6 @@ data class Attraction(
         image = "",
         publishDate = Date(),
         favoriteBy = mutableListOf(),
-        comments = mutableListOf(),
-        isFavoriteByCurrentUser = false,
-        isLikedByCurrentUser = false
+        comments = mutableListOf()
     )
 }

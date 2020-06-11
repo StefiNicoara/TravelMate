@@ -17,6 +17,8 @@ class AttractionDetailViewModel(private val repository: AttractionsRepository) :
 
     val attraction: LiveData<Resource<Attraction>> get() = mutableAttraction
     private var mutableAttraction: MutableLiveData<Resource<Attraction>> = MutableLiveData()
+    val isFavorite: LiveData<Boolean> get() = mutableCheck
+    private var mutableCheck: MutableLiveData<Boolean> = MutableLiveData()
 
 
     fun getCurrentAttraction(attractionId: String) {
@@ -39,6 +41,18 @@ class AttractionDetailViewModel(private val repository: AttractionsRepository) :
 
     fun removeFromFavorites(attraction: Attraction) {
         repository.removeAttractionFromFavorites(attraction)
+    }
+
+    fun isFavoriteByCurrentUser(attractionId: String) {
+        mutableCheck.postValue(false)
+        val observer = repository.isFavoriteByCurrentUser(attractionId)
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onSuccess = {
+                    mutableCheck.postValue(it)
+                }
+            )
+        subscriptions.add(observer)
     }
 
 

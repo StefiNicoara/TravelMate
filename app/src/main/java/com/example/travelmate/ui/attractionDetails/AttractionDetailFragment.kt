@@ -24,7 +24,6 @@ class AttractionDetailFragment : Fragment() {
 
     private val viewModel by inject<AttractionDetailViewModel>()
     private lateinit var binding: FragmentAttractionDetailBinding
-    private var isCheckedFavorites = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +44,9 @@ class AttractionDetailFragment : Fragment() {
             }
         })
         viewModel.getCurrentAttraction(arguments?.get("attractionId") as String)
+        viewModel.isFavoriteByCurrentUser(arguments?.get("attractionId") as String)
         observeAttractions()
+        observeFavoriteMark()
         handleAddClick()
         handleCommentsClick()
         handleViewOnMapClick()
@@ -70,6 +71,22 @@ class AttractionDetailFragment : Fragment() {
         })
     }
 
+    private fun observeFavoriteMark() {
+        viewModel.isFavorite.observe(this, Observer { result ->
+            binding.favoritesButton.isChecked = result
+        })
+    }
+
+    private fun handleFavorites(attraction: Attraction) {
+        binding.favoritesButton.setOnClickListener {
+            if (binding.favoritesButton.isChecked) {
+                viewModel.addToFavorites(attraction)
+            } else {
+                viewModel.removeFromFavorites(attraction)
+            }
+        }
+    }
+
     private fun loadLocation(city: String?, country: String?) {
         binding.location = "$city, $country"
     }
@@ -80,21 +97,6 @@ class AttractionDetailFragment : Fragment() {
             .fit()
             .centerCrop()
             .into(binding.image)
-    }
-
-    private fun handleFavorites(attraction: Attraction) {
-
-        binding.favoritesButton.setOnClickListener {
-            if (isCheckedFavorites) {
-                viewModel.addToFavorites(attraction)
-            } else {
-                viewModel.removeFromFavorites(attraction)
-            }
-        }
-
-        binding.favoritesButton.setOnCheckedChangeListener { _, isChecked ->
-            isCheckedFavorites = isChecked
-        }
     }
 
     private fun handleAddClick() {
