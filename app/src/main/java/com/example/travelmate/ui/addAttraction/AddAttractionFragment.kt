@@ -21,6 +21,8 @@ import com.example.travelmate.utils.Resource
 import com.squareup.picasso.Picasso
 import org.koin.android.ext.android.inject
 import androidx.navigation.fragment.findNavController
+import com.example.travelmate.utils.LoadingFragment
+import com.example.travelmate.utils.NEW_DIALOG
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.ConnectionResult
 
@@ -28,6 +30,7 @@ class AddAttractionFragment : Fragment() {
 
     private val viewModel by inject<AddAttractionViewModel>()
     private lateinit var binding: FragmentAddAttractionBinding
+    private lateinit var loadingFragment: LoadingFragment
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +40,8 @@ class AddAttractionFragment : Fragment() {
 
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_add_attraction, container, false)
+
+        loadingFragment = LoadingFragment()
         return binding.root
     }
 
@@ -54,9 +59,10 @@ class AddAttractionFragment : Fragment() {
         viewModel.publishAttraction.observe(this, Observer { result ->
             when (result) {
                 is Resource.Loading -> {
-
+                    loadingFragment.show(parentFragmentManager, NEW_DIALOG)
                 }
                 is Resource.Success -> {
+                    loadingFragment.dismiss()
                     if (result.data != null) {
                         val navController = findNavController()
                         val actions =
@@ -65,6 +71,7 @@ class AddAttractionFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
+                    loadingFragment.dismiss()
                     Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
                 }
             }

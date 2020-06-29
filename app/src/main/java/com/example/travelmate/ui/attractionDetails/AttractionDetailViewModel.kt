@@ -22,6 +22,7 @@ class AttractionDetailViewModel(private val repository: AttractionsRepository) :
 
 
     fun getCurrentAttraction(attractionId: String) {
+        mutableAttraction.postValue(Resource.Loading())
         val observer = repository.getAttractionById(attractionId)
             .subscribeOn(Schedulers.io())
             .subscribeBy(

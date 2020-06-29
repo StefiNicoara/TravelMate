@@ -15,6 +15,8 @@ import com.example.travelmate.R
 import com.example.travelmate.databinding.FragmentUserAttractionsBinding
 import com.example.travelmate.model.Attraction
 import com.example.travelmate.ui.profile.ProfileFragmentDirections
+import com.example.travelmate.utils.LoadingFragment
+import com.example.travelmate.utils.NEW_DIALOG
 import com.example.travelmate.utils.Resource
 import org.koin.android.ext.android.inject
 
@@ -24,6 +26,7 @@ class UploadsFragment : Fragment() {
 
     private val viewModel by inject<UploadsViewModel>()
     private lateinit var binding: FragmentUserAttractionsBinding
+    private lateinit var loadingFragment: LoadingFragment
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +35,7 @@ class UploadsFragment : Fragment() {
         // Inflate the layout for this fragment
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_user_attractions, container, false)
+        loadingFragment = LoadingFragment()
         return binding.root
     }
 
@@ -51,14 +55,16 @@ class UploadsFragment : Fragment() {
         viewModel.loadUploadedAttractions.observe(this, Observer { result ->
             when (result) {
                 is Resource.Loading -> {
-
+                    loadingFragment.show(parentFragmentManager, NEW_DIALOG)
                 }
                 is Resource.Success -> {
+                    loadingFragment.dismiss()
                     result.data?.let { setUpRecyclerView(it) }
                     binding.recyclerView.adapter?.notifyDataSetChanged()
 
                 }
                 is Resource.Error -> {
+                    loadingFragment.dismiss()
                     Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
                 }
             }

@@ -18,10 +18,7 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.example.travelmate.utils.DATE_PICKER
-import com.example.travelmate.utils.DatePickerFragment
-import com.example.travelmate.utils.PICK_IMAGE_REQUEST
-import com.example.travelmate.utils.Resource
+import com.example.travelmate.utils.*
 import com.squareup.picasso.Picasso
 import org.koin.android.ext.android.inject
 import java.text.DateFormat
@@ -33,6 +30,7 @@ class AddJourneyFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var binding: FragmentAddJourneyBinding
     private val viewModel by inject<AddJourneyViewModel>()
     private var pickerFlag: Boolean? = null
+    private lateinit var loadingFragment: LoadingFragment
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +38,7 @@ class AddJourneyFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     ): View? {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_add_journey, container, false)
+        loadingFragment = LoadingFragment()
         return binding.root
     }
 
@@ -72,14 +71,16 @@ class AddJourneyFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         viewModel.createJourney.observe(this, Observer { result ->
             when (result) {
                 is Resource.Loading -> {
-
+                    loadingFragment.show(parentFragmentManager, NEW_DIALOG)
                 }
                 is Resource.Success -> {
+                    loadingFragment.dismiss()
                     Toast.makeText(context, "Created!", Toast.LENGTH_LONG).show()
                     val navController = findNavController()
                     navController.navigate(R.id.navigation_dashboard)
                 }
                 is Resource.Error -> {
+                    loadingFragment.dismiss()
                     Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
                 }
             }

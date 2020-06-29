@@ -30,6 +30,7 @@ class JourneyPlanViewModel(private val repository: JourneyRepository) : ViewMode
 
 
     fun loadJourney(journeyId: String) {
+        mutableJourney.value = Resource.Loading()
         val observer = repository.getJourneyById(journeyId)
             .subscribeOn(Schedulers.io())
             .subscribeBy(

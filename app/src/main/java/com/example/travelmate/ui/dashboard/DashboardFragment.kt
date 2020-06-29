@@ -15,6 +15,8 @@ import com.example.travelmate.R
 import com.example.travelmate.databinding.FragmentDashboardBinding
 import com.example.travelmate.model.Attraction
 import com.example.travelmate.model.AttractionTag
+import com.example.travelmate.utils.LoadingFragment
+import com.example.travelmate.utils.NEW_DIALOG
 import com.example.travelmate.utils.Resource
 import org.koin.android.ext.android.inject
 
@@ -24,6 +26,7 @@ class DashboardFragment : Fragment() {
     private lateinit var binding: FragmentDashboardBinding
     private var tags: MutableList<AttractionTag> = mutableListOf()
     var searchTerm: String = ""
+    private lateinit var loadingFragment : LoadingFragment
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +36,7 @@ class DashboardFragment : Fragment() {
 
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard, container, false)
+        loadingFragment = LoadingFragment()
         return binding.root
     }
 
@@ -61,14 +65,15 @@ class DashboardFragment : Fragment() {
         viewModel.loadAttractions.observe(this, Observer { result ->
             when (result) {
                 is Resource.Loading -> {
-
+                    loadingFragment.show(parentFragmentManager, NEW_DIALOG)
                 }
                 is Resource.Success -> {
+                    loadingFragment.dismiss()
                     result.data?.let { setUpDashboardRecyclerView(it) }
                     binding.attractionsRV.adapter?.notifyDataSetChanged()
-
                 }
                 is Resource.Error -> {
+                    loadingFragment.dismiss()
                     Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
                 }
             }

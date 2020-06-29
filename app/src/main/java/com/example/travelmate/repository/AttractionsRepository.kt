@@ -111,15 +111,13 @@ class AttractionsRepository {
 
     fun loadAllAttractionsTimeline(): Single<Resource<List<Attraction>>> {
         val attractionsList = mutableListOf<Attraction>()
-
         return Single.create create@{ emitter ->
             attractionsRef
                 .orderBy("publishDate", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener { queryDocumentSnapshot ->
                     for (documentSnapshot in queryDocumentSnapshot) {
-                        val attraction =
-                            documentSnapshot.toObject(Attraction::class.java)
+                        val attraction = documentSnapshot.toObject(Attraction::class.java)
                         attractionsList.add(attraction)
                     }
                     emitter.onSuccess(Resource.Success(attractionsList))

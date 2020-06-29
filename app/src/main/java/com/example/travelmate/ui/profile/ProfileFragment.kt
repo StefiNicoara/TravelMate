@@ -8,16 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.example.travelmate.R
 import com.example.travelmate.databinding.FragmentProfileBinding
-import com.example.travelmate.utils.ANIMATION_DURATION
-import com.example.travelmate.utils.ANIMATION_DURATION_PROFILE
 import com.google.android.material.tabs.TabLayout
 import org.koin.android.ext.android.inject
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.Observer
-import com.example.travelmate.utils.Resource
 import android.content.Intent
 import androidx.navigation.fragment.findNavController
 import com.example.travelmate.ui.splashscreen.SplashScreen
+import com.example.travelmate.utils.*
 
 
 class ProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
@@ -71,9 +69,6 @@ class ProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private fun observeLogOut() {
         viewModel.logOut.observe(this, Observer { result ->
             when (result) {
-                is Resource.Loading -> {
-
-                }
                 is Resource.Success -> {
                     val intent = Intent(activity, SplashScreen::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -101,7 +96,6 @@ class ProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             R.id.log_out -> {
                 viewModel.logOut()
                 true
-
             }
             else -> false
         }

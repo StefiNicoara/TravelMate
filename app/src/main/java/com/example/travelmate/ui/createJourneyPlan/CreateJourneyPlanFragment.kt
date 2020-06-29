@@ -28,6 +28,7 @@ class CreateJourneyPlanFragment : Fragment(), DatePickerDialog.OnDateSetListener
 
     private val viewModel by inject<CreateJourneyPlanViewModel>()
     private lateinit var binding: FragmentCreateJourneyPlanBinding
+    private lateinit var loadingFragment: LoadingFragment
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +42,7 @@ class CreateJourneyPlanFragment : Fragment(), DatePickerDialog.OnDateSetListener
                 container,
                 false
             )
+        loadingFragment = LoadingFragment()
         return binding.root
     }
 
@@ -78,14 +80,16 @@ class CreateJourneyPlanFragment : Fragment(), DatePickerDialog.OnDateSetListener
         viewModel.attractionAdded.observe(this, Observer { result ->
             when (result) {
                 is Resource.Loading -> {
-
+                    loadingFragment.show(parentFragmentManager, NEW_DIALOG)
                 }
                 is Resource.Success -> {
+                    loadingFragment.dismiss()
                     Toast.makeText(context, "Added!", Toast.LENGTH_LONG).show()
                     findNavController().navigate(R.id.navigation_dashboard)
 
                 }
                 is Resource.Error -> {
+                    loadingFragment.dismiss()
                     Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
                 }
             }
@@ -96,13 +100,15 @@ class CreateJourneyPlanFragment : Fragment(), DatePickerDialog.OnDateSetListener
         viewModel.loadJourneys.observe(this, Observer { result ->
             when (result) {
                 is Resource.Loading -> {
-
+                    loadingFragment.show(parentFragmentManager, NEW_DIALOG)
                 }
                 is Resource.Success -> {
+                    loadingFragment.dismiss()
                     result.data?.let { setJourneysRV(it) }
                     binding.journeysRV.adapter?.notifyDataSetChanged()
                 }
                 is Resource.Error -> {
+                    loadingFragment.dismiss()
                     Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
                 }
             }

@@ -9,10 +9,7 @@ import com.example.travelmate.MainActivity
 import com.example.travelmate.R
 import com.example.travelmate.databinding.ActivityLoginBinding
 import com.example.travelmate.ui.account.login.resetPassword.ForgotPasswordDialogFragment
-import com.example.travelmate.utils.ANIMATION_DURATION
-import com.example.travelmate.utils.BaseActivity
-import com.example.travelmate.utils.NEW_DIALOG
-import com.example.travelmate.utils.Resource
+import com.example.travelmate.utils.*
 import org.koin.android.ext.android.inject
 
 class LoginActivity : BaseActivity() {
@@ -26,17 +23,21 @@ class LoginActivity : BaseActivity() {
             DataBindingUtil.setContentView(this, R.layout.activity_login)
         loginBinding.loginViewModel = viewModel
 
+        val loadingFragment = LoadingFragment()
 
         addWelcomeAnimation(loginBinding.wbId, loginBinding.mateId)
 
         viewModel.logInResponse.observe(this, Observer { response ->
             when (response) {
                 is Resource.Loading -> {
+                    loadingFragment.show(supportFragmentManager, NEW_DIALOG)
                 }
                 is Resource.Success -> {
+                    loadingFragment.dismiss()
                     goToHomeScreen()
                 }
                 is Resource.Error -> {
+                    loadingFragment.dismiss()
                     displayError(response.error)
                 }
             }

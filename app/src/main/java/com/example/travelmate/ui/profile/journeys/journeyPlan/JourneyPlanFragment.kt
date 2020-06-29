@@ -23,12 +23,15 @@ import java.text.DateFormat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.travelmate.ui.profile.journeys.journeyPlan.viewJourneyOnMap.ViewJourneyOnMapFragmentDirections
+import com.example.travelmate.utils.LoadingFragment
+import com.example.travelmate.utils.NEW_DIALOG
 
 
 class JourneyPlanFragment : Fragment() {
 
     private lateinit var binding: FragmentJourneyPlanBinding
     private val viewModel by inject<JourneyPlanViewModel>()
+    private lateinit var loadingFragment: LoadingFragment
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +39,7 @@ class JourneyPlanFragment : Fragment() {
     ): View? {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_journey_plan, container, false)
+        loadingFragment = LoadingFragment()
         return binding.root
     }
 
@@ -63,12 +67,14 @@ class JourneyPlanFragment : Fragment() {
         viewModel.loadJourney.observe(this, Observer { result ->
             when (result) {
                 is Resource.Loading -> {
-
+                    loadingFragment.show(parentFragmentManager, NEW_DIALOG)
                 }
                 is Resource.Success -> {
+                    loadingFragment.dismiss()
                     setUpBinding(result.data)
                 }
                 is Resource.Error -> {
+                    loadingFragment.dismiss()
                     Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
                 }
             }
@@ -78,9 +84,6 @@ class JourneyPlanFragment : Fragment() {
     private fun observeDelete() {
         viewModel.deleteResponse.observe(this, Observer { result ->
             when (result) {
-                is Resource.Loading -> {
-
-                }
                 is Resource.Success -> {
                     viewModel.loadJourney(arguments?.get("journeyId") as String)
                     Toast.makeText(context, "Deleted", Toast.LENGTH_LONG).show()
@@ -95,9 +98,6 @@ class JourneyPlanFragment : Fragment() {
     private fun observeMarkComplete() {
         viewModel.markCompleteResponse.observe(this, Observer { result ->
             when (result) {
-                is Resource.Loading -> {
-
-                }
                 is Resource.Success -> {
                     Toast.makeText(context, "Journey complete!", Toast.LENGTH_LONG).show()
                     val navController = findNavController()

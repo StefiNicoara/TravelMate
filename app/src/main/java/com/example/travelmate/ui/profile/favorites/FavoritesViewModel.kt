@@ -24,6 +24,7 @@ class FavoritesViewModel(private val repository: AttractionsRepository) : ViewMo
     private var mutableDetailsScreenNav: MutableLiveData<String> = MutableLiveData()
 
     fun loadFavoriteAttractions() {
+        mutableLoadAttractions.value = Resource.Loading()
         val observer = repository.loadFavoriteAttractions()
             .subscribeOn(Schedulers.io())
             .subscribeBy(

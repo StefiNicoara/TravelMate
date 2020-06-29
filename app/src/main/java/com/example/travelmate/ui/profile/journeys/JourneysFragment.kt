@@ -20,6 +20,7 @@ import com.example.travelmate.ui.profile.ProfileFragmentDirections
 import com.example.travelmate.ui.profile.journeys.recyclerViewAdapters.JourneyRVAdapter
 import com.example.travelmate.ui.profile.journeys.recyclerViewAdapters.PendingJourneysRVAdapter
 import com.example.travelmate.ui.profile.journeys.shareJourney.ShareJourneyDialogFragment
+import com.example.travelmate.utils.LoadingFragment
 import com.example.travelmate.utils.NEW_DIALOG
 import com.example.travelmate.utils.Resource
 import org.koin.android.ext.android.inject
@@ -28,6 +29,7 @@ class JourneysFragment : Fragment() {
 
     private val viewModel by inject<JourneysViewModel>()
     private lateinit var binding: FragmentJourneysBinding
+    private lateinit var loadingFragment: LoadingFragment
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +38,7 @@ class JourneysFragment : Fragment() {
 
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_journeys, container, false)
+        loadingFragment = LoadingFragment()
         return binding.root
     }
 
@@ -64,9 +67,6 @@ class JourneysFragment : Fragment() {
     private fun observeStartJourney() {
         viewModel.startJourney.observe(this, Observer { result ->
             when (result) {
-                is Resource.Loading -> {
-
-                }
                 is Resource.Success -> {
                     viewModel.loadCurrentJourneys()
                     viewModel.loadUpcomingJourneys()
@@ -90,9 +90,6 @@ class JourneysFragment : Fragment() {
     private fun observeAcceptJourney() {
         viewModel.acceptJourney.observe(this, Observer { response ->
             when (response) {
-                is Resource.Loading -> {
-
-                }
                 is Resource.Success -> {
                     viewModel.loadPendingJourneys()
                     viewModel.loadCurrentJourneys()
@@ -110,9 +107,6 @@ class JourneysFragment : Fragment() {
     private fun observeDeclineJourney() {
         viewModel.declineJourney.observe(this, Observer { response ->
             when (response) {
-                is Resource.Loading -> {
-
-                }
                 is Resource.Success -> {
                     viewModel.loadPendingJourneys()
                     viewModel.loadCurrentJourneys()
@@ -130,9 +124,6 @@ class JourneysFragment : Fragment() {
     private fun observePendingJourneys() {
         viewModel.loadPendingJourneys.observe(this, Observer { result ->
             when (result) {
-                is Resource.Loading -> {
-
-                }
                 is Resource.Success -> {
                     result.data?.let { setUpPendingJourneyRV(it) }
                     binding.visibilityPending = result.data?.isEmpty() != true
@@ -148,9 +139,6 @@ class JourneysFragment : Fragment() {
     private fun observeCurrentJourneys() {
         viewModel.loadCurrentJourneys.observe(this, Observer { result ->
             when (result) {
-                is Resource.Loading -> {
-
-                }
                 is Resource.Success -> {
                     result.data?.let { setJourneyRV(it, binding.currentJourneyRV, false) }
                     binding.visibilityCurrent = result.data?.isEmpty() != true
@@ -166,9 +154,6 @@ class JourneysFragment : Fragment() {
     private fun observeUpcomingJourneys() {
         viewModel.loadUpcomingJourneys.observe(this, Observer { result ->
             when (result) {
-                is Resource.Loading -> {
-
-                }
                 is Resource.Success -> {
                     result.data?.let { setJourneyRV(it, binding.upcomingJourneyRV, true) }
                     binding.visibilityUpcoming = result.data?.isEmpty() != true
@@ -184,9 +169,6 @@ class JourneysFragment : Fragment() {
     private fun observePastJourneys() {
         viewModel.loadPastJourneys.observe(this, Observer { result ->
             when (result) {
-                is Resource.Loading -> {
-
-                }
                 is Resource.Success -> {
                     result.data?.let { setJourneyRV(it, binding.pastJourneyRV, false) }
                     binding.visibilityPast = result.data?.isEmpty() != true

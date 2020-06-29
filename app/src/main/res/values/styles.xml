@@ -93,5 +93,21 @@
         <item name="android:fontFamily">@font/jost_regular</item>
     </style>
 
+    <!-- Loading Indicator -->
+    <style name="genericProgressIndicator" parent="android:Widget.ProgressBar.Large">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:visibility">visible</item>
+        <item name="android:indeterminate">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:indeterminateDrawable">@drawable/avd_loading</item>
+        <item name="android:backgroundTint">@android:color/transparent</item>
+    </style>
+
+
 
 </resources>

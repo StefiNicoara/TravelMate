@@ -22,6 +22,8 @@ import com.google.android.gms.maps.model.LatLng
 import android.view.WindowManager
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.example.travelmate.utils.LoadingFragment
+import com.example.travelmate.utils.NEW_DIALOG
 import com.example.travelmate.utils.Resource
 import org.koin.android.ext.android.inject
 
@@ -30,6 +32,7 @@ class MapSearchFragment : Fragment(), OnMapReadyCallback {
     private val viewModel by inject<MapSearchViewModel>()
     private lateinit var binding: FragmentMapSearchBinding
     private lateinit var googleMap: GoogleMap
+    private lateinit var loadingFragment: LoadingFragment
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +40,7 @@ class MapSearchFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_map_search, container, false)
-
+        loadingFragment = LoadingFragment()
         return binding.root
     }
 
@@ -103,15 +106,17 @@ class MapSearchFragment : Fragment(), OnMapReadyCallback {
         viewModel.updateAttraction.observe(this, Observer { result ->
             when (result) {
                 is Resource.Loading -> {
-
+                    loadingFragment.show(parentFragmentManager, NEW_DIALOG)
                 }
                 is Resource.Success -> {
+                    loadingFragment.dismiss()
                     if (result.data != null) {
                         findNavController().navigate(R.id.navigation_dashboard)
                         Toast.makeText(context, "Published!", Toast.LENGTH_LONG).show()
                     }
                 }
                 is Resource.Error -> {
+                    loadingFragment.dismiss()
                     Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
                 }
             }

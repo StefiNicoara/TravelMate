@@ -46,6 +46,7 @@ class JourneysViewModel(private val repository: JourneyRepository) : ViewModel()
     private var mutableNavigation: MutableLiveData<String> = MutableLiveData()
 
     fun loadPendingJourneys() {
+        mutablePendingJourneys.value = Resource.Loading()
         val observer = repository.getPendingJourneys()
             .subscribeOn(Schedulers.io())
             .subscribeBy(
@@ -60,6 +61,7 @@ class JourneysViewModel(private val repository: JourneyRepository) : ViewModel()
     }
 
     fun loadCurrentJourneys() {
+        mutableCurrentJourneys.value = Resource.Loading()
         val observer = repository.getCurrentJourneys()
             .subscribeOn(Schedulers.io())
             .subscribeBy(
@@ -74,6 +76,7 @@ class JourneysViewModel(private val repository: JourneyRepository) : ViewModel()
     }
 
     fun loadUpcomingJourneys() {
+        mutableUpcomingJourneys.value = Resource.Loading()
         val observer = repository.getUpcomingJourneys()
             .subscribeOn(Schedulers.io())
             .subscribeBy(
@@ -88,6 +91,7 @@ class JourneysViewModel(private val repository: JourneyRepository) : ViewModel()
     }
 
     fun loadPastJourneys() {
+        mutablePastJourneys.value = Resource.Loading()
         val observer = repository.getPastJourneys()
             .subscribeOn(Schedulers.io())
             .subscribeBy(

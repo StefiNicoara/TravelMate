@@ -49,6 +49,7 @@ class CreateJourneyPlanViewModel(
         val journeyPlan =
             calendar?.time?.let { attraction?.let { it1 -> JourneyPlan(it1, it, false) } }
 
+        mutableAttractionAdded.value = Resource.Loading()
         if (journeyPlan != null && journeyId != null) {
             val observer = journeyRepository.addAttractionToJourneyPlan(journeyId!!, journeyPlan)
                 .subscribeOn(Schedulers.io())
@@ -67,6 +68,7 @@ class CreateJourneyPlanViewModel(
     }
 
     fun loadJourneys() {
+        mutableJourneys.value = Resource.Loading()
         val observer = journeyRepository.getAvailableJourneys()
             .subscribeOn(Schedulers.io())
             .subscribeBy(

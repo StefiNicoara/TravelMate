@@ -16,6 +16,8 @@ import com.example.travelmate.R
 import com.example.travelmate.databinding.FragmentAttractionDetailBinding
 import com.example.travelmate.model.Attraction
 import com.example.travelmate.ui.dashboard.DashboardFragmentDirections
+import com.example.travelmate.utils.LoadingFragment
+import com.example.travelmate.utils.NEW_DIALOG
 import com.example.travelmate.utils.Resource
 import com.squareup.picasso.Picasso
 import org.koin.android.ext.android.inject
@@ -24,6 +26,7 @@ class AttractionDetailFragment : Fragment() {
 
     private val viewModel by inject<AttractionDetailViewModel>()
     private lateinit var binding: FragmentAttractionDetailBinding
+    private lateinit var loadingFrament : LoadingFragment
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +34,7 @@ class AttractionDetailFragment : Fragment() {
     ): View? {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_attraction_detail, container, false)
+        loadingFrament = LoadingFragment()
         return binding.root
     }
 
@@ -56,15 +60,17 @@ class AttractionDetailFragment : Fragment() {
         viewModel.attraction.observe(this, Observer { result ->
             when (result) {
                 is Resource.Loading -> {
-
+                    loadingFrament.show(parentFragmentManager, NEW_DIALOG)
                 }
                 is Resource.Success -> {
+                    loadingFrament.dismiss()
                     binding.attraction = result.data
                     loadLocation(result.data?.city?.name, result.data?.city?.country)
                     result.data?.image?.let { setPhoto(it) }
                     result.data?.let { handleFavorites(it) }
                 }
                 is Resource.Error -> {
+                    loadingFrament.dismiss()
                     Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
                 }
             }

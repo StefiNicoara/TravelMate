@@ -63,6 +63,7 @@ class DashboardViewModel(private val repository: AttractionsRepository) : ViewMo
     }
 
     fun loadAttractionsTimeline() {
+        mutableLoadAttractions.value = Resource.Loading()
         val observer = repository.loadAllAttractionsTimeline()
             .subscribeOn(Schedulers.io())
             .subscribeBy(
@@ -77,6 +78,7 @@ class DashboardViewModel(private val repository: AttractionsRepository) : ViewMo
     }
 
     fun loadAttractionsTrending() {
+        mutableLoadAttractions.value = Resource.Loading()
         val observer = repository.loadAllAttractionsTrending()
             .subscribeOn(Schedulers.io())
             .subscribeBy(

@@ -23,6 +23,7 @@ class UploadsViewModel(private val repository: AttractionsRepository) : ViewMode
     private var mutableDetailsScreenNav: MutableLiveData<String> = MutableLiveData()
 
     fun loadFavoriteAttractions() {
+        mutableLoadAttractions.value = Resource.Loading()
         val observer = repository.loadUploadedAttractions()
             .subscribeOn(Schedulers.io())
             .subscribeBy(

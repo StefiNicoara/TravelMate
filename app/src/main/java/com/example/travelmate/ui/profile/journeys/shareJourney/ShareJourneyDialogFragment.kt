@@ -62,9 +62,6 @@ class ShareJourneyDialogFragment : DialogFragment() {
     private fun observeSearch() {
         viewModel.searchClick.observe(this, Observer { result ->
             when (result) {
-                is Resource.Loading -> {
-
-                }
                 is Resource.Success -> {
                     if (result.data != null) {
                         binding.isFound = true
@@ -91,9 +88,6 @@ class ShareJourneyDialogFragment : DialogFragment() {
     private fun observeSend() {
         viewModel.sendClick.observe(this, Observer { result ->
             when (result) {
-                is Resource.Loading -> {
-
-                }
                 is Resource.Success -> {
                     dismiss()
                     Toast.makeText(context, "Successfully sent!", Toast.LENGTH_LONG).show()

@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.travelmate.R
 import com.example.travelmate.databinding.FragmentCommentsBinding
 import com.example.travelmate.model.Comment
+import com.example.travelmate.utils.LoadingFragment
+import com.example.travelmate.utils.NEW_DIALOG
 import com.example.travelmate.utils.Resource
 import org.koin.android.ext.android.inject
 
@@ -22,6 +24,7 @@ class CommentsFragment : Fragment() {
     private val viewModel by inject<CommentsViewModel>()
     private lateinit var binding: FragmentCommentsBinding
     private lateinit var username: String
+    private lateinit var loadingFragment: LoadingFragment
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +32,7 @@ class CommentsFragment : Fragment() {
     ): View? {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_comments, container, false)
+        loadingFragment = LoadingFragment()
         return binding.root
     }
 
@@ -59,9 +63,10 @@ class CommentsFragment : Fragment() {
         viewModel.loadComments.observe(this, Observer { result ->
             when (result) {
                 is Resource.Loading -> {
-
+                    loadingFragment.show(parentFragmentManager, NEW_DIALOG)
                 }
                 is Resource.Success -> {
+                    loadingFragment.dismiss()
                     if (result.data.isNullOrEmpty()) {
                         binding.showEmpty = true
                         binding.showComments = false
@@ -72,6 +77,7 @@ class CommentsFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
+                    loadingFragment.dismiss()
                     Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
                 }
             }
@@ -97,9 +103,10 @@ class CommentsFragment : Fragment() {
         viewModel.addCommentResponse.observe(this, Observer { result ->
             when (result) {
                 is Resource.Loading -> {
-
+                    loadingFragment.show(parentFragmentManager, NEW_DIALOG)
                 }
                 is Resource.Success -> {
+                    loadingFragment.dismiss()
                     if (result.data == true) {
                         Toast.makeText(context, "Published!", Toast.LENGTH_LONG).show()
                         binding.showComments = true
@@ -108,6 +115,7 @@ class CommentsFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
+                    loadingFragment.dismiss()
                     Toast.makeText(context, result.error?.message, Toast.LENGTH_LONG).show()
                 }
             }
